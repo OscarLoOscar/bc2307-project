@@ -42,7 +42,7 @@ public interface WebSocketOperation {
         public ApiResponse<List<OrderResp>> AskOrdersQueue(
                         @SymbolCheck @RequestParam("stockId") String stockId);
 
-        @CrossOrigin(origins = "http://127.0.0.1:5500")
+        // @CrossOrigin(origins = "http://127.0.0.1:5500")
         @GetMapping("/atAuctionOrders")
         @ResponseStatus(value = HttpStatus.OK)
         public Map<String, StockExchange> atAuctionOrders(

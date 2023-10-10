@@ -64,10 +64,9 @@ public class FinnhubMapper {
   public OrderResp mapSingleOrderToOrderResp(Orders orders) {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
     return OrderResp.builder() //
-        // .type(orders.getType())//
-        // .tradeDate(orders.getTradeDate())//
-        // .stockId(orders.getStockId())//
-        .localTime(orders.getTradeDateTime().toLocalTime().format(formatter))
+        .type(orders.getType())//
+        // .symbol(orders.getStockId())//
+        .localTime(orders.getTradeDateTime().toLocalTime().format(formatter))//
         .price(orders.getPrice())//
         .quantity(orders.getQuantity())//
         .build();
