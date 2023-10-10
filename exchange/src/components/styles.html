@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <!-- Include any other necessary stylesheets or scripts -->
+    <link rel="stylesheet" href="kline.css" />
+    <!-- <link rel="stylesheet" href="tradeList.css" /> -->
+    <link rel="stylesheet" href="BidAskTrade.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.3.2/echarts.min.js"></script>
+    <title>Stock Dashboard</title>
+</head>
+<body>
+    <div class="container">
+        <div class="left-sidebar">
+            <h1>Stock K-Lne</h1>
+            <div id="main"></div>
+        </div>
+        <div class="right-sidebar">
+            <div class="trade-section">
+                <h2>Trade Form</h2>
+                <form id="trade-form">
+                    <div>
+                        <label for="trade-type">Trade Type:</label>
+                        <select id="trade-type" name="trade-type">
+                            <option value="Bid">Bid</option>
+                            <option value="Ask">Ask</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="stock-code">Stock Code:</label>
+                        <button id="choose-stock">Choose Stock</button>
+                        <select id="stock-code" name="stock-code">
+                            <option value="AAPL">AAPL</option>
+                            <option value="TSLA">TSLA</option>
+                            <option value="MSFT">MSFT</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="price">Price:</label>
+                        <button type="button" id="decrease-price">-</button>
+                        <input type="number" id="price" name="price" value="100">
+                        <button type="button" id="increase-price">+</button>
+                    </div>
+                    <div>
+                        <label for="quantity">Quantity : </label>
+                        <button type="button" id="decrease-quantity">-</button>
+                        <input type="number" id="quantity" name="quantity" value="100">
+                        <button type="button" id="increase-quantity">+</button>
+                    </div>
+                    <div>
+                        <button type="submit">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <h2>AAPL Stock Queue</h2>
+        <div class="container">
+          <div class="left-sidebar">
+            <ul class="BidList" id="BidList"></ul>
+          </div>
+          <div class="right-sidebar">
+            <ul class="AskList" id="AskList"></ul>
+          </div>
+        </div>
+            <!-- <button class="check-btn" id="check">
+            test 1
+            <i class="fas fa-paper-plane"></i>
+        </button> -->
+    </div>
+    <!-- <script src="tradeList.js"></script> -->
+    <script src="kline.js"></script>
+    <script src="BidAskTrade.js"></script>
+    <!-- Include any other necessary scripts -->
+</body>
+</html>

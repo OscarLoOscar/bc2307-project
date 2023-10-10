@@ -1,0 +1,26 @@
+server.port: 8085
+
+api:
+  finnhub:
+    token: 'ck46ck1r01qus81pqgegck46ck1r01qus81pqgf0'
+    domain: 'finnhub.io'
+    base-url: 'api/v1'
+    endpoints:
+      stock:
+        profile2: '/stock/profile2'
+        quote: '/quote'
+
+spring.datasource:
+  url: 'jdbc:postgresql://localhost:5432/postgres'
+  username: 'postgres'
+  password: 'admin1234'
+spring.jpa:
+  show-sql: true
+  ## Hibernate Properties
+  properties.hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+  # Hibernate ddl auto (create, create-drop, validate, update)
+  hibernate.ddl-auto: validate # update
+
+spring.sql.init:
+  # schema-locations: classpath:ddl/DDL_DROPS.sql, classpath:ddl/DDL_TUSERS.sql, classpath:ddl/DDL_TPOSTS.sql
+  mode: always # always

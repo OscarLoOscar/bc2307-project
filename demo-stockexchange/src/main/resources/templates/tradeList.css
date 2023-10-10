@@ -1,0 +1,135 @@
+/* Global Styling: */
+@import url('https://fonts.googleapis.com/css?family=Lato&display=swap');
+
+:root {
+  --border-color: #e3e5e4;
+  --background-color: #c3c7ca;
+  --text-color: #34444f;
+}
+
+/* Global Reset: */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100vh;
+  font-family: 'Lato', sans-serif;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: flex-start;
+  width: 80%;
+  margin: 0 auto;
+}
+
+/* Left Sidebar Styling */
+.left-sidebar {
+  flex: 1;
+  padding: 10px;
+}
+
+/* Right Sidebar Styling */
+.right-sidebar {
+  flex: 1;
+  padding: 10px;
+}
+
+/* BidList Styling: */
+.BidList {
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  margin-top: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+/* Outer box */
+.BidList li {
+  background-color: #ffa07ab0;
+  height: 40px;
+  display: flex;
+  flex: 1;
+  color: black;
+  align-items: center;
+}
+
+.BidList li:not(:last-of-type) {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.BidList li.over .tradeListgable {
+  background-color: lightskyblue;
+}
+
+.BidList .person-name {
+  margin: 0 20px 0 0;
+}
+
+.BidList li.right .person-name {
+  color: #3ae374;
+}
+
+.BidList li.wrong .person-name {
+  color: #ff3838;
+}
+
+/* AskList Styling */
+.AskList {
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  padding: 0;
+  list-style-type: none;
+}
+
+/* Outer box */
+.AskList li {
+  background-color: #87cefa86;
+  height: 40px;
+  display: flex;
+  flex: 1;
+  color: black;
+  align-items: center;}
+
+.AskList li.over .tradeListgable {
+  background-color: lightskyblue;
+}
+
+.AskList .person-name {
+  margin: 0 20px 0 0;
+}
+
+.AskList li.right .person-name {
+  color: #3ae374;
+}
+
+.AskList li.wrong .person-name {
+  color: #ff3838;
+}
+
+/* Check Button: */
+.check-btn {
+  background-color: var(--background-color);
+  border: none;
+  color: var(--text-color);
+  font-size: 16px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.check-btn:active {
+  transform: scale(0.98);
+}
+
+.check-btn:focus {
+  outline: none;
+}

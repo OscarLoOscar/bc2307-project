@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>AAPL Stock Queue</title>
+    <link rel="stylesheet" href="tradeList.css" />
+    <!-- <script  //可移動
+      src="https://kit.fontawesome.com/3da1a747b2.js"
+      crossorigin="anonymous"
+    ></script> -->
+  </head>
+  <body>
+    <h2>AAPL Stock Queue</h2>
+    <div class="container">
+      <div class="left-sidebar">
+        <ul class="BidList" id="BidList"></ul>
+      </div>
+      <div class="right-sidebar">
+        <ul class="AskList" id="AskList"></ul>
+      </div>
+    </div>
+    <button class="check-btn" id="check">
+      Check Order
+      <i class="fas fa-paper-plane"></i>
+    </button>
+    <script src="tradeList.js"></script>  
+  </body>
+</html>

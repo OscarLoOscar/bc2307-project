@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="BidAskTrade.css">
+    <title>Trade Form</title>
+</head>
+<body>
+    <h2>Trade Form</h2>
+    <form id="trade-form">
+        <div>
+            <label for="trade-type">Trade Type:</label>
+            <select id="trade-type" name="trade-type">
+                <option value="Bid">Bid</option>
+                <option value="Ask">Ask</option>
+            </select>
+        </div>
+        <div>
+            <label for="stock-code">Stock Code:</label>
+            <select id="stock-code" name="stock-code">
+                <option value="AAPL">AAPL</option>
+                <option value="TSLA">TSLA</option>
+                <option value="MSFT">MSFT</option>
+            </select>            <!-- <span id="selected-stock">No stock selected</span> -->
+        </div>
+        <div>
+            <label for="price">Price : </label>
+            <button type="button" id="decrease-price">-</button>
+            <input type="number" id="price" name="price" value="100" >
+            <button type="button" id="increase-price">+</button>
+        </div>
+        <div>
+            <label for="quantity">Quantity : </label>
+            <button type="button" id="decrease-quantity">-</button>
+            <input type="number" id="quantity" name="quantity" value="100">
+            <button type="button" id="increase-quantity">+</button>
+        </div>
+        <div>
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+    <script src="BidAskTrade.js"></script>
+</body>
+</html>

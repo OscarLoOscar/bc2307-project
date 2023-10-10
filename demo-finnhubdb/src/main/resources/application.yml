@@ -1,0 +1,51 @@
+server:
+  port: 8086
+
+api:
+  finnhubAPI:
+    domain: "localhost:8085"
+    base-url: "api/v1" 
+    endpoints:
+      stock:
+        data: '/data/stock'
+        quote: "/getQuote"
+        stockSymbol: "/stockSymbol"
+
+redis-key:
+  company-profile2: "demo-finnhub:companyprofile2"
+
+# JDBC連接
+# Data Source Settings
+spring.datasource:
+  driver-class-name: com.mysql.cj.jdbc.Driver
+  url: jdbc:mysql://localhost:3306/finnhub
+  username: oscarlo
+  password: oscarVenturenixLab2023.
+  # driverClassName: 'org.h2.Driver'
+  # url: 'jdbc:h2:mem:jpademo'
+  # username: 'sa'
+  # password:
+spring.jpa:
+  show-sql: true
+  hibernate.ddl-auto:
+    update # create, create-drop, update, none, validate
+
+spring.data.redis:
+  host: localhost
+  port: 6379
+  database: 0
+  timeout: 60000
+  password:
+  
+    # optional to under "properties"
+  # properties:hibernate.dialect: org.hibernate.dialect.MySQLDialect
+  # Either to use hibernate or spring.sql.init, otherwise it duplicated to create tables
+spring.sql.init:
+  #   init:
+  #    schema-locations: classpath:ddl/finnhub_stock_price.sql ,
+  #                      classpath:ddl/FINNHUB_STOCK.sql
+  mode: always # always
+  platform: mysql
+  # schema-locations: classpath:ddl/DDL_DROPS.sql, classpath:ddl/DDL_TUSERS.sql, classpath:ddl/DDL_TPOSTS.sql
+
+  spring.profiles.active: enableScheduling

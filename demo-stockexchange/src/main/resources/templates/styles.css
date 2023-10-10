@@ -1,0 +1,21 @@
+/* styles.css */
+
+.container {
+  display: flex; /* Use flexbox to create a two-column layout */
+}
+
+.left-sidebar {
+  flex: 1; /* Take up 50% of the container */
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.943);
+
+}
+
+
+.right-sidebar {
+  flex: 1; /* Take up 50% of the container */
+  padding: 20px;
+  background-color: #e0e0e0;
+}
+
+/* Add additional styling for your elements as needed */

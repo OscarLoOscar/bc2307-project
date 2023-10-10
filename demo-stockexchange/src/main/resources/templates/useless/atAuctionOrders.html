@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>At Auction Orders</title>
+</head>
+<body>
+    <h1>At Auction Orders for ${stockId}</h1>
+
+    <table border="1">
+        <tr>
+            <th>Symbol</th>
+            <th>Price</th>
+            <th>Quantity</th>
+        </tr>
+
+        <tr th:each="stockExchange : ${response}">
+            <td th:text="${stockExchange.symbol}"></td>
+            <td th:text="${stockExchange.price}"></td>
+            <td th:text="${stockExchange.quantity}"></td>
+        </tr>
+    </table>
+</body>
+</html>
