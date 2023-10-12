@@ -21,8 +21,9 @@ import lombok.ToString;
 @ToString
 @Setter
 public class OrderRequest {
-  String type; // 'Bid','Ask'
+  String action; // 'Bid','Ask'
 
+  String orderType;
   // @JsonFormat(locale = "zh", timezone = "GMT+8",
   // pattern = "yyyy-MM-dd HH:mm:ss")
   // @DateTimeFormat
@@ -30,9 +31,11 @@ public class OrderRequest {
   // private LocalDate tradeDate = LocalDate.now();
   // String stockId;
 
-  Double price;
+  double price;
 
-  private Integer quantity;
+  private int quantity;
+
+  private long totalOrderValue ;
 
   private Map<Double, Integer> bidOffers =
       new TreeMap<>(Comparator.reverseOrder());

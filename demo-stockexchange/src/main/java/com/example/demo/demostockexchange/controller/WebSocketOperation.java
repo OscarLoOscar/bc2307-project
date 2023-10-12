@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,6 +13,7 @@ import com.example.demo.demostockexchange.annotation.SymbolCheck;
 import com.example.demo.demostockexchange.entity.Orders;
 import com.example.demo.demostockexchange.exception.ApiResponse;
 import com.example.demo.demostockexchange.exception.FinnhubException;
+import com.example.demo.demostockexchange.model.OrderForm;
 import com.example.demo.demostockexchange.model.OrderRequest;
 import com.example.demo.demostockexchange.model.OrderResp;
 import com.example.demo.demostockexchange.model.BuyerVsSeller.BuyerSellerData;
@@ -26,8 +28,8 @@ public interface WebSocketOperation {
         @PostMapping("/trade/symbol/{symbol}")
         @ResponseStatus(HttpStatus.OK)
         public ApiResponse<Orders> placeOrder(@PathVariable String symbol,
-                        @RequestParam String tradeType, double price,
-                        int quantity) throws FinnhubException;
+        @RequestParam String tradeType, double price,
+        int quantity) throws FinnhubException;
 
         @GetMapping("/bidQueue")
         @ResponseStatus(value = HttpStatus.OK)

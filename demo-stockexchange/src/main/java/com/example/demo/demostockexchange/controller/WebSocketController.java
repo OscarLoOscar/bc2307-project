@@ -1,22 +1,16 @@
 package com.example.demo.demostockexchange.controller;
 
 import java.util.List;
-import java.util.Map;
-import java.util.PriorityQueue;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.example.demo.demostockexchange.annotation.SymbolCheck;
 import com.example.demo.demostockexchange.entity.Orders;
 import com.example.demo.demostockexchange.exception.ApiResponse;
 import com.example.demo.demostockexchange.exception.FinnhubException;
-import com.example.demo.demostockexchange.infra.Code;
-import com.example.demo.demostockexchange.infra.tradeType;
 import com.example.demo.demostockexchange.model.OrderRequest;
 import com.example.demo.demostockexchange.model.OrderResp;
-import com.example.demo.demostockexchange.model.StockExchange;
 import com.example.demo.demostockexchange.model.BuyerVsSeller.BuyerSellerData;
 import com.example.demo.demostockexchange.model.mapper.FinnhubMapper;
 import com.example.demo.demostockexchange.repository.StockRepository;
@@ -68,9 +62,11 @@ public class WebSocketController implements WebSocketOperation {
   // .data(finnhubMapper.requestToOrdersEntity(orderRequest))//
   // .build();
   // }
+  
   @Override
-  public ApiResponse<Orders> placeOrder(String symbol, String tradeType,
-      double price, int quantity) throws FinnhubException {
+   public ApiResponse<Orders> placeOrder(@PathVariable String symbol,
+                        @RequestParam String action, double price,
+                        int quantity) throws FinnhubException {
     if (!tradeStock.contains(symbol)) {
       // throw FinnhubException(Code.FINNHUB_SYMBOL_NOTFOUND);
       return null;
@@ -78,9 +74,9 @@ public class WebSocketController implements WebSocketOperation {
       OrderRequest request = OrderRequest.builder()//
           .price(price)//
           .quantity(quantity)//
-          .type(tradeType)//
+          .action(action)//
           .build();//
-      request.onOrder(price, quantity, tradeType);
+      request.onOrder(price, quantity, action);
       stockRepository
           .save(finnhubMapper.requestToOrdersEntity(symbol, request));
       return ApiResponse.<Orders>builder()//

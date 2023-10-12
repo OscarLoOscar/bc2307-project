@@ -23,7 +23,7 @@ public class FinnhubMapper {
 
   public OrderRequest mapSingleOrder(Orders orders) {
     return OrderRequest.builder() //
-        .type(orders.getType())//
+        .action(orders.getType())//
         // .tradeDate(orders.getTradeDate())//
         // .stockId(orders.getStockId())//
         .price(orders.getPrice())//
@@ -66,7 +66,7 @@ public class FinnhubMapper {
   // -------------------
   public Orders requestToOrdersEntity(String symbol,OrderRequest ordersRequest) {
     return Orders.builder() //
-        .type(ordersRequest.getType())//
+        .type(ordersRequest.getAction())//
         .tradeDateTime(LocalDateTime.now())//
          .stockId(symbol)//
         .price(ordersRequest.getPrice())//

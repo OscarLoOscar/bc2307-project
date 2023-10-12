@@ -38,7 +38,11 @@ public class CORSFilter implements Filter {
 }
 
 /*
- * 這個CORSFilter類別是一個Servlet過濾器，用於處理跨來源資源共享 (Cross-Origin Resource Sharing，CORS) 的請求。 CORS是一種機制，用於在瀏覽器中允許一個網頁從一個網域（網站）向不同的網域（網站）發起跨域請求。 在Spring應用程式中，如果你的前端程式碼託管在一個不同的網域或連接埠上，就需要解決CORS的問題，以確保前端能夠與後端進行通訊。
+ * CORSFilter class是Servlet過濾器，用於處理跨來源資源共享 (Cross-Origin Resource Sharing，CORS) 的請求。
+ * 
+ *  CORS是一種機制，用於在瀏覽器中允許一個網頁從一個網域（網站）向不同的網域（網站）發起跨域請求。 
+ * 
+ * Spring中，如果你front-end託管在一個不同的網域或連接埠上，就需要解決CORS的問題，以確保前端能夠與後端進行通訊。
 
 這個CORSFilter類別的主要作用是配置HTTP回應頭，以允許跨域請求。 以下是它的一些關鍵設定：
 

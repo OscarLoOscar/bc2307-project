@@ -387,4 +387,10 @@ body::before {
   margin-bottom: 5px;
   margin-top: 10px;
 }
+
+.place-order-button .el-button:active {
+  background-color: #1b439b; /* Change the background color when the button is pressed */
+  color: white; /* Change the text color when the button is pressed */
+}
+
 </style>
