@@ -229,7 +229,7 @@ body::before {
 
 /* Styling for the order form and panel */
 .order-form {
-  width: 50%;
+  width: 38%;
   display: flex;
   flex-direction: column;
   align-items: left;
