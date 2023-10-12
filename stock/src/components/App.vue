@@ -42,7 +42,7 @@
           <el-row class="button-header">Price</el-row>
           <el-row>
             <div class="custom-input-number">
-              <el-input-number v-model="form.price_input" :min="0" :max="1000" :step="0.1"></el-input-number>
+              <el-input-number v-model="form.price_input" :min="0" :max="10000" :step="0.1"></el-input-number>
             </div>
           </el-row>
           <!-- shares -->
@@ -81,7 +81,7 @@ export default {
   setup() {
     const form = ref({
       share_input: 100,
-      price_input: 50.5,
+      price_input: 1000.0,
       total_order_value_input: null
     });
 
@@ -117,22 +117,29 @@ export default {
       }
     };
 
-    // Function to place an order
+  // Function to place an order
     const placeOrder = () => {
-      // Add your order placement logic here
-      console.log('Placing order...');
-      console.log('Price Input:', form.price_input);
-      console.log('Share Input:', form.share_input);
-      console.log('OrderType Selected Option:', buySellSelectedOption.value);
-      console.log('Buy Sell Selected Option:', orderTypeSelectedOption.value);
+  // Access the form data directly from the setup context
+  const requestData = {
+    symbol: 'TSLA',
+    tradeType: buySellOptions[buySellSelectedOption.value], // Use the selected option index to get the value
+    orderType: orderTypeOptions[orderTypeSelectedOption.value], // Use the selected option index to get the value
+    price: form.price_input,
+    quantity: form.share_input,
+    // Include other request data here
+  };
 
-      if (orderTypeSelectedOption.value === 0) {
-        console.log('orderTypeSelectedOption.value:', 0);
-      } else {
-        console.log('orderTypeSelectedOption.value:', 1);
-      }
-      // Implement your order placement logic here
-    };
+  // Send the POST request using Axios
+  axios.post('http://localhost:8085/sumit/trade/symbol/TSLA', requestData)
+    .then(() => {
+      // Handle the response if needed
+      console.log('Order placed successfully');
+    })
+    .catch(error => {
+      // Handle any errors
+      console.error('Error placing order:', error);
+    });
+};
 
     // Fetch data initially
     onMounted(() => {
@@ -393,4 +400,15 @@ body::before {
   color: white; /* Change the text color when the button is pressed */
 }
 
+.action-row:active {
+  /* Define the style for the "Action" row when clicked */
+  background-color: #1b439b;
+  color: white;
+}
+
+.order-type-row:active {
+  /* Define the style for the "Order Type" row when clicked */
+  background-color: #1b439b;
+  color: white;
+}
 </style>
