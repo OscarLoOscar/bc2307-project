@@ -4,15 +4,15 @@
     <div class="order-book-container">
       <div class="order-book-tables">
         <div class="order-book-buy">
-          <el-table :data="buyOrders">
-            <el-table-column label="Shares" prop="share" align="center"></el-table-column>
+          <el-table :data="buyOrders" :max-height="480">
+            <el-table-column label="Shares" prop="quantity" align="center"></el-table-column>
             <el-table-column label="Buy (Bid)" prop="price" align="center"></el-table-column>
           </el-table>
         </div>
         <div class="order-book-sell">
-          <el-table :data="sellOrders">
+          <el-table :data="sellOrders" :max-height="480">
             <el-table-column label="Sell (Ask)" prop="price" align="center"></el-table-column>
-            <el-table-column label="Shares" prop="share" align="center"></el-table-column>
+            <el-table-column label="Shares" prop="quantity" align="center"></el-table-column>
           </el-table>
         </div>
       </div>
@@ -105,10 +105,10 @@ export default {
     const retrieveQueue = async () => {
       try {
         const responseBuy = await axios.get(
-          "http://localhost:8087/transactions/bidQueue?stockId=TSLA"
+          "http://localhost:8085/transactions/bidQueue?stockId=TSLA"
         );
         const responseAsk = await axios.get(
-          "http://localhost:8087/transactions/askQueue?stockId=TSLA"
+          "http://localhost:8085/transactions/askQueue?stockId=TSLA"
         );
         sellOrders.value = responseAsk.data;
         buyOrders.value = responseBuy.data;
@@ -121,8 +121,8 @@ export default {
     const placeOrder = () => {
       // Add your order placement logic here
       console.log('Placing order...');
-      console.log('Price Input:', form.value.price_input);
-      console.log('Share Input:', form.value.share_input);
+      console.log('Price Input:', form.price_input);
+      console.log('Share Input:', form.share_input);
       console.log('OrderType Selected Option:', buySellSelectedOption.value);
       console.log('Buy Sell Selected Option:', orderTypeSelectedOption.value);
 

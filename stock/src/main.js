@@ -1,25 +1,29 @@
 import { createApp } from "vue";
 import App from "./components/App.vue";
 import "./components/assets/tailwind.css";
-// import ElementPlus from 'element-plus'
 import ElementPlus from "element-plus";
-import "element-plus/theme-chalk/index.css"; // Import Element UI CSS
+import "element-plus/theme-chalk/index.css";
 
-// fontawesome
+// Fontawesome
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faCaretUp,
   faCaretDown,
   faSearch,
-  faCheck, faTimes, faPlus
+  faCheck,
+  faTimes,
+  faPlus
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
 library.add(faCaretUp, faCaretDown, faSearch, faCheck, faTimes, faPlus);
 
-// app.use(ElementPlus)
-createApp(App).component("font-awesome-icon", FontAwesomeIcon).use(ElementPlus).mount("#app");
+const app = createApp(App); // Create your Vue app instance
 
-// custom filter
+app.component("font-awesome-icon", FontAwesomeIcon);
+app.use(ElementPlus);
+
+// Custom filters
 app.config.globalProperties.$filters = {
   // percent
   price_negative(value) {
@@ -30,7 +34,7 @@ app.config.globalProperties.$filters = {
   },
   // comma
   comma_separator(value) {
-    // Add comma for dollar format, i.e. 1,000,000
+    // Add commas for dollar format, e.g., 1,000,000
     return value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
   },
   // truncate string
@@ -43,3 +47,5 @@ app.config.globalProperties.$filters = {
     return value.substr(0, size);
   },
 };
+
+app.mount("#app"); // Mount your Vue app to the HTML element with id="app"
