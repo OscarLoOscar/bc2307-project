@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -41,6 +40,7 @@ public class OrderRequest {
 
   public void onOrder(double price, int quantity, String side) {
     if (tradeType.BID.name().equals(side)) {
+      bidOffers.put(price, quantity);
       Set<Double> ask_prices = askOffers.keySet();
       List<Double> ask_prices_list = new ArrayList<>(ask_prices);
       for (double ask_price : ask_prices_list) {
@@ -61,7 +61,8 @@ public class OrderRequest {
       if (quantity > 0) {
         addBidRestingOrder(price, quantity);
       }
-    } else {
+    } else if (tradeType.ASK.name().equals(side)) {
+      askOffers.put(price, quantity);
       Set<Double> bid_prices = bidOffers.keySet();
       List<Double> bid_prices_list = new ArrayList<>(bid_prices);
       for (double bid_price : bid_prices_list) {

@@ -45,7 +45,7 @@ public class WebSocketController implements WebSocketOperation {
         .build();
   }
 
-  List<String> tradeStock = List.of("AAPL", "TSLA", "MSFT");
+  public static List<String> tradeStock = List.of("AAPL", "TSLA", "MSFT");
 
   // @Override
   // public ApiResponse<Orders> placeOrder(OrderRequest orderRequest)
@@ -80,7 +80,7 @@ public class WebSocketController implements WebSocketOperation {
           .quantity(quantity)//
           .type(tradeType)//
           .build();//
-
+      request.onOrder(price, quantity, tradeType);
       stockRepository
           .save(finnhubMapper.requestToOrdersEntity(symbol, request));
       return ApiResponse.<Orders>builder()//
@@ -89,8 +89,6 @@ public class WebSocketController implements WebSocketOperation {
           .build();
     }
   }
-
-
 
   public void createAskOrder(String symbol, OrderRequest orderRequest) {
     // Validate and process the Ask order request

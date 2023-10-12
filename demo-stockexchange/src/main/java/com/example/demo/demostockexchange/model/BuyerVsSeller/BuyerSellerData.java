@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class BuyerSellerData {
+public class BuyerSellerData{
   private int buyerVolume;
   private int sellerVolume;
 
