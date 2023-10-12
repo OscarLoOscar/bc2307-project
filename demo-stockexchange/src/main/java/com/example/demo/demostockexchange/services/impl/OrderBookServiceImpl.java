@@ -31,8 +31,8 @@ public class OrderBookServiceImpl implements OrderBookService {
   }
 
   @Override
-  public void addOrder(OrderRequest makeOrder) {
-    Orders response = finnhubMapper.requestToOrdersEntity(makeOrder);
+  public void addOrder(String symbol, OrderRequest makeOrder) {
+    Orders response = finnhubMapper.requestToOrdersEntity(symbol,makeOrder);
     stockRepository.save(response);
   }
 

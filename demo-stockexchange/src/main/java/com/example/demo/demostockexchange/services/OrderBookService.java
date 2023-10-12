@@ -16,7 +16,7 @@ public interface OrderBookService {
 
   public List<Orders> getOrderBook();
 
-  public void addOrder(OrderRequest makeOrder);
+  public void addOrder(String symbol, OrderRequest makeOrder);
 
   // public List<StockExchange> atAuctionOrders(String stockId);
 

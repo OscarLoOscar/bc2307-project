@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.stream.Collectors;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.example.demo.demostockexchange.entity.Orders;
 import com.example.demo.demostockexchange.model.OrderRequest;
@@ -66,11 +64,11 @@ public class FinnhubMapper {
   }
 
   // -------------------
-  public Orders requestToOrdersEntity(OrderRequest ordersRequest) {
+  public Orders requestToOrdersEntity(String symbol,OrderRequest ordersRequest) {
     return Orders.builder() //
         .type(ordersRequest.getType())//
         .tradeDateTime(LocalDateTime.now())//
-        // .stockId(ordersRequest.getStockId())//
+         .stockId(symbol)//
         .price(ordersRequest.getPrice())//
         .quantity(ordersRequest.getQuantity())//
         .build();
