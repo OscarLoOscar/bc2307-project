@@ -1,18 +1,14 @@
 package com.example.demo.demostockexchange.services.impl;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.demostockexchange.entity.Orders;
 import com.example.demo.demostockexchange.infra.tradeType;
 import com.example.demo.demostockexchange.model.OrderRequest;
 import com.example.demo.demostockexchange.model.OrderResp;
-import com.example.demo.demostockexchange.model.StockExchange;
 import com.example.demo.demostockexchange.model.BuyerVsSeller.BuyerSellerData;
 import com.example.demo.demostockexchange.model.mapper.FinnhubMapper;
 import com.example.demo.demostockexchange.repository.StockRepository;
@@ -52,7 +48,7 @@ public class OrderBookServiceImpl implements OrderBookService {
       }
     } // Queue<OrderRequest> buyOrders = new PriorityQueue<>(
       // (b1, b2) -> Double.compare(b2.getPrice(), b1.getPrice())); // Descending order by price
-    return finnhubMapper.convertListToQueue(response);
+    return finnhubMapper.mapToResp(response);
 
   }
 
@@ -68,23 +64,22 @@ public class OrderBookServiceImpl implements OrderBookService {
       }
     } // Queue<OrderRequest> buyOrders = new PriorityQueue<>(
       // (b1, b2) -> Double.compare(b2.getPrice(), b1.getPrice())); // Descending order by price
-    return finnhubMapper.convertListToQueue(response);
+    return finnhubMapper.mapToResp(response);
 
   }
 
 
-  @Override
-  public Map<String, StockExchange> atAuctionOrders(String stockId) {
-    Map<String, StockExchange> response = new HashMap<>();
+  // @Override
+  // public List<StockExchange> atAuctionOrders(String stockId) {
+  //   List<StockExchange> response = new ArrayList<>();
 
-    List<OrderResp> bidQueue = this.getBidQueue(stockId);
-    List<OrderResp> askQueue = this.getAskQueue(stockId);
+  //   List<OrderResp> bidQueue = this.getBidQueue(stockId);
+  //   List<OrderResp> askQueue = this.getAskQueue(stockId);
 
-    response.put(stockId,
-        finnhubMapper.installBidQueueAndAskQueue(bidQueue, askQueue));
-    return response;
+  //   response.get(0).add(bidQueue);
+  //   return response;
 
-  }
+  // }
 
   @Override
   @Transactional(readOnly = true)
@@ -104,31 +99,31 @@ public class OrderBookServiceImpl implements OrderBookService {
     return new BuyerSellerData(buyerVolume, sellerVolume);
   }
 
-  @Override
-  public String executeTrades(OrderResp orderResp) {
-    synchronized (this) {
-      for (OrderResp BidOrder : this.getBidQueue(orderResp.getSymbol())) {
-        for (OrderResp AskOrder : this.getAskQueue(orderResp.getSymbol())) {
-          if (BidOrder.getSymbol().equals(AskOrder.getSymbol())
-              && BidOrder.getPrice() >= AskOrder.getPrice()
-              && BidOrder.getQuantity() > 0 && AskOrder.getQuantity() > 0) {
-            int tradedQuantity =
-                Math.min(BidOrder.getQuantity(), AskOrder.getQuantity());
-            double tradePrice = AskOrder.getPrice(); // Use the seller's price
-            System.out
-                .println("Trade executed - Symbol: " + BidOrder.getSymbol() + //
-                    ", Price: " + tradePrice + //
-                    ", Quantity: " + tradedQuantity);//
-            Integer BidOrderQuantity = BidOrder.getQuantity();
-            Integer AskOrderQuantity = AskOrder.getQuantity();
-            BidOrderQuantity -= tradedQuantity;
-            AskOrderQuantity -= tradedQuantity;
-          }
-        }
-      }
-    }
-    return "Trade executed successfully";
-  }
+  // @Override
+  // public String executeTrades(OrderResp orderResp) {
+  //   synchronized (this) {
+  //     for (OrderResp BidOrder : this.getBidQueue(orderResp.getSymbol())) {
+  //       for (OrderResp AskOrder : this.getAskQueue(orderResp.getSymbol())) {
+  //         if (BidOrder.getSymbol().equals(AskOrder.getSymbol())
+  //             && BidOrder.getPrice() >= AskOrder.getPrice()
+  //             && BidOrder.getQuantity() > 0 && AskOrder.getQuantity() > 0) {
+  //           int tradedQuantity =
+  //               Math.min(BidOrder.getQuantity(), AskOrder.getQuantity());
+  //           double tradePrice = AskOrder.getPrice(); // Use the seller's price
+  //           System.out
+  //               .println("Trade executed - Symbol: " + BidOrder.getSymbol() + //
+  //                   ", Price: " + tradePrice + //
+  //                   ", Quantity: " + tradedQuantity);//
+  //           Integer BidOrderQuantity = BidOrder.getQuantity();
+  //           Integer AskOrderQuantity = AskOrder.getQuantity();
+  //           BidOrderQuantity -= tradedQuantity;
+  //           AskOrderQuantity -= tradedQuantity;
+  //         }
+  //       }
+  //     }
+  //   }
+  //   return "Trade executed successfully";
+  // }
 
 }
 

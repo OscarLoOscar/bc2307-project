@@ -18,10 +18,10 @@ public interface OrderBookService {
 
   public void addOrder(OrderRequest makeOrder);
 
-  public Map<String, StockExchange> atAuctionOrders(String stockId);
+  // public List<StockExchange> atAuctionOrders(String stockId);
 
   public BuyerSellerData calculateBuyerSellerIndicator();
 
-  public String executeTrades(OrderResp orderResp);
+  // public String executeTrades(OrderResp orderResp);
 }
 

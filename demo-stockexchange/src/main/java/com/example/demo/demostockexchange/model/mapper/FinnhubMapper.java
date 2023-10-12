@@ -3,26 +3,19 @@ package com.example.demo.demostockexchange.model.mapper;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
-import java.util.Queue;
 import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.example.demo.demostockexchange.entity.Orders;
-import com.example.demo.demostockexchange.infra.tradeType;
 import com.example.demo.demostockexchange.model.OrderRequest;
 import com.example.demo.demostockexchange.model.OrderResp;
 import com.example.demo.demostockexchange.model.StockExchange;
 
 @Component
 public class FinnhubMapper {
-
-  @Autowired
-  private ModelMapper modelMapper;
-
 
   public List<OrderRequest> map(List<Orders> ordersList) {
     return ordersList.stream()//
@@ -34,14 +27,14 @@ public class FinnhubMapper {
     return OrderRequest.builder() //
         .type(orders.getType())//
         // .tradeDate(orders.getTradeDate())//
-        .stockId(orders.getStockId())//
+        // .stockId(orders.getStockId())//
         .price(orders.getPrice())//
         .quantity(orders.getQuantity())//
         .build();
   }
   // ---------------
 
-  public List<OrderResp> convertListToQueue(List<Orders> ordersList) {
+  public List<OrderResp> mapToResp(List<Orders> ordersList) {
     PriorityQueue<OrderResp> orderRequestQueue =
         new PriorityQueue<>((o1, o2) -> {
           int priceComparison = Double.compare(o2.getPrice(), o1.getPrice());
@@ -64,7 +57,7 @@ public class FinnhubMapper {
   public OrderResp mapSingleOrderToOrderResp(Orders orders) {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
     return OrderResp.builder() //
-        .type(orders.getType())//
+        // .type(orders.getType())//
         // .symbol(orders.getStockId())//
         .localTime(orders.getTradeDateTime().toLocalTime().format(formatter))//
         .price(orders.getPrice())//
@@ -77,7 +70,7 @@ public class FinnhubMapper {
     return Orders.builder() //
         .type(ordersRequest.getType())//
         .tradeDateTime(LocalDateTime.now())//
-        .stockId(ordersRequest.getStockId())//
+        // .stockId(ordersRequest.getStockId())//
         .price(ordersRequest.getPrice())//
         .quantity(ordersRequest.getQuantity())//
         .build();

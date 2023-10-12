@@ -17,8 +17,6 @@ public class OrderResp {
 
   String type; // 'Bid','Ask'
 
-  String symbol;
-
   private String localTime;
 
   Double price;

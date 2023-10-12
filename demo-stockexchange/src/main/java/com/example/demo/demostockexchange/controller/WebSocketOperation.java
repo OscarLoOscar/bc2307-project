@@ -34,26 +34,27 @@ public interface WebSocketOperation {
 
         @GetMapping("/bidQueue")
         @ResponseStatus(value = HttpStatus.OK)
-        public ApiResponse<List<OrderResp>> BidOrdersQueue(
+        public List<OrderResp> BidOrdersQueue(
                         @SymbolCheck @RequestParam("stockId") String stockId);
 
         @GetMapping("/askQueue")
         @ResponseStatus(value = HttpStatus.OK)
-        public ApiResponse<List<OrderResp>> AskOrdersQueue(
+        public List<OrderResp> AskOrdersQueue(
                         @SymbolCheck @RequestParam("stockId") String stockId);
 
         // @CrossOrigin(origins = "http://127.0.0.1:5500")
-        @GetMapping("/atAuctionOrders")
-        @ResponseStatus(value = HttpStatus.OK)
-        public Map<String, StockExchange> atAuctionOrders(
-                        @SymbolCheck @RequestParam("stockId") String stockId)
-                        throws FinnhubException;
+        // @GetMapping("/atAuctionOrders")
+        // @ResponseStatus(value = HttpStatus.OK)
+        // // public Map<String, StockExchange> atAuctionOrders(
+        // public List<StockExchange> atAuctionOrders(
+        // @SymbolCheck @RequestParam("stockId") String stockId)
+        // throws FinnhubException;
 
         @CrossOrigin(origins = "http://127.0.0.1:5500")
         @GetMapping("/indicator")
         public BuyerSellerData getBuyerSellerIndicator();
 
 
-        @PostMapping("/executeTrades")
-        public String executeTrades(@RequestBody OrderResp orderResp);
+        // @PostMapping("/executeTrades")
+        // public String executeTrades(@RequestBody OrderResp orderResp);
 }

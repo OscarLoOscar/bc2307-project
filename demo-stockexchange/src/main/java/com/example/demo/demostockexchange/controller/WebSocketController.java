@@ -40,25 +40,38 @@ public class WebSocketController implements WebSocketOperation {
 
   List<String> tradeStock = List.of("AAPL", "TSLA", "MSFT");
 
+  // @Override
+  // public ApiResponse<Orders> placeOrder(OrderRequest orderRequest)
+  // throws FinnhubException {
+
+  // // List<String> tradeStock = List.of("AAPL", "TSLA", "MSFT");
+  // if (!tradeStock.contains(orderRequest.getStockId()))
+  // throw new FinnhubException(Code.FINNHUB_SYMBOL_NOTFOUND);
+  // if (tradeType.ASK.name().equals(orderRequest.getType().toUpperCase())
+  // && tradeStock.contains(orderRequest.getStockId())) {
+  // createAskOrder(orderRequest);
+  // } else if (tradeType.BID.name().equals(orderRequest.getType().toUpperCase())
+  // && tradeStock.contains(orderRequest.getStockId())) {
+  // createBidOrder(orderRequest);
+  // }
+  // return ApiResponse.<Orders>builder()//
+  // .ok()//
+  // .message(orderRequest.getType().toUpperCase()
+  // + " Order placed successfully.")//
+  // .data(finnhubMapper.requestToOrdersEntity(orderRequest))//
+  // .build();
+  // }
+
   @Override
   public ApiResponse<Orders> placeOrder(OrderRequest orderRequest)
       throws FinnhubException {
 
-    // List<String> tradeStock = List.of("AAPL", "TSLA", "MSFT");
-    if (!tradeStock.contains(orderRequest.getStockId()))
-      throw new FinnhubException(Code.FINNHUB_SYMBOL_NOTFOUND);
-    if (tradeType.ASK.name().equals(orderRequest.getType().toUpperCase())
-        && tradeStock.contains(orderRequest.getStockId())) {
-      createAskOrder(orderRequest);
-    } else if (tradeType.BID.name().equals(orderRequest.getType().toUpperCase())
-        && tradeStock.contains(orderRequest.getStockId())) {
-      createBidOrder(orderRequest);
-    }
+    OrderRequest request = new OrderRequest();
+    request.onOrder(orderRequest.getPrice(), orderRequest.getQuantity(),
+        orderRequest.getType());
     return ApiResponse.<Orders>builder()//
         .ok()//
-        .message(orderRequest.getType().toUpperCase()
-            + " Order placed successfully.")//
-        .data(finnhubMapper.requestToOrdersEntity(orderRequest))//
+        .data(finnhubMapper.requestToOrdersEntity(request))//
         .build();
   }
 
@@ -73,41 +86,34 @@ public class WebSocketController implements WebSocketOperation {
   }
 
   @Override
-  public ApiResponse<List<OrderResp>> BidOrdersQueue(String stockId) {
-    List<OrderResp> orderQueue = orderBookService.getBidQueue(stockId);
-    return ApiResponse.<List<OrderResp>>builder()//
-        .ok()//
-        .data(orderQueue)//
-        .build();
+  public List<OrderResp> BidOrdersQueue(String stockId) {
+    return orderBookService.getBidQueue(stockId);
   }
 
   @Override
-  public ApiResponse<List<OrderResp>> AskOrdersQueue(String stockId) {
-    List<OrderResp> orderQueue = orderBookService.getAskQueue(stockId);
-    return ApiResponse.<List<OrderResp>>builder()//
-        .ok()//
-        .data(orderQueue)//
-        .build();
+  public List<OrderResp> AskOrdersQueue(String stockId) {
+    return orderBookService.getAskQueue(stockId);
   }
 
-  @Override
-  public Map<String, StockExchange> atAuctionOrders(String stockId)
-      throws FinnhubException {
-    if (!tradeStock.contains(stockId)) {
-      throw new FinnhubException(Code.NOTFOUND);
-    }
-    return orderBookService.atAuctionOrders(stockId);
-  }
+  // @Override
+  // // public Map<String, StockExchange> atAuctionOrders(String stockId)
+  // public List<StockExchange> atAuctionOrders(String stockId)
+  // throws FinnhubException {
+  // if (!tradeStock.contains(stockId)) {
+  // throw new FinnhubException(Code.NOTFOUND);
+  // }
+  // return orderBookService.atAuctionOrders(stockId).get(stockId);
+  // }
 
   @Override
   public BuyerSellerData getBuyerSellerIndicator() {
     return orderBookService.calculateBuyerSellerIndicator();
   }
 
-  @Override
-  public String executeTrades(OrderResp orderResp) {
-    return orderBookService.executeTrades(orderResp);
-  }
+  // @Override
+  // public String executeTrades(OrderResp orderResp) {
+  //   return orderBookService.executeTrades(orderResp);
+  // }
 
 
 }

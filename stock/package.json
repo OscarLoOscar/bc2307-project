@@ -1,0 +1,31 @@
+{
+  "name": "crypto_live_api",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve",
+    "build": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build",
+    "lint": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service lint"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.36",
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
+    "@fortawesome/vue-fontawesome": "^3.0.0-4",
+    "@tailwindcss/postcss7-compat": "^2.0.2",
+    "autoprefixer": "^10.4.16",
+    "axios": "^0.21.4",
+    "core-js": "^3.6.5",
+    "element-plus": "^2.3.14",
+    "node": "^20.7.0",
+    "postcss": "8",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.2",
+    "vue": "^3.0.0"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^5.0.8",
+    "@vue/cli-service": "^5.0.8",
+    "@vue/compiler-sfc": "^3.0.0",
+    "vue-cli-plugin-tailwind": "^3.0.0",
+    "vue-template-compiler": "^2.6.14"
+  }
+}

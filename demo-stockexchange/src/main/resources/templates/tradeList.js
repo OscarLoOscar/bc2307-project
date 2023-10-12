@@ -62,11 +62,11 @@ const interval = 5000; // 5 seconds
 
 setInterval(function () {
   // Fetch and display data here
-  fetch("http://localhost:8081/transactions/atAuctionOrders?stockId=TSLA")
+  fetch("http://localhost:8087/transactions/atAuctionOrders?stockId=TSLA")
     .then(response => response.json())
     .then(data => {
-      const bidOrders = data.TSLA.bidOrders;
-      const askOrders = data.TSLA.askOrders;
+      const bidOrders = data.bidOrders;
+      const askOrders = data.askOrders;
 
       // Update the chat with the extracted data
       updateChat(bidOrders, askOrders);
