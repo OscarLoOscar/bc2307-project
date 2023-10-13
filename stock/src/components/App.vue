@@ -28,18 +28,14 @@
           </el-row>
           <el-row>
             <el-col class="button-wrapper">
-              <el-button
-                :class="{ 'selected': isBuySelected }"
-                @click="buySellSelectOption(true)"
-              >
-                Buy
-              </el-button>
-              <el-button
-                :class="{ 'selected': !isBuySelected }"
-                @click="buySellSelectOption(false)"
-              >
-                Sell
-              </el-button>
+
+              <el-button v-for="(option, index) in buySellOptions" :key="index"
+            :class="{ 'selected': buySellSelectedOption === index || isMarketSelected && index === 0 }"
+          @click="buySellSelectOption(index)"
+          >
+          <span>{{ option }}</span>
+          </el-button>
+
             </el-col>
           </el-row>
           <!-- Order Type -->
@@ -52,16 +48,14 @@
           </el-row>
           <el-row>
             <el-col class="button-wrapper">
-              <el-button
-                :class="{ 'selected': isMarketSelected }"
-                @click="orderTypeSelectOption(true)"
-              >Market
-              </el-button>
-              <el-button
-                :class="{ 'selected': !isMarketSelected }"
-                @click="orderTypeSelectOption(false)"
-              >Limit
-              </el-button>
+
+            <el-button v-for="(option, index) in orderTypeOptions" :key="index"
+            :class="{ 'selected': orderTypeSelectedOption === index || isMarketSelected && index === 0 }"
+          @click="orderTypeSelectOption(index)"
+          >
+          <span>{{ option }}</span>
+          </el-button>
+
             </el-col>
           </el-row>
           <!-- price -->
@@ -448,17 +442,12 @@ body::before {
   color: white;
   border-color: #1b439b;
 }
-/* Selected effect for Action buttons */
-.button-wrapper .el-button.action.selected {
-  border-color: #1b439b;
-  border-width: 1.5px;
-  color: #1b439b;
-}
+
 .button-wrapper .el-button {
   font-size: 15px;
   padding: 20px 40px;
   width: auto;
-  height: 65px;
+  height: auto;
   border: 1.5px solid #e7dfdf;
   border-radius: 20px;
   text-align: left;
@@ -467,6 +456,12 @@ body::before {
   transition: border-color 0.2s;
 }
 
+/* Selected effect for Action buttons */
+.button-wrapper .el-button.action.selected {
+  border-color: #1b439b;
+  border-width: 1.5px;
+  color: #1b439b;
+}
 .button-wrapper .el-button.order-type.selected {
   border-color: #1b439b;
   border-width: 1.5px;
