@@ -60,21 +60,21 @@
           <el-row class="button-header">Price</el-row>
           <el-row>
             <div class="custom-input-number">
-              <el-input-number v-model="form.price_input" :min="0" :max="10000" :step="0.1"></el-input-number>
+              <el-input-number v-model="price_input" :min="0" :max="10000" :step="0.1"></el-input-number>
             </div>
           </el-row>
           <!-- shares -->
           <el-row class="button-header">Quantity</el-row>
           <el-row>
             <div class="custom-input-number">
-              <el-input-number v-model="form.quantity_input" :min="0" :max="1000" :step="1"></el-input-number>
+              <el-input-number v-model="quantity_input" :min="0" :max="1000" :step="1"></el-input-number>
             </div>
           </el-row>
           <!-- Total Order value -->
           <el-row class="button-header">Total Order Value</el-row>
           <el-row>
             <div class="custom-input-order-value">
-              <el-input-number v-model="form.total_order_value_input" :min="1" :max="10000000000"
+              <el-input-number v-model="total_order_value_input" :min="1" :max="10000000000"
                 :controls="false"></el-input-number>
             </div>
           </el-row>
@@ -97,11 +97,9 @@ export default {
   name: 'App',
 
   setup() {
-    const form = ref({
-      price_input: 1000.0,
-      quantity_input: 100,
-      total_order_value_input: null
-    });
+      const    price_input= ref(1000.0);
+      const   quantity_input= ref(100);
+      const   total_order_value_input= null;
 
     // Buy Sell Option
     const buySellSelectedOption = ref(0);
@@ -139,26 +137,19 @@ export default {
     const placeOrder = () => {
   // Access the form data directly from the setup context
    // Ensure that form.price_input and form.quantity_input are valid
-   if (isNaN(form.price_input) || isNaN(form.quantity_input) || form.price_input <= 0 || form.quantity_input <= 0) {
+   if (isNaN(price_input.value) || isNaN(quantity_input.value) || price_input.value <= 0 || quantity_input.value <= 0) {
         console.error('Invalid price or quantity');
         return;
       }
-  const requestData = {
-    symbol: 'TSLA',
-    action: buySellOptions[buySellSelectedOption.value], // Use the selected option index to get the value
-    orderType: orderTypeOptions[orderTypeSelectedOption.value], // Use the selected option index to get the value
-    price: form.price_input,
-    quantity: form.quantity_input,
+      const  symbol= 'TSLA';
+      const  action= buySellOptions[buySellSelectedOption.value]; // Use the selected option index to get the value
+      const  orderType= orderTypeOptions[orderTypeSelectedOption.value]; // Use the selected option index to get the value
+      const  price= price_input.value;
+      const  quantity= quantity_input.value;
     // Include other request data here
-  };
-
-  // Check the values in requestData
-  console.log('Price:', form.price_input);
-console.log('Quantity:', form.quantity_input);
-  console.log('requestData:', requestData);
 
   // Construct the URL with the selected parameters
-  const url = `http://localhost:8085/sumit/trade/symbol/TSLA?action=${requestData.action}&orderType=${requestData.orderType}&price=${requestData.price}&quantity=${requestData.quantity}`;
+  const url = `http://localhost:8085/sumit/trade/symbol/${symbol}?action=${action}&orderType=${orderType}&price=${price}&quantity=${quantity}`;
 
   // Create an Axios configuration object
   const config = {
@@ -166,7 +157,6 @@ console.log('Quantity:', form.quantity_input);
     headers: {
       'Content-Type': 'application/json'
     },
-    data: requestData
   };
 
   // Send the POST request using Axios
@@ -187,10 +177,10 @@ console.log('Quantity:', form.quantity_input);
       retrieveQueue();
     });
 
-    // Fetch data periodically every 100 seconds
+    // Fetch data periodically every 5 seconds
     setInterval(() => {
       retrieveQueue();
-    }, 100000);
+    }, 5000);
 
     // Update buyOrders and sellOrders when buys and asks data change
     const updateOrders = () => {
@@ -204,11 +194,10 @@ console.log('Quantity:', form.quantity_input);
     });
 
     return {
-      form,
+      price_input,
+      quantity_input,
       buyOrders,
       sellOrders,
-      // toggleBuySell,
-      // toggleMarketLimit,
       buySellSelectedOption,
       buySellOptions,
       buySellSelectOption,
