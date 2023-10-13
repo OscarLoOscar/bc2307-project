@@ -19,22 +19,48 @@
       <div class="order-form">
         <el-form :model="form">
           <!-- Action -->
-          <el-row class="button-header">Action</el-row>
+          <el-row
+            class="button-header"
+            @click="toggleActionRow"
+            :class="{ 'action-row': activeActionRow }"
+          >
+            Action
+          </el-row>
           <el-row>
             <el-col class="button-wrapper">
-              <el-button v-for="(option, index) in buySellOptions" :key="index"
-                :class="{ 'selected': buySellSelectedOption === index }" @click="buySellSelectOption(index)">
-                <span>{{ option }}</span>
+              <el-button
+                :class="{ 'selected': isBuySelected }"
+                @click="buySellSelectOption(true)"
+              >
+                Buy
+              </el-button>
+              <el-button
+                :class="{ 'selected': !isBuySelected }"
+                @click="buySellSelectOption(false)"
+              >
+                Sell
               </el-button>
             </el-col>
           </el-row>
           <!-- Order Type -->
-          <el-row class="button-header">Order Type</el-row>
+          <el-row
+            class="button-header"
+            @click="toggleOrderTypeRow"
+            :class="{ 'order-type-row': activeOrderTypeRow }"
+          >
+            Order Type
+          </el-row>
           <el-row>
             <el-col class="button-wrapper">
-              <el-button v-for="(option, index) in orderTypeOptions" :key="index"
-                :class="{ 'selected': orderTypeSelectedOption === index }" @click="orderTypeSelectOption(index)">
-                <span>{{ option }}</span>
+              <el-button
+                :class="{ 'selected': isMarketSelected }"
+                @click="orderTypeSelectOption(true)"
+              >Market
+              </el-button>
+              <el-button
+                :class="{ 'selected': !isMarketSelected }"
+                @click="orderTypeSelectOption(false)"
+              >Limit
               </el-button>
             </el-col>
           </el-row>
@@ -85,22 +111,37 @@ export default {
       total_order_value_input: null
     });
 
-    const buyOrders = ref([]);
-    const sellOrders = ref([]);
+    // // Variables to track selected options
+    // const isBuySelected = ref(true); // Default to "Buy"
+    // const isMarketSelected = ref(true); // Default to "Market"
+
+    // // Function to toggle the "Buy" and "Sell" options
+    // const toggleBuySell = (isBuy) => {
+    //   isBuySelected.value = isBuy;
+    // };
+
+    // // Function to toggle the "Market" and "Limit" options
+    // const toggleMarketLimit = (isMarket) => {
+    //   isMarketSelected.value = isMarket;
+    // };
+
 
     // Buy Sell Option
-    const buySellSelectedOption = ref(null);
+    const buySellSelectedOption = ref(true);
     const buySellOptions = ['Buy', 'Sell'];
     const buySellSelectOption = (buySellIndex) => {
       buySellSelectedOption.value = buySellIndex;
     };
 
     // Order Type Option
-    const orderTypeSelectedOption = ref(null);
+    const orderTypeSelectedOption = ref(true);
     const orderTypeOptions = ['Market', 'Limit'];
     const orderTypeSelectOption = (orderTypeIndex) => {
       orderTypeSelectedOption.value = orderTypeIndex;
     };
+    
+    const buyOrders = ref([]);
+    const sellOrders = ref([]);
 
     const retrieveQueue = async () => {
       try {
@@ -117,29 +158,29 @@ export default {
       }
     };
 
-  // Function to place an order
+    // Function to place an order
     const placeOrder = () => {
-  // Access the form data directly from the setup context
-  const requestData = {
-    symbol: 'TSLA',
-    tradeType: buySellOptions[buySellSelectedOption.value], // Use the selected option index to get the value
-    orderType: orderTypeOptions[orderTypeSelectedOption.value], // Use the selected option index to get the value
-    price: form.price_input,
-    quantity: form.share_input,
-    // Include other request data here
-  };
+      // Access the form data directly from the setup context
+      const requestData = {
+        symbol: 'TSLA',
+        tradeType: buySellOptions[buySellSelectedOption.value], // Use the selected option index to get the value
+        orderType: orderTypeOptions[orderTypeSelectedOption.value], // Use the selected option index to get the value
+        price: form.price_input,
+        quantity: form.share_input,
+        // Include other request data here
+      };
 
-  // Send the POST request using Axios
-  axios.post('http://localhost:8085/sumit/trade/symbol/TSLA', requestData)
-    .then(() => {
-      // Handle the response if needed
-      console.log('Order placed successfully');
-    })
-    .catch(error => {
-      // Handle any errors
-      console.error('Error placing order:', error);
-    });
-};
+      // Send the POST request using Axios
+      axios.post('http://localhost:8085/sumit/trade/symbol/TSLA', requestData)
+        .then(() => {
+          // Handle the response if needed
+          console.log('Order placed successfully');
+        })
+        .catch(error => {
+          // Handle any errors
+          console.error('Error placing order:', error);
+         });
+    };
 
     // Fetch data initially
     onMounted(() => {
@@ -166,6 +207,8 @@ export default {
       form,
       buyOrders,
       sellOrders,
+      // toggleBuySell,
+      // toggleMarketLimit,
       buySellSelectedOption,
       buySellOptions,
       buySellSelectOption,
@@ -191,7 +234,7 @@ body::before {
   left: 0;
   right: 0;
   bottom: 0;
-  opacity: 0.93;
+  opacity: 0.9;
   /* Adjust the opacity level (0.0 to 1.0) */
   z-index: -1;
 }
@@ -276,16 +319,15 @@ body::before {
   font-size: 15px;
   padding: 28px 60px;
   width: 133px;
-  /* Set the fixed width as needed */
   height: 65px;
-  margin-bottom: 15px;
-  margin-top: 15px;
   border: 1.5px solid #e7dfdf;
   border-radius: 20px;
   text-align: left;
   background-color: #f6f9f7;
+  color: #1b439b;
   transition: border-color 0.2s;
 }
+
   .selected {
     border-color: #1b439b;
     border-width: 1.5px;
@@ -400,15 +442,43 @@ body::before {
   color: white; /* Change the text color when the button is pressed */
 }
 
-.action-row:active {
+.button-wrapper .el-button:active{
   /* Define the style for the "Action" row when clicked */
   background-color: #1b439b;
   color: white;
+  border-color: #1b439b;
+}
+/* Selected effect for Action buttons */
+.button-wrapper .el-button.action.selected {
+  border-color: #1b439b;
+  border-width: 1.5px;
+  color: #1b439b;
+}
+.button-wrapper .el-button {
+  font-size: 15px;
+  padding: 20px 40px;
+  width: auto;
+  height: 65px;
+  border: 1.5px solid #e7dfdf;
+  border-radius: 20px;
+  text-align: left;
+  background-color: #f6f9f7;
+  color: #1b439b;
+  transition: border-color 0.2s;
 }
 
-.order-type-row:active {
-  /* Define the style for the "Order Type" row when clicked */
+.button-wrapper .el-button.order-type.selected {
+  border-color: #1b439b;
+  border-width: 1.5px;
+  color: #1b439b;
+}
+
+/* Styles for the button on hover */
+.button-wrapper .el-button:hover {
+  /* Your styles for the hover state (when the mouse is over the button) */
+  /* Example styles: */
   background-color: #1b439b;
   color: white;
+  border-color: #1b439b;
 }
 </style>
