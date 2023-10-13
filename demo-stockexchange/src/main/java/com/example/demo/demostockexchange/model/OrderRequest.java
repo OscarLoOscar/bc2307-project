@@ -42,7 +42,7 @@ public class OrderRequest {
   private Map<Double, Integer> askOffers = new TreeMap<>();
 
   public void onOrder(double price, int quantity, String side) {
-    if (tradeType.BID.name().equals(side)) {
+    if (tradeType.BUY.name().toLowerCase().equals(side)) {
       bidOffers.put(price, quantity);
       Set<Double> ask_prices = askOffers.keySet();
       List<Double> ask_prices_list = new ArrayList<>(ask_prices);
@@ -64,7 +64,7 @@ public class OrderRequest {
       if (quantity > 0) {
         addBidRestingOrder(price, quantity);
       }
-    } else if (tradeType.ASK.name().equals(side)) {
+    } else if (tradeType.SELL.name().toLowerCase().equals(side)) {
       askOffers.put(price, quantity);
       Set<Double> bid_prices = bidOffers.keySet();
       List<Double> bid_prices_list = new ArrayList<>(bid_prices);

@@ -5,14 +5,14 @@
       <div class="order-book-tables">
         <div class="order-book-buy">
           <el-table :data="buyOrders" :max-height="480">
-            <el-table-column label="Shares" prop="quantity" align="center"></el-table-column>
+            <el-table-column label="Quantity" prop="quantity" align="center"></el-table-column>
             <el-table-column label="Buy (Bid)" prop="price" align="center"></el-table-column>
           </el-table>
         </div>
         <div class="order-book-sell">
           <el-table :data="sellOrders" :max-height="480">
             <el-table-column label="Sell (Ask)" prop="price" align="center"></el-table-column>
-            <el-table-column label="Shares" prop="quantity" align="center"></el-table-column>
+            <el-table-column label="Quantity" prop="quantity" align="center"></el-table-column>
           </el-table>
         </div>
       </div>
@@ -21,8 +21,7 @@
           <!-- Action -->
           <el-row
             class="button-header"
-            @click="toggleActionRow"
-            :class="{ 'action-row': activeActionRow }"
+            :class="{ 'action-row': buySellSelectedOption }"
           >
             Action
           </el-row>
@@ -30,7 +29,7 @@
             <el-col class="button-wrapper">
 
               <el-button v-for="(option, index) in buySellOptions" :key="index"
-            :class="{ 'selected': buySellSelectedOption === index || isMarketSelected && index === 0 }"
+            :class="{ 'selected': buySellSelectedOption === index  }"
           @click="buySellSelectOption(index)"
           >
           <span>{{ option }}</span>
@@ -41,8 +40,7 @@
           <!-- Order Type -->
           <el-row
             class="button-header"
-            @click="toggleOrderTypeRow"
-            :class="{ 'order-type-row': activeOrderTypeRow }"
+            :class="{ 'order-type-row': orderTypeSelectedOption }"
           >
             Order Type
           </el-row>
@@ -50,7 +48,7 @@
             <el-col class="button-wrapper">
 
             <el-button v-for="(option, index) in orderTypeOptions" :key="index"
-            :class="{ 'selected': orderTypeSelectedOption === index || isMarketSelected && index === 0 }"
+            :class="{ 'selected': orderTypeSelectedOption === index}"
           @click="orderTypeSelectOption(index)"
           >
           <span>{{ option }}</span>
@@ -66,10 +64,10 @@
             </div>
           </el-row>
           <!-- shares -->
-          <el-row class="button-header">Shares</el-row>
+          <el-row class="button-header">Quantity</el-row>
           <el-row>
             <div class="custom-input-number">
-              <el-input-number v-model="form.share_input" :min="0" :max="1000" :step="1"></el-input-number>
+              <el-input-number v-model="form.quantity_input" :min="0" :max="1000" :step="1"></el-input-number>
             </div>
           </el-row>
           <!-- Total Order value -->
@@ -100,35 +98,20 @@ export default {
 
   setup() {
     const form = ref({
-      share_input: 100,
       price_input: 1000.0,
+      quantity_input: 100,
       total_order_value_input: null
     });
 
-    // // Variables to track selected options
-    // const isBuySelected = ref(true); // Default to "Buy"
-    // const isMarketSelected = ref(true); // Default to "Market"
-
-    // // Function to toggle the "Buy" and "Sell" options
-    // const toggleBuySell = (isBuy) => {
-    //   isBuySelected.value = isBuy;
-    // };
-
-    // // Function to toggle the "Market" and "Limit" options
-    // const toggleMarketLimit = (isMarket) => {
-    //   isMarketSelected.value = isMarket;
-    // };
-
-
     // Buy Sell Option
-    const buySellSelectedOption = ref(true);
+    const buySellSelectedOption = ref(0);
     const buySellOptions = ['Buy', 'Sell'];
     const buySellSelectOption = (buySellIndex) => {
       buySellSelectedOption.value = buySellIndex;
     };
 
     // Order Type Option
-    const orderTypeSelectedOption = ref(true);
+    const orderTypeSelectedOption = ref(0);
     const orderTypeOptions = ['Market', 'Limit'];
     const orderTypeSelectOption = (orderTypeIndex) => {
       orderTypeSelectedOption.value = orderTypeIndex;
@@ -154,27 +137,50 @@ export default {
 
     // Function to place an order
     const placeOrder = () => {
-      // Access the form data directly from the setup context
-      const requestData = {
-        symbol: 'TSLA',
-        tradeType: buySellOptions[buySellSelectedOption.value], // Use the selected option index to get the value
-        orderType: orderTypeOptions[orderTypeSelectedOption.value], // Use the selected option index to get the value
-        price: form.price_input,
-        quantity: form.share_input,
-        // Include other request data here
-      };
+  // Access the form data directly from the setup context
+   // Ensure that form.price_input and form.quantity_input are valid
+   if (isNaN(form.price_input) || isNaN(form.quantity_input) || form.price_input <= 0 || form.quantity_input <= 0) {
+        console.error('Invalid price or quantity');
+        return;
+      }
+  const requestData = {
+    symbol: 'TSLA',
+    action: buySellOptions[buySellSelectedOption.value], // Use the selected option index to get the value
+    orderType: orderTypeOptions[orderTypeSelectedOption.value], // Use the selected option index to get the value
+    price: form.price_input,
+    quantity: form.quantity_input,
+    // Include other request data here
+  };
 
-      // Send the POST request using Axios
-      axios.post('http://localhost:8085/sumit/trade/symbol/TSLA', requestData)
-        .then(() => {
-          // Handle the response if needed
-          console.log('Order placed successfully');
-        })
-        .catch(error => {
-          // Handle any errors
-          console.error('Error placing order:', error);
-         });
-    };
+  // Check the values in requestData
+  console.log('Price:', form.price_input);
+console.log('Quantity:', form.quantity_input);
+  console.log('requestData:', requestData);
+
+  // Construct the URL with the selected parameters
+  const url = `http://localhost:8085/sumit/trade/symbol/TSLA?action=${requestData.action}&orderType=${requestData.orderType}&price=${requestData.price}&quantity=${requestData.quantity}`;
+
+  // Create an Axios configuration object
+  const config = {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    data: requestData
+  };
+
+  // Send the POST request using Axios
+  axios(url, config)
+    .then(() => {
+      // Handle the response if needed
+      console.log('Order placed successfully');
+    })
+    .catch(error => {
+      // Handle any errors
+      console.error('Error placing order:', error);
+    });
+};
+
 
     // Fetch data initially
     onMounted(() => {

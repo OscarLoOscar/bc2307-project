@@ -2,7 +2,9 @@ package com.example.demo.demostockexchange.controller;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.demostockexchange.entity.Orders;
 import com.example.demo.demostockexchange.exception.ApiResponse;
@@ -25,16 +27,20 @@ public class OrderControllerOperation implements OrderController {
   StockRepository stockRepository;
 
   @Override
-  public ApiResponse<Orders> placeOrder(String symbol, OrderForm orderForm)
-      throws FinnhubException {
+  public ApiResponse<Orders> placeOrder(@PathVariable String symbol,
+      @RequestParam String action, //
+      @RequestParam String orderType, //
+      @RequestParam double price, //
+      @RequestParam int quantity//
+  ) throws FinnhubException {
     if (!tradeStock.contains(symbol)) {
       return null;
     }
     OrderRequest request = OrderRequest.builder()//
-        .action(orderForm.getAction())//
-        .orderType(orderForm.getOrderType())//
-        .price(orderForm.getPrice())//
-        .quantity(orderForm.getQuantity())//
+        .action(action)//
+        .orderType(orderType)//
+        .price(price)//
+        .quantity(quantity)//
         // .totalOrderValue((long) orderForm.getPrice() * orderForm.getQuantity())//
         .build();
     request.onOrder(request.getPrice(), request.getQuantity(),

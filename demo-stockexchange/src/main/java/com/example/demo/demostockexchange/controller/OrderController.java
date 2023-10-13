@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import com.example.demo.demostockexchange.entity.Orders;
 import com.example.demo.demostockexchange.exception.ApiResponse;
@@ -16,5 +17,9 @@ public interface OrderController {
         @PostMapping("/trade/symbol/{symbol}")
         @ResponseStatus(HttpStatus.OK)
         public ApiResponse<Orders> placeOrder(@PathVariable String symbol,
-                        @RequestBody OrderForm orderForm) throws FinnhubException;
+                        @RequestParam String action,//
+                        @RequestParam String orderType,//
+                        @RequestParam double price,//
+                        @RequestParam int quantity//
+                        ) throws FinnhubException;
 }

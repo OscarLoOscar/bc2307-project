@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum tradeType {
-  BID, //
-  ASK,//
+  BUY, //
+  SELL,//
 ;
 }
