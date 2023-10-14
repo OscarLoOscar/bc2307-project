@@ -84,7 +84,7 @@
   </div>
 
   <div> 
-    <div id="kline-chart" style="width: 1000%; height: 600px;" ref="klineChart"></div>
+    <div id="kline-chart" style="width: 700%; height: 600px;" ref="klineChart"></div>
     </div>
 </div>
 
@@ -198,11 +198,11 @@ const klineChart = ref(null); // Reference to the Kline chart div
       const myChart = echarts.init(klineChart.value);
     // Define Finnhub client and API key
 const apiKey = "cju3it9r01qr958213c0cju3it9r01qr958213cg"; // Replace with your Finnhub API key
-const symbol = 'TSLA';
+const symbol = stockSymbol.value;
 //stockSymbol.value;
 const time = "D";//1,5,15,60,D,M,W
-const from = 1390988249;
-const to = 1591852249;
+const from = 1990988249;
+const to = 2091852249;
 
 const apiUrl = `https://finnhub.io/api/v1/stock/candle?symbol=${symbol}&resolution=${time}&from=${from}&to=${to}&token=${apiKey}`;
 
@@ -435,7 +435,7 @@ fetch(apiUrl)
 }
 
 // Set up a timer to call fetchData every, for example, 5 seconds (5000 milliseconds)
-const interval = 10000; // 10 seconds
+const interval = 100000; // 100 seconds
 setInterval(fetchData, interval);
 
 // Define calculateMA function
