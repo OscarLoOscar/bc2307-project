@@ -2,22 +2,33 @@
   <div id="app">
     <h1 class="caption p-4">Stock Order Book</h1>
     <div class="order-book-container">
-      <div class="order-book-tables">
-        <div class="order-book-buy">
+
+        <div>
+        <el-row class="button-header">Stock Symbol : </el-row>
+        <el-row>
+          <div class="custom-input-stock-symbol">
+          <el-input v-model="stockSymbol" class="custom-stock-input"></el-input>
+            </div>
+          </el-row> 
+          </div>
+
+          <div class="order-book-tables">
+        <div class="order-book-buy"  >
           <el-table :data="buyOrders" :max-height="480">
             <el-table-column label="Quantity" prop="quantity" align="center"></el-table-column>
             <el-table-column label="Buy (Bid)" prop="price" align="center"></el-table-column>
           </el-table>
         </div>
-        <div class="order-book-sell">
+        <div class="order-book-sell"  >
           <el-table :data="sellOrders" :max-height="480">
             <el-table-column label="Sell (Ask)" prop="price" align="center"></el-table-column>
             <el-table-column label="Quantity" prop="quantity" align="center"></el-table-column>
           </el-table>
         </div>
       </div>
-      <div class="order-form">
-        <!-- <el-form :model="form"> -->
+    </div>
+
+      <div class="order-form" >
           <!-- Action -->
           <el-row
             class="button-header"
@@ -85,8 +96,6 @@
             </div>
         
           </el-row>
-        <!-- </el-form> -->
-      </div>
     </div>
   </div>
 </template>
@@ -97,11 +106,11 @@ import axios from 'axios';
 
 export default {
   name: 'App',
-
   setup() {
       const    price_input= ref(1000.0);
       const   quantity_input= ref(100);
       const   total_order_value_input=ref( price_input*quantity_input);
+      const stockSymbol = ref('TSLA');
 
     // Buy Sell Option
     const buySellSelectedOption = ref(0);
@@ -143,7 +152,7 @@ export default {
         console.error('Invalid price or quantity');
         return;
       }
-      const  symbol= 'TSLA';
+      const  symbol= stockSymbol.value;
       const  action= buySellOptions[buySellSelectedOption.value]; // Use the selected option index to get the value
       const  orderType= orderTypeOptions[orderTypeSelectedOption.value]; // Use the selected option index to get the value
       const  price= price_input.value;
@@ -196,6 +205,7 @@ export default {
     });
 
     return {
+      stockSymbol,
       price_input,
       quantity_input,
       total_order_value_input,
@@ -305,6 +315,9 @@ body::before {
 
   color: rgb(92, 99, 99);
   font-size: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: top;
 }
 
 .button-wrapper .el-button {
@@ -472,5 +485,20 @@ body::before {
   background-color: #1b439b;
   color: white;
   border-color: #1b439b;
+}
+
+.custom-stock-input {
+  /* Control the box size */
+  width: 200px; /* Adjust the width as needed */
+  height: 40px; /* Adjust the height as needed */
+ display: flex;
+  align-items: center;
+  /* Control the background color */
+  background-color: #f7f7f7; /* Background color */
+  border: 2px solid #e46c25; /* Border color */
+  border-radius: 10px; /* Border radius */
+  padding: 10px; /* Padding inside the input */
+  font-size: 16px; /* Font size */
+  color: #333; /* Text color */
 }
 </style>
