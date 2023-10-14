@@ -438,7 +438,6 @@ body::before {
   /* Define the style for the "Action" row when clicked */
   background-color: #1b439b;
   color: white;
-  border-color: #1b439b;
 }
 
 .button-wrapper .el-button {
