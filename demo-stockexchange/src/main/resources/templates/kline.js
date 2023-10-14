@@ -3,7 +3,7 @@ var myChart = echarts.init(document.getElementById('main'));
 
 // Define Finnhub client and API key
 const apiKey = "cju3it9r01qr958213c0cju3it9r01qr958213cg"; // Replace with your Finnhub API key
-const symbol = "AAPL";
+const symbol = "TSLA";
 const time = "D";//1,5,15,60,D,M,W
 const from = 1390988249;
 const to = 1591852249;
