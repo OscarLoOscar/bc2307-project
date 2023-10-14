@@ -2,7 +2,7 @@
   <div id="app">
     <h1 class="caption p-4">Stock Order Book</h1>
     <div class="order-book-container">
-
+<div>
         <div>
         <el-row class="button-header">Stock Symbol : </el-row>
         <el-row>
@@ -11,22 +11,6 @@
             </div>
           </el-row> 
           </div>
-
-          <div class="order-book-tables">
-        <div class="order-book-buy"  >
-          <el-table :data="buyOrders" :max-height="480">
-            <el-table-column label="Quantity" prop="quantity" align="center"></el-table-column>
-            <el-table-column label="Buy (Bid)" prop="price" align="center"></el-table-column>
-          </el-table>
-        </div>
-        <div class="order-book-sell"  >
-          <el-table :data="sellOrders" :max-height="480">
-            <el-table-column label="Sell (Ask)" prop="price" align="center"></el-table-column>
-            <el-table-column label="Quantity" prop="quantity" align="center"></el-table-column>
-          </el-table>
-        </div>
-      </div>
-    </div>
 
       <div class="order-form" >
           <!-- Action -->
@@ -98,6 +82,23 @@
           </el-row>
     </div>
   </div>
+
+  <div class="order-book-tables" top>
+        <div class="order-book-buy"  >
+          <el-table :data="buyOrders" :max-height="480">
+            <el-table-column label="Quantity" prop="quantity" align="center"></el-table-column>
+            <el-table-column label="Buy (Bid)" prop="price" align="center"></el-table-column>
+          </el-table>
+        </div>
+        <div class="order-book-sell"  >
+          <el-table :data="sellOrders" :max-height="480">
+            <el-table-column label="Sell (Ask)" prop="price" align="center"></el-table-column>
+            <el-table-column label="Quantity" prop="quantity" align="center"></el-table-column>
+          </el-table>
+        </div>
+      </div>
+    </div>
+    </div>
 </template>
 
 <script>
@@ -274,7 +275,7 @@ body::before {
 
 /* Styling for the order form and panel */
 .order-form {
-  width: 38%;
+  width: auto;
   display: flex;
   flex-direction: column;
   align-items: left;
