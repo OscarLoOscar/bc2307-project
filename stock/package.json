@@ -19,7 +19,8 @@
     "node": "^20.7.0",
     "postcss": "^7",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.2",
-    "vue": "^3.0.0"
+    "vue": "^3.0.0",
+    "vue-loading-button": "^0.2.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^5.0.8",

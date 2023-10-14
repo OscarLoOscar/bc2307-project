@@ -28,7 +28,7 @@ public interface WebSocketOperation {
         @PostMapping("/trade/symbol/{symbol}")
         @ResponseStatus(HttpStatus.OK)
         public ApiResponse<Orders> placeOrder(@PathVariable String symbol,
-        @RequestParam String tradeType, double price,
+        @RequestParam String Action, double price,
         int quantity) throws FinnhubException;
 
         @GetMapping("/bidQueue")

@@ -17,7 +17,7 @@
         </div>
       </div>
       <div class="order-form">
-        <el-form :model="form">
+        <!-- <el-form :model="form"> -->
           <!-- Action -->
           <el-row
             class="button-header"
@@ -79,11 +79,13 @@
             </div>
           </el-row>
           <el-row>
+
             <div class="place-order-button">
               <el-button type="primary" @click="placeOrder">Place Order</el-button>
             </div>
+        
           </el-row>
-        </el-form>
+        <!-- </el-form> -->
       </div>
     </div>
   </div>
@@ -99,7 +101,7 @@ export default {
   setup() {
       const    price_input= ref(1000.0);
       const   quantity_input= ref(100);
-      const   total_order_value_input= null;
+      const   total_order_value_input=ref( price_input*quantity_input);
 
     // Buy Sell Option
     const buySellSelectedOption = ref(0);
@@ -180,7 +182,7 @@ export default {
     // Fetch data periodically every 5 seconds
     setInterval(() => {
       retrieveQueue();
-    }, 5000);
+    }, 2000);
 
     // Update buyOrders and sellOrders when buys and asks data change
     const updateOrders = () => {
@@ -196,6 +198,7 @@ export default {
     return {
       price_input,
       quantity_input,
+      total_order_value_input,
       buyOrders,
       sellOrders,
       buySellSelectedOption,

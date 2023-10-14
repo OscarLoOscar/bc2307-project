@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import com.example.demo.demostockexchange.infra.tradeType;
+import com.example.demo.demostockexchange.infra.Action;
+import com.example.demo.demostockexchange.infra.OrderType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,20 +36,20 @@ public class OrderRequest {
 
   private int quantity;
 
-  private long totalOrderValue ;
+  // private long totalOrderValue ;
 
   private Map<Double, Integer> bidOffers =
       new TreeMap<>(Comparator.reverseOrder());
   private Map<Double, Integer> askOffers = new TreeMap<>();
 
   public void onOrder(double price, int quantity, String side) {
-    if (tradeType.BUY.name().toLowerCase().equals(side)) {
-      bidOffers.put(price, quantity);
-      Set<Double> ask_prices = askOffers.keySet();
+    if (Action.BUY.name().toLowerCase().equals(side)) {
+      this.bidOffers.put(price, quantity);
+      Set<Double> ask_prices = this.askOffers.keySet();
       List<Double> ask_prices_list = new ArrayList<>(ask_prices);
       for (double ask_price : ask_prices_list) {
         if (quantity > 0 && price >= ask_price) {
-          int ask_quantity = askOffers.get(ask_price);
+          int ask_quantity = this.askOffers.get(ask_price);
           if (quantity >= ask_quantity) {
             quantity = quantity - ask_quantity;
             removeAskOrder(ask_price, ask_quantity);
@@ -64,18 +65,18 @@ public class OrderRequest {
       if (quantity > 0) {
         addBidRestingOrder(price, quantity);
       }
-    } else if (tradeType.SELL.name().toLowerCase().equals(side)) {
-      askOffers.put(price, quantity);
-      Set<Double> bid_prices = bidOffers.keySet();
+    } else if (Action.SELL.name().toLowerCase().equals(side)) {
+      this.askOffers.put(price, quantity);
+      Set<Double> bid_prices = this.bidOffers.keySet();
       List<Double> bid_prices_list = new ArrayList<>(bid_prices);
       for (double bid_price : bid_prices_list) {
         if (quantity > 0 && price <= bid_price) {
-          int bid_quantity = bidOffers.get(bid_price);
+          int bid_quantity = this.bidOffers.get(bid_price);
           if (quantity >= bid_quantity) {
             quantity = quantity - bid_quantity;
-            removeBidOrder(bid_price, bid_quantity);
+            this.removeBidOrder(bid_price, bid_quantity);
           } else {
-            removeBidOrder(bid_price, quantity);
+            this.removeBidOrder(bid_price, quantity);
             quantity = 0;
           }
           if (quantity == 0) {
@@ -85,44 +86,44 @@ public class OrderRequest {
 
       }
       if (quantity > 0) {
-        addAskRestingOffer(price, quantity);
+        this.addAskRestingOffer(price, quantity);
       }
     }
   }
 
 
   synchronized void addBidRestingOrder(double price, int quantity) {
-    bidOffers.put(price, quantity);
+    this.bidOffers.put(price, quantity);
   }
 
   synchronized void removeBidOrder(double price, int quantity) {
-    int lastQuantity = bidOffers.get(price);
+    int lastQuantity = this.bidOffers.get(price);
     if (lastQuantity == quantity) {
-      bidOffers.remove(price);
+      this.bidOffers.remove(price);
     } else {
-      bidOffers.put(price, lastQuantity - quantity);
+      this.bidOffers.put(price, lastQuantity - quantity);
     }
   }
 
   synchronized void addAskRestingOffer(double price, int quantity) {
-    askOffers.put(price, quantity);
+    this.askOffers.put(price, quantity);
   }
 
   synchronized void removeAskOrder(double price, int quantity) {
-    int lastQuantity = askOffers.get(price);
+    int lastQuantity = this.askOffers.get(price);
     if (lastQuantity == quantity) {
-      askOffers.remove(price);
+      this.askOffers.remove(price);
     } else {
-      askOffers.put(price, lastQuantity - quantity);
+      this.askOffers.put(price, lastQuantity - quantity);
     }
   }
 
   public int getAskLevel() {
-    return askOffers.size();
+    return this.askOffers.size();
   }
 
   public int getBidLevel() {
-    return bidOffers.size();
+    return this.bidOffers.size();
   }
 
 }

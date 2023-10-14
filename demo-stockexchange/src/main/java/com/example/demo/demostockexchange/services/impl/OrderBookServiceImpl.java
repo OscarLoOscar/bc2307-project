@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.demostockexchange.entity.Orders;
-import com.example.demo.demostockexchange.infra.tradeType;
+import com.example.demo.demostockexchange.infra.Action;
 import com.example.demo.demostockexchange.model.OrderRequest;
 import com.example.demo.demostockexchange.model.OrderResp;
 import com.example.demo.demostockexchange.model.BuyerVsSeller.BuyerSellerData;
@@ -43,7 +43,7 @@ public class OrderBookServiceImpl implements OrderBookService {
   //   List<Orders> data = this.getOrderBook();
   //   List<Orders> response = new ArrayList<>();
   //   for (Orders order : data) {
-  //     if (tradeType.BID.name().toLowerCase()
+  //     if (Action.BID.name().toLowerCase()
   //         .equals(order.getType().toLowerCase())
   //         && order.getStockId().equals(stockId)) {
   //       response.add(order);
@@ -60,7 +60,7 @@ public class OrderBookServiceImpl implements OrderBookService {
     Map<Double, Integer> priceToQuantityMap = new TreeMap<>(Comparator.reverseOrder());
 
     for (Orders order : data) {
-        if (tradeType.BUY.name().toLowerCase().equalsIgnoreCase(order.getType()) && order.getStockId().equals(stockId)) {
+        if (Action.BUY.name().toLowerCase().equalsIgnoreCase(order.getType()) && order.getStockId().equals(stockId)) {
             double price = order.getPrice();
             int quantity = order.getQuantity();
             
@@ -83,7 +83,7 @@ public class OrderBookServiceImpl implements OrderBookService {
 
         // Create an OrderResp object with the price and summed quantity
         OrderResp orderResp = OrderResp.builder()
-                .type(tradeType.BUY.name())
+                .type(Action.BUY.name())
                 .localTime(LocalTime.now().toString())
                 .price(price)
                 .quantity(quantity)
@@ -101,7 +101,7 @@ public class OrderBookServiceImpl implements OrderBookService {
     Map<Double, Integer> priceToQuantityMap = new TreeMap<>();
 
     for (Orders order : data) {
-        if (tradeType.SELL.name().toLowerCase().equalsIgnoreCase(order.getType()) && order.getStockId().equals(stockId)) {
+        if (Action.SELL.name().toLowerCase().equalsIgnoreCase(order.getType()) && order.getStockId().equals(stockId)) {
             double price = order.getPrice();
             int quantity = order.getQuantity();
             
@@ -124,7 +124,7 @@ public class OrderBookServiceImpl implements OrderBookService {
 
         // Create an OrderResp object with the price and summed quantity
         OrderResp orderResp = OrderResp.builder()
-                .type(tradeType.SELL.name())
+                .type(Action.SELL.name())
                 .localTime(LocalTime.now().toString())
                 .price(price)
                 .quantity(quantity)
@@ -141,7 +141,7 @@ public class OrderBookServiceImpl implements OrderBookService {
   //   List<Orders> data = this.getOrderBook();
   //   List<Orders> response = new ArrayList<>();
   //   for (Orders order : data) {
-  //     if (tradeType.ASK.name().toLowerCase()
+  //     if (Action.ASK.name().toLowerCase()
   //         .equals(order.getType().toLowerCase())
   //         && order.getStockId().equals(stockId)) {
   //       response.add(order);

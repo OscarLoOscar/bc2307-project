@@ -36,13 +36,13 @@ document.addEventListener("DOMContentLoaded", () => {
   tradeForm.addEventListener("submit", (event) => {
     event.preventDefault();
 
-    const tradeType = document.getElementById("trade-type").value;
+    const Action = document.getElementById("trade-type").value;
     const stockCode = selectedStock;
     const price = parseFloat(priceInput.value);
     const quantity = parseInt(quantityInput.value);
 
-    // You can use the tradeType, stockCode, price, and quantity for further processing or submission.
-    console.log("Trade Type : ", tradeType);
+    // You can use the Action, stockCode, price, and quantity for further processing or submission.
+    console.log("Trade Type : ", Action);
     console.log("Stock Code : ", stockCode);
     console.log("Price : ", price);
     console.log("Quantity : ", quantity);

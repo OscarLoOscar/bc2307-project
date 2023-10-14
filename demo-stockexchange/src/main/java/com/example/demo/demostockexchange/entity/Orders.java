@@ -36,7 +36,7 @@ public class Orders {
   String stockId;
 
   @NonNull
-  String type; // 'Bid','Ask'
+  String type; // 'Buy','Sell'
 
   @NonNull
   Double price;

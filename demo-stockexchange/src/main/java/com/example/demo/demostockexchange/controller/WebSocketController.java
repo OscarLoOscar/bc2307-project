@@ -48,10 +48,10 @@ public class WebSocketController implements WebSocketOperation {
   // // List<String> tradeStock = List.of("AAPL", "TSLA", "MSFT");
   // if (!tradeStock.contains(orderRequest.getStockId()))
   // throw new FinnhubException(Code.FINNHUB_SYMBOL_NOTFOUND);
-  // if (tradeType.ASK.name().equals(orderRequest.getType().toUpperCase())
+  // if (Action.ASK.name().equals(orderRequest.getType().toUpperCase())
   // && tradeStock.contains(orderRequest.getStockId())) {
   // createAskOrder(orderRequest);
-  // } else if (tradeType.BID.name().equals(orderRequest.getType().toUpperCase())
+  // } else if (Action.BID.name().equals(orderRequest.getType().toUpperCase())
   // && tradeStock.contains(orderRequest.getStockId())) {
   // createBidOrder(orderRequest);
   // }

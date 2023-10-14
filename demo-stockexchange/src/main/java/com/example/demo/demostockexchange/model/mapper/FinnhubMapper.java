@@ -8,6 +8,7 @@ import java.util.PriorityQueue;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 import com.example.demo.demostockexchange.entity.Orders;
+import com.example.demo.demostockexchange.infra.Action;
 import com.example.demo.demostockexchange.model.OrderRequest;
 import com.example.demo.demostockexchange.model.OrderResp;
 import com.example.demo.demostockexchange.model.StockExchange;
@@ -66,7 +67,7 @@ public class FinnhubMapper {
   // -------------------
   public Orders requestToOrdersEntity(String symbol,OrderRequest ordersRequest) {
     return Orders.builder() //
-        .type(ordersRequest.getAction())//
+        .type(ordersRequest.getAction().toString())//
         .tradeDateTime(LocalDateTime.now())//
          .stockId(symbol)//
         .price(ordersRequest.getPrice())//
