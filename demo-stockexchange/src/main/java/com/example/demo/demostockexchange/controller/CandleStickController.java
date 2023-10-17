@@ -2,6 +2,7 @@ package com.example.demo.demostockexchange.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,13 +25,16 @@ public class CandleStickController implements CandleStickOperation {
 
       // Parse the 'fromDate' and 'toDate' strings to Date objects
       Date fromDateObj = dateFormat.parse(fromDate);
+      System.out.println("fromDateObj : " + fromDateObj);
       Date toDateObj = dateFormat.parse(toDate);
+      System.out.println("toDateObj : " + toDateObj);
 
       // Convert Date objects to Unix timestamps
       long fromTimestamp = fromDateObj.getTime() / 1000; // Divide by 1000 to convert to seconds
       long toTimestamp = toDateObj.getTime() / 1000; // Divide by 1000 to convert to seconds
 
-      return candleService.getCandleData(symbol, resolution, fromTimestamp, toTimestamp);
+      return candleService.getCandleData(symbol, resolution, fromTimestamp,
+          toTimestamp);
 
     } catch (Exception e) {
       e.printStackTrace();

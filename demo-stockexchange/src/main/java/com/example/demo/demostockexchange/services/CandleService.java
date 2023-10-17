@@ -1,5 +1,6 @@
 package com.example.demo.demostockexchange.services;
 
+import java.util.List;
 import com.example.demo.demostockexchange.model.Candle;
 
 public interface CandleService {

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import java.util.List;
 
 @Getter
 @Setter
@@ -11,25 +12,25 @@ import lombok.ToString;
 public class Candle {
 
   @JsonProperty(value = "c")
-  double closePrice;
+  List<Double> closePrice;
 
   @JsonProperty(value = "h")
-  double highPrice;
+  List<Double> highPrice;
 
   @JsonProperty(value = "l")
-  double lowPrice;
+  List<Double> lowPrice;
 
   @JsonProperty(value = "o")
-  double openPrice;
+  List<Double> openPrice;
 
   @JsonProperty(value = "s")
   String status;
 
   @JsonProperty(value = "t")
-  long timestamp;
+  List<Long> timestamp;
 
   @JsonProperty(value = "v")
-  long volume;
+  List<Long> volume;
 
 
 

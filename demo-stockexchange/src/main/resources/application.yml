@@ -28,7 +28,7 @@ spring:
 api:
   finnhub:
     domain: "finnhub.io"
-    base-url: "/api/v1"
+    base-url: "api/v1"
     endpoint: "stock/candle"
     token: cju3it9r01qr958213c0cju3it9r01qr958213cg
 
