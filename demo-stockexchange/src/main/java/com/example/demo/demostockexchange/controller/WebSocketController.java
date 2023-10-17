@@ -11,7 +11,7 @@ import com.example.demo.demostockexchange.exception.ApiResponse;
 import com.example.demo.demostockexchange.exception.FinnhubException;
 import com.example.demo.demostockexchange.model.OrderRequest;
 import com.example.demo.demostockexchange.model.OrderResp;
-import com.example.demo.demostockexchange.model.BuyerVsSeller.BuyerSellerData;
+import com.example.demo.demostockexchange.model.BuyerSellerData;
 import com.example.demo.demostockexchange.model.mapper.FinnhubMapper;
 import com.example.demo.demostockexchange.repository.StockRepository;
 import com.example.demo.demostockexchange.services.OrderBookService;

@@ -2,9 +2,9 @@ package com.example.demo.demostockexchange.services;
 
 import java.util.List;
 import com.example.demo.demostockexchange.entity.Orders;
+import com.example.demo.demostockexchange.model.BuyerSellerData;
 import com.example.demo.demostockexchange.model.OrderRequest;
 import com.example.demo.demostockexchange.model.OrderResp;
-import com.example.demo.demostockexchange.model.BuyerVsSeller.BuyerSellerData;
 
 public interface OrderBookService {
 

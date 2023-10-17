@@ -25,3 +25,10 @@ spring:
     mode: HTML5 # 模版模式
     prefix: classpath:/templates/ # 模版存放路径
     suffix: .html # 模版后缀
+api:
+  finnhub:
+    domain: "finnhub.io"
+    base-url: "/api/v1"
+    endpoint: "stock/candle"
+    token: cju3it9r01qr958213c0cju3it9r01qr958213cg
+

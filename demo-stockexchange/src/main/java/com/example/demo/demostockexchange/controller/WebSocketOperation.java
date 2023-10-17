@@ -16,7 +16,7 @@ import com.example.demo.demostockexchange.exception.FinnhubException;
 import com.example.demo.demostockexchange.model.OrderForm;
 import com.example.demo.demostockexchange.model.OrderRequest;
 import com.example.demo.demostockexchange.model.OrderResp;
-import com.example.demo.demostockexchange.model.BuyerVsSeller.BuyerSellerData;
+import com.example.demo.demostockexchange.model.BuyerSellerData;
 
 public interface WebSocketOperation {
 

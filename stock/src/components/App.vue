@@ -2,6 +2,7 @@
   <div id="app">
     <h1 class="caption p-4">Stock Order Book</h1>
     <div class="order-book-container">
+
 <div>
         <div>
         <el-row class="button-header">Stock Symbol : </el-row>
@@ -80,13 +81,10 @@
             </div>
         
           </el-row>
+
+          
     </div>
   </div>
-
-  <div> 
-    <div id="kline-chart" style="width: 700%; height: 600px;" ref="klineChart"></div>
-    </div>
-</div>
 
 <div>
   <div class="order-book-tables" top>
@@ -104,6 +102,13 @@
         </div>
       </div>
       </div>
+
+  <div> 
+    <div id="kline-chart" style="width: 600px; height: 600px;" ref="klineChart"></div>
+    </div>
+</div>
+
+
     </div>
 </template>
 
@@ -139,6 +144,7 @@ export default {
     const sellOrders = ref([]);
 
     const retrieveQueue = async () => {
+
       try {
         const responseBuy = await axios.get(
           "http://localhost:8085/transactions/bidQueue?stockId=TSLA"
@@ -201,8 +207,8 @@ const apiKey = "cju3it9r01qr958213c0cju3it9r01qr958213cg"; // Replace with your 
 const symbol = stockSymbol.value;
 //stockSymbol.value;
 const time = "D";//1,5,15,60,D,M,W
-const from = 1990988249;
-const to = 2091852249;
+const from = 1690988249;
+const to = 1891852249;
 
 const apiUrl = `https://finnhub.io/api/v1/stock/candle?symbol=${symbol}&resolution=${time}&from=${from}&to=${to}&token=${apiKey}`;
 
@@ -230,6 +236,7 @@ fetch(apiUrl)
 
     // ECharts option
     var option = {
+      backgroundColor: white,
       tooltip: {
         trigger: 'axis',
         axisPointer: {
@@ -462,7 +469,7 @@ function calculateMA(dayCount, data) {
       initKlineChart();
     });
 
-    // Fetch data periodically every 5 seconds
+    // Fetch data periodically every 2 seconds
     setInterval(() => {
       retrieveQueue();
     }, 2000);
@@ -523,7 +530,6 @@ body::before {
   color: rgb(237, 230, 230);
   width: 100%;
 }
-
 .order-book-container {
   display: flex;
   justify-content: space-between;
@@ -533,10 +539,10 @@ body::before {
 }
 
 .order-book-tables {
-  width: 40%;
+  width: 500px;
   display: flex;
   justify-content: space-between;
-  margin-left: 30px;
+  margin-left: -40px;
 }
 
 .order-book-buy {

@@ -1,4 +1,4 @@
-package com.example.demo.demostockexchange.model.BuyerVsSeller;
+package com.example.demo.demostockexchange.model;
 
 import lombok.Getter;
 import lombok.Setter;
