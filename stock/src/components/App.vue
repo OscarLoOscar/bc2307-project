@@ -203,14 +203,17 @@ const klineChart = ref(null); // Reference to the Kline chart div
       // Initialize ECharts instance in the kline-chart div
       const myChart = echarts.init(klineChart.value);
     // Define Finnhub client and API key
-const apiKey = "cju3it9r01qr958213c0cju3it9r01qr958213cg"; // Replace with your Finnhub API key
+// const apiKey = "cju3it9r01qr958213c0cju3it9r01qr958213cg"; // Replace with your Finnhub API key
 const symbol = stockSymbol.value;
 //stockSymbol.value;
 const time = "D";//1,5,15,60,D,M,W
-const from = 1690988249;
-const to = 1891852249;
+const from = "2023-01-01";
+const to = "2023-10-01";
 
-const apiUrl = `https://finnhub.io/api/v1/stock/candle?symbol=${symbol}&resolution=${time}&from=${from}&to=${to}&token=${apiKey}`;
+// const apiUrl = `https://finnhub.io/api/v1/stock/candle?symbol=${symbol}&resolution=${time}&from=${from}&to=${to}&token=${apiKey}`;
+const apiUrl = `http://localhost:8085/api/v1/getCandleData?symbol=${symbol}&resolution=${time}&from=${from}&to=${to}`;
+
+console.log(apiUrl);
 
 function fetchData(){
 fetch(apiUrl)
@@ -236,7 +239,6 @@ fetch(apiUrl)
 
     // ECharts option
     var option = {
-      backgroundColor: white,
       tooltip: {
         trigger: 'axis',
         axisPointer: {
