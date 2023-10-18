@@ -7,6 +7,7 @@ import lombok.Getter;
 
 // No other lombok Constructor/ Builder, lock the id increment
 @Getter
+
 public class Order {
 
   private static int idCounter = 0;
@@ -15,7 +16,9 @@ public class Order {
 
   private String userId;
 
-  private LocalDateTime tranDateTime;
+  private String symbol;
+
+  private LocalDateTime orderDateTime;
 
   private Action action;
 
@@ -25,16 +28,32 @@ public class Order {
 
   private int share;
 
-  public static Order of(String userId, LocalDateTime tranDateTime, Action action,
-      OrderType orderType, double price, int share) {
+  public static Order of(String userId, LocalDateTime tranDateTime,
+      Action action, OrderType orderType, double price, int share) {
     return new Order(userId, tranDateTime, action, orderType, price, share);
+  }
+
+  public static Order of(String userId, Action action, OrderType orderType,
+      double price, int share) {
+    return new Order(userId, action, orderType, price, share);
   }
 
   private Order(String userId, LocalDateTime tranDateTime, Action action,
       OrderType orderType, double price, int share) {
     this.id = ++idCounter; // Review.
     this.userId = userId;
-    this.tranDateTime = tranDateTime;
+    this.orderDateTime = tranDateTime;
+    this.action = action;
+    this.orderType = orderType;
+    this.price = price;
+    this.share = share;
+  }
+
+  private Order(String userId, Action action, OrderType orderType, double price,
+      int share) {
+    this.id = ++idCounter; // Review.
+    this.userId = userId;
+    this.orderDateTime = LocalDateTime.now();
     this.action = action;
     this.orderType = orderType;
     this.price = price;

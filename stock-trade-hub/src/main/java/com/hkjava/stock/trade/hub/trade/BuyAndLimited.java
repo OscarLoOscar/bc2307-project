@@ -55,6 +55,8 @@ public class BuyAndLimited implements Tradable {
     System.out.println("end buybook size : " + this.buybook);
     cleanup();
   }
+
+  
   private void cleanup() {
     int sellBookSize = this.sellbook.size();
     int buyBookSize = this.buybook.size();
