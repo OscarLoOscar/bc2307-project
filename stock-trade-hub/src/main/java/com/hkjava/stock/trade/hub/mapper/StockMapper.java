@@ -1,20 +1,19 @@
 package com.hkjava.stock.trade.hub.mapper;
 
-import static java.util.stream.Collectors.toList;
 import java.time.LocalDateTime;
 import com.hkjava.stock.trade.hub.dto.req.PlaceOrderDTO;
 import com.hkjava.stock.trade.hub.dto.resp.OrderBookDTO;
 import com.hkjava.stock.trade.hub.model.Order;
-import com.hkjava.stock.trade.hub.model.OrderBook;
+import com.hkjava.stock.trade.hub.model.Stock;
 
 public class StockMapper {
 
   // TBC. Sort by Price
-  public static OrderBookDTO map(String symbol, OrderBook book) {
+  public static OrderBookDTO map(Stock stock) {
     return OrderBookDTO.builder() //
-        .symbol(symbol) //
-        .buyBook(book.getBuyBook().stream().collect(toList())) //
-        .sellBook(book.getSellBook().stream().collect(toList())) //
+        .symbol(stock.getSymbol()) //
+        .buyBook(stock.getBuyBook().reversed()) //
+        .sellBook(stock.getSellBook().reversed()) //
         .build();
   }
 

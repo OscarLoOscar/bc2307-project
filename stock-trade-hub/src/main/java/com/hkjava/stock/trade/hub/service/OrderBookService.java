@@ -1,15 +1,20 @@
 package com.hkjava.stock.trade.hub.service;
 
-import com.hkjava.stock.trade.hub.dto.req.PlaceOrderDTO;
-import com.hkjava.stock.trade.hub.model.Order;
-import com.hkjava.stock.trade.hub.model.OrderBook;
+import com.hkjava.stock.trade.hub.model.Stock;
 
 public interface OrderBookService {
 
-  OrderBook orderBook(String symbol);
+  // Stock orderBook(String symbol);
 
   // OrderBook orderAndGet(String userId, TradeDTO tradeDTO);
 
-  Order order(String userId, String symbol, PlaceOrderDTO tradeDTO);
+  // Order order(String userId, String symbol, PlaceOrderDTO tradeDTO);
+
+   /**
+   * Get Order Book per Stock Symbol 
+   * @param symbol
+   * @return
+   */
+  Stock getStock(String symbol);
 
 }

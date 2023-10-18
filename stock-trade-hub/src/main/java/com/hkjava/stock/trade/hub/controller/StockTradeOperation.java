@@ -15,11 +15,15 @@ public interface StockTradeOperation {
 
   @GetMapping(value = "/stock/orderbook")
   @ResponseStatus(value = HttpStatus.OK)
-  OrderBookDTO orderBook(String symbol);
+  OrderBookDTO getOrderBook(String symbol);
 
   @PostMapping(value = "/stock/order/userid/{userId}/symbol/{symbol}")
   @ResponseStatus(value = HttpStatus.OK)
-  Order order(@RequestParam String userId, @RequestParam String symbol,
+  Order createOrder(@RequestParam String userId, //
       @RequestBody PlaceOrderDTO tradeDTO);
+
+  @GetMapping(value = "/stock/userid/{userid}/orders")
+  @ResponseStatus(value = HttpStatus.OK)
+  List<Order> getOrders(String userid);
 
 }

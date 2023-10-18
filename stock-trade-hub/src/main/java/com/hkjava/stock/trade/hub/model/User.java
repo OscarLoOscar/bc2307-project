@@ -32,6 +32,10 @@ public class User {
     this.userId = userId;
   }
 
+  public static User of(String userId) {
+    return new User(userId);
+  }
+
   public void addScore(int score) {
     this.score += score;
   }
@@ -54,9 +58,9 @@ public class User {
       userPool.put(this.userId, newPassword);
   }
 
-  public Order placeOrder(PlaceOrderDTO placeOrderDTO) {
-    Order order = StockMapper.map(this.userId, placeOrderDTO);
-    return addOrder(userId, order);
+  public Order placeOrder(Order order) {
+    // Order order = StockMapper.map(this.userId, placeOrderDTO);
+    return addOrder(this.userId, order);
   }
 
   public void cancelOrder(int orderId) {

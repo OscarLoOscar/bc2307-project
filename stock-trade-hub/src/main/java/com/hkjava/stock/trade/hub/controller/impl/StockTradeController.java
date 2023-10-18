@@ -10,6 +10,7 @@ import com.hkjava.stock.trade.hub.dto.resp.OrderBookDTO;
 import com.hkjava.stock.trade.hub.mapper.StockMapper;
 import com.hkjava.stock.trade.hub.model.Order;
 import com.hkjava.stock.trade.hub.service.OrderBookService;
+import com.hkjava.stock.trade.hub.service.OrderService;
 
 @RestController
 @RequestMapping(value = "/v1")
@@ -18,14 +19,23 @@ public class StockTradeController implements StockTradeOperation {
   @Autowired
   private OrderBookService orderBookService;
 
+  @Autowired
+  private OrderService orderService;
+
   @Override
-  public OrderBookDTO orderBook(String symbol) {
-    return StockMapper.map(symbol, orderBookService.orderBook(symbol));
+  public OrderBookDTO getOrderBook(String symbol) {
+    return StockMapper.map(orderBookService.getStock(symbol));
   }
 
   @Override
-  public Order order(String userId, String symbol, PlaceOrderDTO tradeDTO) {
-    return orderBookService.order(userId, symbol, tradeDTO);
+  public Order createOrder(String userId, PlaceOrderDTO placeOrderDTO) {
+    Order order = StockMapper.map(userId, placeOrderDTO);
+    return orderService.createOrder(userId, order);
+  }
+
+  @Override
+  public List<Order> getOrders(String userid) {
+    return orderService.getOrders(userid);
   }
 
 

@@ -207,7 +207,7 @@ const klineChart = ref(null); // Reference to the Kline chart div
 const symbol = stockSymbol.value;
 //stockSymbol.value;
 const time = "D";//1,5,15,60,D,M,W
-const from = "2023-01-01";
+const from = "2022-11-01";
 const to = "2023-10-01";
 
 // const apiUrl = `https://finnhub.io/api/v1/stock/candle?symbol=${symbol}&resolution=${time}&from=${from}&to=${to}&token=${apiKey}`;
@@ -380,7 +380,7 @@ fetch(apiUrl)
         smooth: true,
         lineStyle: {
           normal: {
-            opacity: 0.5
+            opacity: 1
           }
         }
       }, {
@@ -390,7 +390,7 @@ fetch(apiUrl)
         smooth: true,
         lineStyle: {
           normal: {
-            opacity: 0.5
+            opacity: 2
           }
         }
       }, {
@@ -400,7 +400,7 @@ fetch(apiUrl)
         smooth: true,
         lineStyle: {
           normal: {
-            opacity: 0.5
+            opacity: 3
           }
         }
       }, {
@@ -410,7 +410,7 @@ fetch(apiUrl)
         smooth: true,
         lineStyle: {
           normal: {
-            opacity: 0.5
+            opacity: 4
           }
         }
       }, {
