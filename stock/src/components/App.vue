@@ -2,55 +2,51 @@
   <div id="app">
     <h1 class="caption p-4">Stock Order Book</h1>
     <div class="order-book-container">
+      <div>
+        <div class="order-form">
 
-<div>
-        <div>
-        <el-row class="button-header">Stock Symbol : </el-row>
-        <el-row>
-          <div class="custom-input-stock-symbol">
-          <el-input v-model="stockSymbol" class="custom-stock-input"></el-input>
-            </div>
-          </el-row> 
-          </div>
+        <div class="custom-dropdown">
+          <el-row class="button-header">Stock Symbol : </el-row>
+          <el-row>
+            <el-select v-model="stockSymbol" class="custom-dropdown">
+              <el-option
+                v-for="(option, index) in stockSymbolOptions"
+                :key="index"
+                :label="option"
+                :value="option"
+              ></el-option>
+            </el-select>
+          </el-row>
+        </div>
 
-      <div class="order-form" >
-          <!-- Action -->
-          <el-row
-            class="button-header"
-            :class="{ 'action-row': buySellSelectedOption }"
-          >
+          <!-- Action Dropdown -->
+          <el-row class="button-header">
             Action
           </el-row>
           <el-row>
-            <el-col class="button-wrapper">
-
-              <el-button v-for="(option, index) in buySellOptions" :key="index"
-            :class="{ 'selected': buySellSelectedOption === index  }"
-          @click="buySellSelectOption(index)"
-          >
-          <span>{{ option }}</span>
-          </el-button>
-
-            </el-col>
+            <el-select v-model="buySellSelectedOption" class="custom-dropdown">
+              <el-option
+                v-for="(option, index) in buySellOptions"
+                :key="index"
+                :label="option"
+                :value="index"
+              ></el-option>
+            </el-select>
           </el-row>
-          <!-- Order Type -->
-          <el-row
-            class="button-header"
-            :class="{ 'order-type-row': orderTypeSelectedOption }"
-          >
+
+          <!-- Order Type Dropdown -->
+          <el-row class="button-header">
             Order Type
           </el-row>
           <el-row>
-            <el-col class="button-wrapper">
-
-            <el-button v-for="(option, index) in orderTypeOptions" :key="index"
-            :class="{ 'selected': orderTypeSelectedOption === index}"
-          @click="orderTypeSelectOption(index)"
-          >
-          <span>{{ option }}</span>
-          </el-button>
-
-            </el-col>
+            <el-select v-model="orderTypeSelectedOption" class="custom-dropdown">
+              <el-option
+                v-for="(option, index) in orderTypeOptions"
+                :key="index"
+                :label="option"
+                :value="index"
+              ></el-option>
+            </el-select>
           </el-row>
           <!-- price -->
           <el-row class="button-header">Price</el-row>
@@ -67,13 +63,13 @@
             </div>
           </el-row>
           <!-- Total Order value -->
-          <el-row class="button-header">Total Order Value</el-row>
+          <!-- <el-row class="button-header">Total Order Value</el-row>
           <el-row>
             <div class="custom-input-order-value">
               <el-input-number v-model="total_order_value_input" :min="1" :max="10000000000"
                 :controls="false"></el-input-number>
-            </div>
-          </el-row>
+            </div> 
+          </el-row> -->
           <el-row>
 
             <div class="place-order-button">
@@ -125,6 +121,7 @@ export default {
       const   quantity_input= ref(100);
       const   total_order_value_input=ref( price_input*quantity_input);
       const stockSymbol = ref('TSLA');
+      const stockSymbolOptions = ['TSLA','AAPL','MSFT'];
 
     // Buy Sell Option
     const buySellSelectedOption = ref(0);
@@ -494,6 +491,7 @@ function calculateMA(dayCount, data) {
       total_order_value_input,
       buyOrders,
       sellOrders,
+      stockSymbolOptions,
       buySellSelectedOption,
       buySellOptions,
       buySellSelectOption,
@@ -631,16 +629,16 @@ body::before {
   border: 1.5px solid #1b439b;
   border-radius: 25px;
 
-  margin-bottom: 15px;
-  margin-top: 15px;
+  margin-bottom: 10px;
+  margin-top: 5px;
 
   background-color: #f7f7f7;
   color: #333;
   font-size: 18px;
   /* Increase the font size for a larger input box */
-  width: 280px;
+  width: 240px;
   /* Width of the container */
-  height: 65px;
+  height: 45px;
   /* Height of the container */
 }
 
@@ -658,11 +656,11 @@ body::before {
   background-color: #4771b8;
   color: white;
   border: 1.5px solid #3850b9;
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  margin-right: -50px;
-  margin-top: -5px;
+  margin-right: -35px;
+  margin-top: -2px;
   font-size: 20px;
   font-weight: 300;
 }
@@ -671,11 +669,11 @@ body::before {
   background-color: #4771b8;
   color: white;
   border: 1.5px solid #3850b9;
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  margin-left: -50px;
-  margin-top: -5px;
+  margin-left: -35px;
+  margin-top: -2px;
   font-size: 20px;
   font-weight: bold;
 }
@@ -716,13 +714,15 @@ body::before {
   /* Remove the button border */
   border-radius: 25px;
   font-size: 15px;
-  width: 280px;
+  width: 250px;
   height: 65px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 5px;
   margin-top: 10px;
+  margin-left: -5px;
+
 }
 
 .place-order-button .el-button:active {
