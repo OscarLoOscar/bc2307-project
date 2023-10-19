@@ -4,7 +4,8 @@
     <div class="order-book-container">
       <div>
         <div class="order-form">
-      
+
+          <div class="left-side">
           <div class="custom-dropdown">
           <el-row class="button-header">Stock Symbol : </el-row>
           <el-row>
@@ -48,6 +49,9 @@
               ></el-option>
             </el-select>
           </el-row>
+          </div>
+          
+          <div class="right-side">
           <!-- price -->
           <el-row class="button-header">Price</el-row>
           <el-row>
@@ -62,6 +66,7 @@
               <el-input-number v-model="quantity_input" :min="0" :max="1000" :step="1"></el-input-number>
             </div>
           </el-row>
+          </div>
           <!-- Total Order value -->
           <!-- <el-row class="button-header">Total Order Value</el-row>
           <el-row>
@@ -83,15 +88,15 @@
   </div>
 
 <div>
-  <div class="order-book-tables" top>
+  <div class="order-book-tables" bottom>
         <div class="order-book-buy"  >
-          <el-table :data="buyOrders" :max-height="480">
+          <el-table :data="buyOrders" :max-height="480" >
             <el-table-column label="Quantity" prop="quantity" align="center"></el-table-column>
             <el-table-column label="Buy (Bid)" prop="price" align="center"></el-table-column>
           </el-table>
         </div>
         <div class="order-book-sell"  >
-          <el-table :data="sellOrders" :max-height="480">
+          <el-table :data="sellOrders" :max-height="480" >
             <el-table-column label="Sell (Ask)" prop="price" align="center"></el-table-column>
             <el-table-column label="Quantity" prop="quantity" align="center"></el-table-column>
           </el-table>
@@ -306,6 +311,9 @@ body::before {
   /* Box shadow for depth */
 
 }
+.right-side , .left-side{
+  flex: 10; /* Expand to fill available space */
+}
 
 .order-panel {
   width: 97%;
@@ -459,7 +467,6 @@ body::before {
   margin-bottom: 5px;
   margin-top: 10px;
   margin-left: -5px;
-
 }
 
 .place-order-button .el-button:active {

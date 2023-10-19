@@ -29,11 +29,12 @@ export default {
     const klineChart = ref(null);
     const fromDate = ref('2022-01-01');
     const toDate = ref('2023-10-18');
+    const time = ref('D');
 
     const initKlineChart = () => {
       const myChart = echarts.init(klineChart.value);
       const symbol = 'TSLA';
-      const time = setTimeInterval.value;
+      const selectedTime = setTimeInterval.value;
 
       // Include fromDate and toDate in your apiUrl
       const apiUrl = `http://localhost:8085/api/v1/getCandleData?symbol=${symbol}&resolution=${time}&from=${fromDate.value}&to=${toDate.value}`;
@@ -292,8 +293,8 @@ function calculateMA(dayCount, data) {
 
 };
 
-    const setTimeInterval = (time) => {
-      time = time || 'D'; // Default to '1 Day'
+    const setTimeInterval = (selectedTime) => {
+      time.value = selectedTime || 'D'; // Default to '1 Day'
       initKlineChart();
     };
 
