@@ -198,7 +198,6 @@ const symbol = stockSymbol.value;
     // Fetch data initially
     onMounted(() => {
       retrieveQueue();
-      // initKlineChart();
     });
 
     // Fetch data periodically every 2 seconds
@@ -453,7 +452,7 @@ body::before {
   border-radius: 25px;
   font-size: 15px;
   width: 250px;
-  height: 65px;
+  height: 45px;
   display: flex;
   align-items: center;
   justify-content: center;
