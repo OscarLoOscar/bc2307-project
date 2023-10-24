@@ -29,18 +29,21 @@ export default {
     const klineChart = ref(null);
     const fromDate = ref('2022-01-01');
     const toDate = ref('2023-10-18');
-    const time = ref('D');
+    const time = ref('D') ;
 
-    const initKlineChart = () => {
+    const setTimeInterval = (selectedTime) => {
+      time.value = selectedTime || 'D'; // Default to '1 Day'
+      initKlineChart(time.value);
+    };
+
+    const initKlineChart = (selectedTime) => {
       const myChart = echarts.init(klineChart.value);
       const symbol = 'TSLA';
-      const selectedTime = setTimeInterval.value;
 
       // Include fromDate and toDate in your apiUrl
-      const apiUrl = `http://localhost:8085/api/v1/getCandleData?symbol=${symbol}&resolution=${time}&from=${fromDate.value}&to=${toDate.value}`;
-
+      const apiUrl = `http://localhost:8085/api/v1/getCandleData?symbol=${symbol}&resolution=${selectedTime}&from=${fromDate.value}&to=${toDate.value}`;
+      console.log("apiUrl : " + apiUrl);
       // ... Rest of your initKlineChart logic
-      console.log(apiUrl);
 
 function fetchData(){
 fetch(apiUrl)
@@ -293,17 +296,14 @@ function calculateMA(dayCount, data) {
 
 };
 
-    const setTimeInterval = (selectedTime) => {
-      time.value = selectedTime || 'D'; // Default to '1 Day'
-      initKlineChart();
-    };
+ 
 
     const updateApiUrl = () => {
-      initKlineChart();
+      initKlineChart(time.value);
     };
 
     onMounted(() => {
-      initKlineChart();
+      initKlineChart(time.value);
     });
 
     return {

@@ -1,5 +1,4 @@
-package com.hkjava.demo.demofinnhubdb
-.infra;
+package com.hkjava.demo.demofinnhubdb.infra;
 
 import java.util.concurrent.TimeUnit;
 import org.springframework.data.redis.connection.RedisConnectionFactory;

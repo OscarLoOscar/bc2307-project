@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>flex - 主軸對齊方式</title>
+  <style>
+.box {
+  display: flex;
+  justify-content: flex-start; /* default 設定*/
+  justify-content: flex-end; /*排到最尾*/
+  /*置中*/
+  justify-content: center;
+/*div 沿主軸排列，father div 餘下間距平均分在div之間*/
+  justify-content: space-between;
+  /* child-div 左右間距平均分*/
+  justify-content: space-around;
+  /* child-div 間距平均分 */
+  justify-content: space-evenly;
+} 
+  </style>
+</head>
+<body>
+  <div class="box">
+<div>1</div>
+<div>2</div>
+<div>3</div>
+  </div>
+</body>
+</html>

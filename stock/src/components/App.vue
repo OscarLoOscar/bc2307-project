@@ -2,11 +2,8 @@
   <div id="app">
     <h1 class="caption p-4">Stock Order Book</h1>
     <div class="order-book-container">
-      <div>
         <div class="order-form">
 
-          <div class="left-side">
-          <div class="custom-dropdown">
           <el-row class="button-header">Stock Symbol : </el-row>
           <el-row>
             <el-select v-model="stockSymbol" class="custom-dropdown">
@@ -18,7 +15,6 @@
               ></el-option>
             </el-select>
           </el-row>
-        </div>
 
           <!-- Action Dropdown -->
           <el-row class="button-header">
@@ -49,9 +45,7 @@
               ></el-option>
             </el-select>
           </el-row>
-          </div>
           
-          <div class="right-side">
           <!-- price -->
           <el-row class="button-header">Price</el-row>
           <el-row>
@@ -66,7 +60,6 @@
               <el-input-number v-model="quantity_input" :min="0" :max="1000" :step="1"></el-input-number>
             </div>
           </el-row>
-          </div>
           <!-- Total Order value -->
           <!-- <el-row class="button-header">Total Order Value</el-row>
           <el-row>
@@ -83,9 +76,7 @@
         
           </el-row>
 
-          
-    </div>
-  </div>
+          </div>
 
 <div>
   <div class="order-book-tables" bottom>
@@ -104,7 +95,7 @@
       </div>
       </div>
 
-      <klineChart /></div>
+      <klineChart/></div>
 
 
     </div>
@@ -208,7 +199,7 @@ const symbol = stockSymbol.value;
     // Fetch data periodically every 2 seconds
     setInterval(() => {
       retrieveQueue();
-    }, 2000);
+    }, 200000);
 
     // Update buyOrders and sellOrders when buys and asks data change
     const updateOrders = () => {
@@ -272,14 +263,6 @@ body::before {
   justify-content: space-between;
   border-radius: 10px;
   border-style: groove;
-
-}
-
-.order-book-tables {
-  width: 500px;
-  display: flex;
-  justify-content: space-between;
-  margin-left: -40px;
 }
 
 .order-book-buy {
@@ -297,6 +280,7 @@ body::before {
 /* Styling for the order form and panel */
 .order-form {
   width: auto;
+  height:auto;
   display: flex;
   flex-direction: column;
   align-items: left;
@@ -311,14 +295,19 @@ body::before {
   /* Box shadow for depth */
 
 }
-.right-side , .left-side{
-  flex: 10; /* Expand to fill available space */
-}
 
 .order-panel {
   width: 97%;
   /* Make the panel 100% width within the order-form */
   margin-bottom: 10px;
+}
+
+.order-book-tables {
+  width: 500px;
+  height: auto;
+  display: flex;
+  justify-content: space-between;
+  margin-left: -40px;
 }
 
 .order-panel label {

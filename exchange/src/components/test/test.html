@@ -1,0 +1,138 @@
+<strong>加粗文字</strong>
+<em> 斜體</em>
+<ins> 底線</ins>
+<del>cancel Line</del>
+<hr>
+<b>加粗文字</b>
+
+<i>斜體</i>
+
+<u>底線</u>
+
+<s>cancel Lin</s>
+<br>
+雙標籤：一對出現
+單標籤：沒有結束：<br> 換行 <hr>水平線
+
+<html>
+    <head>
+        網頁頭:比broswer睇既：.css
+        <title> 網頁標題</title>
+    </head>
+    <body>
+        網頁主體：用戶睇：圖片，文字
+    </body>
+</html>
+VS Code , 一個感嘆號一次出晒
+
+<p>
+    段落標籤，段落之間存在間隙
+</p>
+
+<hr>
+插入圖片
+<img src="url">
+<alt> 替換文本，圖片無法顯示時，顯示的文字</alt>
+<title>提示文本，滑鼠停留時顯示的文字</title>
+<width></width>
+<height></height>
+=> <img src="url" alt="sth" title="sth">
+<hr>
+hyperLink
+<a href="url">跳去邊度？</a>
+<a href="url" target="_blank">加target="_blank" 作用開新頁</a>
+<a href="#">#係空連接，乜都唔跳</a>
+
+#### 音頻標籤
+<audio src="url" controls loop muted autoplay> controls 用黎show control panel , loop 循環play, autoplay配合muted先 自動play</audio>
+
+<hr>
+
+### 列表
+1.無序列表
+2.有序列表
+3.自定義列表
+
+#### 無序列表
+ul 無序列表，li 列表條目
+<ul> 
+    <li>第一</li>
+    <li>第二</li> 
+    <li>第三</li>
+</ul>
+
+#### 有序列表
+ol 無序列表，li 列表條目
+<ol>
+    <li>第一</li>
+    <li>第二</li> 
+    <li>第三</li>
+</ol>
+
+#### 自定義列表
+<dl>
+    <dt>Title</dt>
+    <dd>content</dd>
+</dl>
+
+<hr>
+### 表格
+<table>
+    <tr>
+    <th>A</th>
+    <th>B</th>
+    <th>C</th>
+    <th>D</th>
+    </tr>
+    <tr>
+    <td>1</td>
+    <td rowspan="2">2 , row合拼</td>
+    <td>3</td>
+    <td>4</td>
+    </tr>
+     <tr>
+    <td>5</td>
+<!--     <td>6</td> -->
+    <td>7</td>
+    <td>8</td>
+    </tr>
+    <tr>
+    <td colspan="4">4 ，column 合拼</td>
+    </tr>
+</table>
+
+### 表單
+![](https://hackmd.io/_uploads/B1lTx6Qzp.png)
+
+
+入乜show乜
+文本框：
+<input type="text" placeholder="提示信息">
+<br>
+入乜都出點點
+密碼框：
+<input type="password">
+<br>
+單選框：
+<input type="radio" name="gender" checked>
+name:分組用，同組只選一個 ，checked 默許選擇
+<input type="radio" name="gender" checked>男
+<input type="radio" name="gender">女
+<br>
+多選框：<input type="checkbox" checked> 1
+    <input type="checkbox"> 2
+    <input type="checkbox"> 3
+<br>
+上傳文件：<input type="file" multiple>multiple:
+<br>
+下拉選單
+<select>
+<option>1.</option>
+<option>2.</option>
+<option>3.</option>
+<option>4.</option>
+<option selected>1.</option>
+</select>
+
+### 輸入文字
+<textarea>please input</textarea>
