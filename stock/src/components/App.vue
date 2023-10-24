@@ -15,13 +15,14 @@
               ></el-option>
             </el-select>
           </el-row>
-
+      <ul>
+          <li>
           <!-- Action Dropdown -->
-          <el-row class="button-header">
+          <el-row class="button-header action-header">
             Action
           </el-row>
           <el-row>
-            <el-select v-model="buySellSelectedOption" class="custom-dropdown">
+            <el-select v-model="buySellSelectedOption" class="custom-dropdown action-header">
               <el-option
                 v-for="(option, index) in buySellOptions"
                 :key="index"
@@ -30,13 +31,24 @@
               ></el-option>
             </el-select>
           </el-row>
+        </li>
+          <!-- price -->
+        <li>
+          <el-row class="button-header price-header">Price</el-row>
+          <el-row>
+            <div class="custom-input-number price-header">
+              <el-input-number v-model="price_input" :min="0" :max="10000" :step="0.1"></el-input-number>
+            </div>
+          </el-row>
+        </li>
 
+              <li>
           <!-- Order Type Dropdown -->
-          <el-row class="button-header">
+          <el-row class="button-header order-header">
             Order Type
           </el-row>
           <el-row>
-            <el-select v-model="orderTypeSelectedOption" class="custom-dropdown">
+            <el-select v-model="orderTypeSelectedOption" class="custom-dropdown order-header">
               <el-option
                 v-for="(option, index) in orderTypeOptions"
                 :key="index"
@@ -45,21 +57,18 @@
               ></el-option>
             </el-select>
           </el-row>
-          
-          <!-- price -->
-          <el-row class="button-header">Price</el-row>
-          <el-row>
-            <div class="custom-input-number">
-              <el-input-number v-model="price_input" :min="0" :max="10000" :step="0.1"></el-input-number>
-            </div>
-          </el-row>
+        </li>
+
           <!-- shares -->
-          <el-row class="button-header">Quantity</el-row>
+        <li>
+          <el-row class="button-header quantity-header">Quantity</el-row>
           <el-row>
-            <div class="custom-input-number">
+            <div class="custom-input-number quantity-header">
               <el-input-number v-model="quantity_input" :min="0" :max="1000" :step="1"></el-input-number>
             </div>
           </el-row>
+        </li>
+      </ul>
           <!-- Total Order value -->
           <!-- <el-row class="button-header">Total Order Value</el-row>
           <el-row>
@@ -76,7 +85,6 @@
         
           </el-row>
 
-          </div>
 
 <div>
   <div class="order-book-tables" bottom>
@@ -94,6 +102,7 @@
         </div>
       </div>
       </div>
+          </div>
 
       <klineChart/></div>
 
@@ -279,23 +288,49 @@ body::before {
 
 /* Styling for the order form and panel */
 .order-form {
-  width: auto;
-  height:auto;
+  width: 500px;
+  height:500px;
   display: flex;
   flex-direction: column;
   align-items: left;
   /* Center content horizontally */
   margin-left: 30px;
-  background-color: #f7f7f7;
+  background-color: grey;
   /* Light gray background */
   border: 2px solid #b2bfe0;
   border-radius: 5px;
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   /* Box shadow for depth */
+}
+.order-form ul {
+  padding: 0;
+  
+  border-collapse: collapse;
+      display: flex;
+      /*div 換行*/
+      flex-wrap: wrap;
+      /*主軸對齊*/
+justify-content: space-evenly;
+/*行對齊*/
+align-content: space-between;
 
+/* padding: 50px 180px 90px 50px; */
+height:  418px;
+
+margin-bottom:50px;
+    }
+
+.price-header,
+.quantity-header {
+  margin-left: 0px; /* Adjust this value to control the left margin */
 }
 
+.action-header,
+.order-header {
+  margin-left: -25px;
+  margin-right: 0px; /* Adjust this value to control the left margin */
+}
 .order-panel {
   width: 97%;
   /* Make the panel 100% width within the order-form */
@@ -333,6 +368,7 @@ body::before {
   display: flex;
   justify-content: space-between;
   align-items: top;
+  margin-top: 10px;
 }
 
 .button-wrapper .el-button {
@@ -346,6 +382,7 @@ body::before {
   background-color: #f6f9f7;
   color: #1b439b;
   transition: border-color 0.2s;
+  margin-top: -5px;
 }
 
   .selected {
@@ -372,7 +409,7 @@ body::before {
   /* Increase the font size for a larger input box */
   width: 240px;
   /* Width of the container */
-  height: 45px;
+  height: 35px;
   /* Height of the container */
 }
 
