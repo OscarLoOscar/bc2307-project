@@ -9,13 +9,15 @@ import java.util.TreeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.example.demo.demostockexchange.entity.Orders;
-import com.example.demo.demostockexchange.infra.Action;
+// import com.example.demo.demostockexchange.entity.Orders;
+import com.example.demo.demostockexchange.entity.Transaction;
+import com.example.demo.demostockexchange.infra.TransactionType;
 import com.example.demo.demostockexchange.model.BuyerSellerData;
 import com.example.demo.demostockexchange.model.OrderRequest;
 import com.example.demo.demostockexchange.model.OrderResp;
 import com.example.demo.demostockexchange.model.mapper.FinnhubMapper;
-import com.example.demo.demostockexchange.repository.StockRepository;
+// import com.example.demo.demostockexchange.repository.StockRepository;
+import com.example.demo.demostockexchange.repository.TransactionRepository;
 import com.example.demo.demostockexchange.services.OrderBookService;
 
 @Service
@@ -25,17 +27,18 @@ public class OrderBookServiceImpl implements OrderBookService {
   FinnhubMapper finnhubMapper;
 
   @Autowired
-  StockRepository stockRepository;
+  TransactionRepository   transactionRepository ;
+;
 
   @Override
-  public List<Orders> getOrderBook() {
-    return stockRepository.findAll();
+  public List<Transaction> getOrderBook() {
+    return transactionRepository.findAll();
   }
 
   @Override
   public void addOrder(String symbol, OrderRequest makeOrder) {
-    Orders response = finnhubMapper.requestToOrdersEntity(symbol, makeOrder);
-    stockRepository.save(response);
+    Transaction response = finnhubMapper.requestToOrdersEntity(symbol, makeOrder);
+    transactionRepository.save(response);
   }
 
   // @Override
@@ -56,11 +59,11 @@ public class OrderBookServiceImpl implements OrderBookService {
 
   @Override
   public List<OrderResp> getBidQueue(String stockId) {
-    List<Orders> data = this.getOrderBook();
+    List<Transaction> data = this.getOrderBook();
     Map<Double, Integer> priceToQuantityMap = new TreeMap<>(Comparator.reverseOrder());
 
-    for (Orders order : data) {
-        if (Action.BUY.name().toLowerCase().equalsIgnoreCase(order.getType()) && order.getStockId().equals(stockId)) {
+    for (Transaction order : data) {
+        if (TransactionType.BUY.name().toLowerCase().equalsIgnoreCase(order.getTransactionType().toString()) && order.getStockSymbol().equals(stockId)) {
             double price = order.getPrice();
             int quantity = order.getQuantity();
             
@@ -83,7 +86,7 @@ public class OrderBookServiceImpl implements OrderBookService {
 
         // Create an OrderResp object with the price and summed quantity
         OrderResp orderResp = OrderResp.builder()
-                .type(Action.BUY.name())
+                .type(TransactionType.BUY.name())
                 .localTime(LocalTime.now().toString())
                 .price(price)
                 .quantity(quantity)
@@ -97,11 +100,11 @@ public class OrderBookServiceImpl implements OrderBookService {
 
   @Override
   public List<OrderResp> getAskQueue(String stockId) {
-    List<Orders> data = this.getOrderBook();
+    List<Transaction> data = this.getOrderBook();
     Map<Double, Integer> priceToQuantityMap = new TreeMap<>();
 
-    for (Orders order : data) {
-        if (Action.SELL.name().toLowerCase().equalsIgnoreCase(order.getType()) && order.getStockId().equals(stockId)) {
+    for (Transaction order : data) {
+        if (TransactionType.SELL.name().toLowerCase().equalsIgnoreCase(order.getTransactionType().toString()) && order.getStockSymbol().equals(stockId)) {
             double price = order.getPrice();
             int quantity = order.getQuantity();
             
@@ -124,7 +127,7 @@ public class OrderBookServiceImpl implements OrderBookService {
 
         // Create an OrderResp object with the price and summed quantity
         OrderResp orderResp = OrderResp.builder()
-                .type(Action.SELL.name())
+                .type(TransactionType.SELL.name())
                 .localTime(LocalTime.now().toString())
                 .price(price)
                 .quantity(quantity)
@@ -168,12 +171,12 @@ public class OrderBookServiceImpl implements OrderBookService {
   @Override
   @Transactional(readOnly = true)
   public BuyerSellerData calculateBuyerSellerIndicator() {
-    List<Orders> allTrades = stockRepository.findAll();
+    List<Transaction> allTrades = transactionRepository.findAll();
     int buyerVolume = 0;
     int sellerVolume = 0;
 
-    for (Orders trade : allTrades) {
-      if (trade.getQuantity() > 0 && ("bid".equals(trade.getType()))) {
+    for (Transaction trade : allTrades) {
+      if (trade.getQuantity() > 0 && ("bid".equalsIgnoreCase(trade.getTransactionType().toString()))) {
         buyerVolume += trade.getQuantity();
       } else {
         sellerVolume += Math.abs(trade.getQuantity());

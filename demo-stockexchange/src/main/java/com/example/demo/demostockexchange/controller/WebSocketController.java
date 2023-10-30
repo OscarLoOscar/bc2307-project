@@ -6,14 +6,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.example.demo.demostockexchange.entity.Orders;
+import com.example.demo.demostockexchange.controller.impl.WebSocketOperation;
+// import com.example.demo.demostockexchange.entity.Orders;
 import com.example.demo.demostockexchange.exception.ApiResponse;
 import com.example.demo.demostockexchange.exception.FinnhubException;
 import com.example.demo.demostockexchange.model.OrderRequest;
 import com.example.demo.demostockexchange.model.OrderResp;
 import com.example.demo.demostockexchange.model.BuyerSellerData;
 import com.example.demo.demostockexchange.model.mapper.FinnhubMapper;
-import com.example.demo.demostockexchange.repository.StockRepository;
+// import com.example.demo.demostockexchange.repository.StockRepository;
+import com.example.demo.demostockexchange.repository.TransactionRepository;
 import com.example.demo.demostockexchange.services.OrderBookService;
 
 @RestController
@@ -27,7 +29,7 @@ public class WebSocketController implements WebSocketOperation {
   private FinnhubMapper finnhubMapper;
 
   @Autowired
-  StockRepository stockRepository;
+  TransactionRepository transactionRepository;
 
   @Override
   public ApiResponse<List<OrderRequest>> updateOrderBook() {
@@ -63,28 +65,28 @@ public class WebSocketController implements WebSocketOperation {
   // .build();
   // }
   
-  @Override
-   public ApiResponse<Orders> placeOrder(@PathVariable String symbol,
-                        @RequestParam String action, double price,
-                        int quantity) throws FinnhubException {
-    if (!tradeStock.contains(symbol)) {
-      // throw FinnhubException(Code.FINNHUB_SYMBOL_NOTFOUND);
-      return null;
-    } else {
-      OrderRequest request = OrderRequest.builder()//
-          .price(price)//
-          .quantity(quantity)//
-          .action(action)//
-          .build();//
-      request.onOrder(price, quantity, action);
-      stockRepository
-          .save(finnhubMapper.requestToOrdersEntity(symbol, request));
-      return ApiResponse.<Orders>builder()//
-          .ok()//
-          .data(finnhubMapper.requestToOrdersEntity(symbol, request))//
-          .build();
-    }
-  }
+  // @Override
+  //  public ApiResponse<Orders> placeOrder(@PathVariable String symbol,
+  //                       @RequestParam String action, double price,
+  //                       int quantity) throws FinnhubException {
+  //   if (!tradeStock.contains(symbol)) {
+  //     // throw FinnhubException(Code.FINNHUB_SYMBOL_NOTFOUND);
+  //     return null;
+  //   } else {
+  //     OrderRequest request = OrderRequest.builder()//
+  //         .price(price)//
+  //         .quantity(quantity)//
+  //         .action(action)//
+  //         .build();//
+  //     request.onOrder(price, quantity, action);
+  //     stockRepository
+  //         .save(finnhubMapper.requestToOrdersEntity(symbol, request));
+  //     return ApiResponse.<Orders>builder()//
+  //         .ok()//
+  //         .data(finnhubMapper.requestToOrdersEntity(symbol, request))//
+  //         .build();
+  //   }
+  // }
 
   public void createAskOrder(String symbol, OrderRequest orderRequest) {
     // Validate and process the Ask order request

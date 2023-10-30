@@ -2,10 +2,10 @@
   <div id="app">
     <h1 class="caption p-4">Stock Order Book</h1>
     <div class="order-book-container">
-        <div class="order-form">
 
+        <div class="order-form">
           <el-row class="button-header">Stock Symbol : </el-row>
-          <el-row>
+            <el-row>
             <el-select v-model="stockSymbol" class="custom-dropdown">
               <el-option
                 v-for="(option, index) in stockSymbolOptions"
@@ -15,7 +15,9 @@
               ></el-option>
             </el-select>
           </el-row>
+          
       <ul>
+        <span> 
           <li>
           <!-- Action Dropdown -->
           <el-row class="button-header action-header">
@@ -32,17 +34,9 @@
             </el-select>
           </el-row>
         </li>
-          <!-- price -->
-        <li>
-          <el-row class="button-header price-header">Price</el-row>
-          <el-row>
-            <div class="custom-input-number price-header">
-              <el-input-number v-model="price_input" :min="0" :max="10000" :step="0.1"></el-input-number>
-            </div>
-          </el-row>
-        </li>
 
-              <li>
+
+        <li>
           <!-- Order Type Dropdown -->
           <el-row class="button-header order-header">
             Order Type
@@ -58,16 +52,30 @@
             </el-select>
           </el-row>
         </li>
+      </span>
+      <span> 
+          <!-- price -->
+          <li>
+          <el-row class="button-header price-header">Price</el-row>
+          <el-row>
+            <!-- <div class="custom-input-number price-header"> -->
+              <div class="price-header">
 
+              <el-input-number v-model="price_input" :min="0" :max="10000" :step="0.1"></el-input-number>
+            </div>
+          </el-row>
+        </li>
           <!-- shares -->
         <li>
           <el-row class="button-header quantity-header">Quantity</el-row>
           <el-row>
-            <div class="custom-input-number quantity-header">
+            <!-- <div class="custom-input-number quantity-header"> -->
+            <div class="quantity-header">
               <el-input-number v-model="quantity_input" :min="0" :max="1000" :step="1"></el-input-number>
             </div>
           </el-row>
         </li>
+      </span>
       </ul>
           <!-- Total Order value -->
           <!-- <el-row class="button-header">Total Order Value</el-row>
@@ -84,9 +92,10 @@
             </div>
         
           </el-row>
+        </div>
 
-
-<div>
+<!-- bid queue + ask queue -->
+    <div>
   <div class="order-book-tables" bottom>
         <div class="order-book-buy"  >
           <el-table :data="buyOrders" :max-height="480" >
@@ -102,7 +111,6 @@
         </div>
       </div>
       </div>
-          </div>
 
       <klineChart/></div>
 
@@ -132,7 +140,7 @@ export default {
 
     // Buy Sell Option
     const buySellSelectedOption = ref(0);
-    const buySellOptions = ['Buy', 'Sell'];
+    const buySellOptions = ['BUY', 'SELL'];
     const buySellSelectOption = (buySellIndex) => {
       buySellSelectedOption.value = buySellIndex;
     };
@@ -205,10 +213,10 @@ const symbol = stockSymbol.value;
       retrieveQueue();
     });
 
-    // Fetch data periodically every 2 seconds
+    // Fetch data periodically every 10 seconds
     setInterval(() => {
       retrieveQueue();
-    }, 200000);
+    }, 10000);
 
     // Update buyOrders and sellOrders when buys and asks data change
     const updateOrders = () => {
@@ -288,14 +296,14 @@ body::before {
 
 /* Styling for the order form and panel */
 .order-form {
-  width: 500px;
-  height:500px;
+  width: auto;
+  height:220px;
   display: flex;
   flex-direction: column;
   align-items: left;
   /* Center content horizontally */
   margin-left: 30px;
-  background-color: grey;
+  background-color: #333;
   /* Light gray background */
   border: 2px solid #b2bfe0;
   border-radius: 5px;
@@ -305,32 +313,35 @@ body::before {
 }
 .order-form ul {
   padding: 0;
-  
   border-collapse: collapse;
-      display: flex;
-      /*div 換行*/
-      flex-wrap: wrap;
-      /*主軸對齊*/
-justify-content: space-evenly;
-/*行對齊*/
-align-content: space-between;
+  display: flex;
+  /*div 換行*/
+  flex-wrap: wrap;
+  /*主軸對齊*/
+  justify-content: space-evenly;
+  /*行對齊*/
+  align-content: space-between;
+  /* padding: 50px 180px 90px 50px; */
+  height:  118px;
+  margin-bottom:0px;
 
-/* padding: 50px 180px 90px 50px; */
-height:  418px;
-
-margin-bottom:50px;
     }
 
+    .custom-dropdown{
+    width: 130px;
+    }
+    
 .price-header,
 .quantity-header {
-  margin-left: 0px; /* Adjust this value to control the left margin */
+  margin-left: 10px; /* Adjust this value to control the left margin */
 }
 
 .action-header,
 .order-header {
-  margin-left: -25px;
+  margin-left: 0px;
   margin-right: 0px; /* Adjust this value to control the left margin */
 }
+
 .order-panel {
   width: 97%;
   /* Make the panel 100% width within the order-form */
@@ -362,13 +373,12 @@ margin-bottom:50px;
 }
 
 .button-header {
-
-  color: rgb(92, 99, 99);
-  font-size: 20px;
+  color: white;
+  font-size: 18px;
   display: flex;
   justify-content: space-between;
   align-items: top;
-  margin-top: 10px;
+   margin-top: -1px; 
 }
 
 .button-wrapper .el-button {
@@ -379,7 +389,7 @@ margin-bottom:50px;
   border: 1.5px solid #e7dfdf;
   border-radius: 20px;
   text-align: left;
-  background-color: #f6f9f7;
+  background-color: grey;
   color: #1b439b;
   transition: border-color 0.2s;
   margin-top: -5px;
@@ -389,29 +399,28 @@ margin-bottom:50px;
     border-color: #1b439b;
     border-width: 1.5px;
     color: #1b439b;
-  
 }
 
-.custom-input-number {
+/* .custom-input-number {
   display: flex;
   align-items: center;
   justify-content: center;
   /* Align items to the right */
-  border: 1.5px solid #1b439b;
-  border-radius: 25px;
+  /* border: 1.5px solid #1b439b;
+  border-radius: 25px; */
 
-  margin-bottom: 10px;
-  margin-top: 5px;
+  /* margin-bottom: 10px;
+  margin-top: 5px; */
 
-  background-color: #f7f7f7;
+  /* background-color: #f7f7f7;
   color: #333;
-  font-size: 18px;
+  font-size: 18px; */
   /* Increase the font size for a larger input box */
-  width: 240px;
+  /* width: 140px; */
   /* Width of the container */
-  height: 35px;
+  /* height: 35px; */
   /* Height of the container */
-}
+  /* } */ 
 
 
 .custom-input-number .el-input {
@@ -485,14 +494,14 @@ margin-bottom:50px;
   /* Remove the button border */
   border-radius: 25px;
   font-size: 15px;
-  width: 250px;
-  height: 45px;
+  width: 180px;
+  height: 35px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 5px;
-  margin-top: 10px;
-  margin-left: -5px;
+  margin-top: 50px;
+  margin-left: 100px;
 }
 
 .place-order-button .el-button:active {

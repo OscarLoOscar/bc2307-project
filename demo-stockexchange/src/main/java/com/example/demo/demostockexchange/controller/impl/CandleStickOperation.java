@@ -1,4 +1,4 @@
-package com.example.demo.demostockexchange.controller;
+package com.example.demo.demostockexchange.controller.impl;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;

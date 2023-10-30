@@ -25,11 +25,8 @@ public class Stocks {
   
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
-
-  @Column(name = "exchange")//Bombay Stock Exchange (BSE) , National Stock Exchange (NSE)
-  private String exchange;
-
-  @Column(name = "ticker")
-  private String ticker;
+  private Long stockId;
+  private String stockSymbol;
+  private String companyName;
+  private double currentPrice;
 }

@@ -1,4 +1,4 @@
-package com.example.demo.demostockexchange.controller;
+package com.example.demo.demostockexchange.controller.impl;
 
 import java.util.List;
 import org.springframework.http.HttpStatus;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import com.example.demo.demostockexchange.annotation.SymbolCheck;
-import com.example.demo.demostockexchange.entity.Orders;
+// import com.example.demo.demostockexchange.entity.Orders;
 import com.example.demo.demostockexchange.exception.ApiResponse;
 import com.example.demo.demostockexchange.exception.FinnhubException;
 import com.example.demo.demostockexchange.model.OrderForm;
@@ -25,11 +25,12 @@ public interface WebSocketOperation {
         @ResponseStatus(value = HttpStatus.OK)
         public ApiResponse<List<OrderRequest>> updateOrderBook();
 
-        @PostMapping("/trade/symbol/{symbol}")
-        @ResponseStatus(HttpStatus.OK)
-        public ApiResponse<Orders> placeOrder(@PathVariable String symbol,
-        @RequestParam String Action, double price,
-        int quantity) throws FinnhubException;
+        // @PostMapping("/trade/symbol/{symbol}")
+        // @ResponseStatus(HttpStatus.OK)
+        // public ApiResponse<Orders> placeOrder(@PathVariable String symbol,
+        // @RequestParam String Action, //
+        // double price,
+        // int quantity) throws FinnhubException;
 
         @GetMapping("/bidQueue")
         @ResponseStatus(value = HttpStatus.OK)

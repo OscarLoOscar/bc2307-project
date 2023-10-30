@@ -1,4 +1,4 @@
-package com.example.demo.demostockexchange.infra;
+package com.hkjava.stock.trade.hub.infra;
 
 import lombok.Getter;
 

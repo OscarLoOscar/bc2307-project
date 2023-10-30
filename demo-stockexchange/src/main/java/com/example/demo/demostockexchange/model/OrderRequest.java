@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import com.example.demo.demostockexchange.infra.Action;
+import com.example.demo.demostockexchange.infra.TransactionType;
+import com.example.demo.demostockexchange.entity.Transaction;
 import com.example.demo.demostockexchange.infra.OrderType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,7 +23,7 @@ import lombok.ToString;
 @ToString
 @Setter
 public class OrderRequest {
-  String action; // 'Bid','Ask'
+  TransactionType action; // 'Buy','Sell'
 
   String orderType;
   // @JsonFormat(locale = "zh", timezone = "GMT+8",
@@ -43,7 +44,7 @@ public class OrderRequest {
   private Map<Double, Integer> askOffers = new TreeMap<>();
 
   public void onOrder(double price, int quantity, String side) {
-    if (Action.BUY.name().toLowerCase().equals(side)) {
+    if (TransactionType.BUY.name().toLowerCase().equals(side)) {
       this.bidOffers.put(price, quantity);
       Set<Double> ask_prices = this.askOffers.keySet();
       List<Double> ask_prices_list = new ArrayList<>(ask_prices);
@@ -65,7 +66,7 @@ public class OrderRequest {
       if (quantity > 0) {
         addBidRestingOrder(price, quantity);
       }
-    } else if (Action.SELL.name().toLowerCase().equals(side)) {
+    } else if (TransactionType.SELL.name().toLowerCase().equals(side)) {
       this.askOffers.put(price, quantity);
       Set<Double> bid_prices = this.bidOffers.keySet();
       List<Double> bid_prices_list = new ArrayList<>(bid_prices);

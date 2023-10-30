@@ -32,7 +32,7 @@ public class Trader {
 
     // public void marketOrder(Product product, BuySell buySell, int quantity) throws FinnhubException {
 
-    //     if (buySell == BuySell.BUY) {
+    //     if (buySell == Action.BUY) {
     //         while (this.money >= product.getAsk().getPrice() * quantity && quantity > 0) {
     //             // 隊->第一個sell
     //             // 第一個就成交哂
@@ -67,7 +67,7 @@ public class Trader {
     //         }
     //     }
 
-    //     if (buySell == BuySell.SELL) {
+    //     if (buySell == Action.SELL) {
     //         if (this.products.get(product) == null || this.products.get(product) < quantity) {
     //             throw new FinnhubException(Code.TRADER_NOTENOUGH_PRODUCT);
     //         } else {
@@ -97,12 +97,12 @@ public class Trader {
     // public void limitOrder(Product product, BuySell buySell, double price, int quantity) throws FinnhubException{
 
     //     // check if trader have sufficent product for sell or sufficient money for buy
-    //     if (buySell == BuySell.BUY && this.money < price * quantity)
+    //     if (buySell == Action.BUY && this.money < price * quantity)
     //             throw new FinnhubException(Code.TRADER_NOTENOUGH_MONEY);
-    //     if (buySell == BuySell.SELL && (this.products.get(product) == null || this.products.get(product) < quantity))
+    //     if (buySell == Action.SELL && (this.products.get(product) == null || this.products.get(product) < quantity))
     //             throw new FinnhubException(Code.TRADER_NOTENOUGH_PRODUCT);
 
-    //     if (buySell == BuySell.BUY) {
+    //     if (buySell == Action.BUY) {
     //         // 太低價不成交
     //         if (price < product.getAsk().getPrice()) {
     //             // 直接order排隊
@@ -130,7 +130,7 @@ public class Trader {
     //         }
     //     }
 
-    //     if (buySell == BuySell.SELL) {
+    //     if (buySell == Action.SELL) {
     //         if (price > product.getBid().getPrice()) {
     //             product.getBidAsk().getOrders().add(new Order(this.id, buySell, price, quantity, LocalDateTime.now()));
     //             quantity = 0;

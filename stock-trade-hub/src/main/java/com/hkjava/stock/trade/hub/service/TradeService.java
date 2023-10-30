@@ -1,12 +1,13 @@
-package com.example.demo.demostockexchange.services;
+package com.hkjava.stock.trade.hub.service;
 
 import java.util.List;
-import com.example.demo.demostockexchange.exception.FinnhubException;
-import com.example.demo.demostockexchange.model.OrderRequest;
+import com.hkjava.stock.trade.hub.dto.resp.OrderBookDTO;
+import com.hkjava.stock.trade.hub.exception.FinnhubException;
+import com.hkjava.stock.trade.hub.model.Order;
 
 public interface TradeService {
 
-    List<OrderRequest> findOrders();
+    List<OrderBookDTO> findOrders();
 
     void marketOrder(String stockName, String buySell, Integer quantity)
             throws FinnhubException;
@@ -14,5 +15,5 @@ public interface TradeService {
     void limitOrder(String stockName, String buySell, Double price,
             Integer quantity) throws FinnhubException;
 
-    List<TradeRecord> findAll();
+    List<Order> findAll();
 }
