@@ -4,8 +4,7 @@
     <div class="order-book-container">
 
         <div class="order-form">
-          <el-row class="button-header">Stock Symbol : </el-row>
-            <el-row>
+          <span class="button-header-stock-symbol">Stock Symbol :&nbsp;  
             <el-select v-model="stockSymbol" class="custom-dropdown">
               <el-option
                 v-for="(option, index) in stockSymbolOptions"
@@ -14,16 +13,13 @@
                 :value="option"
               ></el-option>
             </el-select>
-          </el-row>
-          
-      <ul>
-        <span> 
+          </span>
+
+      <ul class="flex-container">
           <li>
           <!-- Action Dropdown -->
-          <el-row class="button-header action-header">
-            Action
-          </el-row>
-          <el-row>
+          <span class="button-header-action action-header">
+            Action&nbsp;
             <el-select v-model="buySellSelectedOption" class="custom-dropdown action-header">
               <el-option
                 v-for="(option, index) in buySellOptions"
@@ -32,16 +28,22 @@
                 :value="index"
               ></el-option>
             </el-select>
-          </el-row>
+          </span>
         </li>
-
-
-        <li>
+    <!-- price -->
+          <li>
+          <span class="button-header-price price-header">Price&nbsp;
+            <!-- <div class="custom-input-number price-header"> -->
+              <div class="price-header">
+              <el-input-number v-model="price_input" :min="0" :max="10000" :step="0.1"></el-input-number>
+            </div>
+          </span>
+        </li>  
+   
+           <li>
           <!-- Order Type Dropdown -->
-          <el-row class="button-header order-header">
-            Order Type
-          </el-row>
-          <el-row>
+          <span class="button-header-type order-header">
+            Type&nbsp;&nbsp;&nbsp;&nbsp;
             <el-select v-model="orderTypeSelectedOption" class="custom-dropdown order-header">
               <el-option
                 v-for="(option, index) in orderTypeOptions"
@@ -50,32 +52,19 @@
                 :value="index"
               ></el-option>
             </el-select>
-          </el-row>
+          </span>
         </li>
-      </span>
-      <span> 
-          <!-- price -->
-          <li>
-          <el-row class="button-header price-header">Price</el-row>
-          <el-row>
-            <!-- <div class="custom-input-number price-header"> -->
-              <div class="price-header">
 
-              <el-input-number v-model="price_input" :min="0" :max="10000" :step="0.1"></el-input-number>
-            </div>
-          </el-row>
-        </li>
           <!-- shares -->
         <li>
-          <el-row class="button-header quantity-header">Quantity</el-row>
-          <el-row>
+          <span class="button-header-qty quantity-header">Qty&nbsp;
+
             <!-- <div class="custom-input-number quantity-header"> -->
             <div class="quantity-header">
               <el-input-number v-model="quantity_input" :min="0" :max="1000" :step="1"></el-input-number>
             </div>
-          </el-row>
+          </span>
         </li>
-      </span>
       </ul>
           <!-- Total Order value -->
           <!-- <el-row class="button-header">Total Order Value</el-row>
@@ -216,7 +205,7 @@ const symbol = stockSymbol.value;
     // Fetch data periodically every 10 seconds
     setInterval(() => {
       retrieveQueue();
-    }, 10000);
+    }, 100000);
 
     // Update buyOrders and sellOrders when buys and asks data change
     const updateOrders = () => {
@@ -268,6 +257,16 @@ body::before {
   z-index: -1;
 }
 
+.flex-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: left;
+  list-style: none;
+  padding: 0;
+  margin-left: -50px;
+}
+
 .caption {
   text-align: center;
   font-size: 33px;
@@ -296,8 +295,8 @@ body::before {
 
 /* Styling for the order form and panel */
 .order-form {
-  width: auto;
-  height:220px;
+  width: 400px;
+  height:200px;
   display: flex;
   flex-direction: column;
   align-items: left;
@@ -322,24 +321,46 @@ body::before {
   /*行對齊*/
   align-content: space-between;
   /* padding: 50px 180px 90px 50px; */
-  height:  118px;
-  margin-bottom:0px;
+  height: 118px;
+  margin-bottom: -10px;
 
+    }
+
+    .order-form .ul li{
+      justify-content: space-evenly;
+      align-content: space-between;
     }
 
     .custom-dropdown{
     width: 130px;
+    align-items: center;
     }
-    
-.price-header,
-.quantity-header {
-  margin-left: 10px; /* Adjust this value to control the left margin */
+
+    .action-header{
+  margin-left: 7px;
+  margin-right: 0px; /* Adjust this value to control the left margin */
+  /* display: flex; */
+ align-items: center;
+}
+.price-header{
+  margin-left: 0px; /* Adjust this value to control the left margin */
+  margin-top: 0px;
+  /* display: flex; */
+  align-items: center;
 }
 
-.action-header,
+.quantity-header {
+  margin-left: 0px; /* Adjust this value to control the left margin */
+  margin-top: 0px;
+  /* display: flex; */
+  align-items: center;
+}
+
 .order-header {
-  margin-left: 0px;
+  margin-left: 5px;
   margin-right: 0px; /* Adjust this value to control the left margin */
+  /* display: flex; */
+ align-items: center;
 }
 
 .order-panel {
@@ -372,13 +393,64 @@ body::before {
   margin-bottom: 20px;
 }
 
-.button-header {
+.button-header-stock-symbol {
   color: white;
   font-size: 18px;
   display: flex;
   justify-content: space-between;
   align-items: top;
    margin-top: -1px; 
+   padding-left: -10px;
+   padding-bottom: 5px;
+   padding-right: 10px;
+   padding-bottom: 5px;
+}
+.button-header-action {
+  color: white;
+  font-size: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: top;
+   margin-top: -1px; 
+   padding-left: 10px;
+   padding-bottom: 5px;
+   padding-right: 10px;
+   padding-bottom: 5px;
+}
+.button-header-price {
+  color: white;
+  font-size: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: top;
+   margin-top: -1px; 
+   padding-left: 0px;
+   padding-bottom: 5px;
+   padding-bottom: 5px;
+}
+.button-header-type {
+  color: white;
+  font-size: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: top;
+   margin-top: -1px; 
+   padding-left: 5px;
+   padding-bottom: 5px;
+   padding-right: 10px;
+   padding-bottom: 5px;
+}
+.button-header-qty {
+  color: white;
+  font-size: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: top;
+   margin-top: -1px; 
+   padding-left: 5px;
+   padding-bottom: 5px;
+   padding-right: 10px;
+   padding-bottom: 5px;
 }
 
 .button-wrapper .el-button {
@@ -499,8 +571,8 @@ body::before {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 5px;
-  margin-top: 50px;
+  margin-bottom: -5px;
+  margin-top: 10px;
   margin-left: 100px;
 }
 
