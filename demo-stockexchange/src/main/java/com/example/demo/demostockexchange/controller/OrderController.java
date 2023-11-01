@@ -11,7 +11,6 @@ import com.example.demo.demostockexchange.entity.Transaction;
 import com.example.demo.demostockexchange.exception.ApiResponse;
 import com.example.demo.demostockexchange.exception.FinnhubException;
 import com.example.demo.demostockexchange.infra.TransactionType;
-import com.example.demo.demostockexchange.model.OrderForm;
 import com.example.demo.demostockexchange.model.OrderRequest;
 import com.example.demo.demostockexchange.model.mapper.FinnhubMapper;
 // import com.example.demo.demostockexchange.repository.StockRepository;
@@ -46,7 +45,9 @@ public class OrderController implements OrderControllerOperation {
         .quantity(quantity)//
         // .totalOrderValue((long) orderForm.getPrice() * orderForm.getQuantity())//
         .build();
-    request.onOrder(request.getPrice(), request.getQuantity(),
+        
+    request.onOrder(request.getPrice(), //
+        request.getQuantity(), //
         request.getAction().toString());
     transactionRepository
         .save(finnhubMapper.requestToOrdersEntity(symbol, request));

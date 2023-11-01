@@ -44,54 +44,108 @@ public class OrderRequest {
   private Map<Double, Integer> askOffers = new TreeMap<>();
 
   public void onOrder(double price, int quantity, String side) {
-    if (TransactionType.BUY.name().toLowerCase().equals(side)) {
-      this.bidOffers.put(price, quantity);
-      Set<Double> ask_prices = this.askOffers.keySet();
-      List<Double> ask_prices_list = new ArrayList<>(ask_prices);
-      for (double ask_price : ask_prices_list) {
-        if (quantity > 0 && price >= ask_price) {
-          int ask_quantity = this.askOffers.get(ask_price);
-          if (quantity >= ask_quantity) {
-            quantity = quantity - ask_quantity;
-            removeAskOrder(ask_price, ask_quantity);
-          } else {
-            removeAskOrder(ask_price, quantity);
-            quantity = 0;
-          }
-          if (quantity == 0) {
-            break;
-          }
-        }
-      }
-      if (quantity > 0) {
-        addBidRestingOrder(price, quantity);
-      }
-    } else if (TransactionType.SELL.name().toLowerCase().equals(side)) {
-      this.askOffers.put(price, quantity);
-      Set<Double> bid_prices = this.bidOffers.keySet();
-      List<Double> bid_prices_list = new ArrayList<>(bid_prices);
-      for (double bid_price : bid_prices_list) {
-        if (quantity > 0 && price <= bid_price) {
-          int bid_quantity = this.bidOffers.get(bid_price);
-          if (quantity >= bid_quantity) {
-            quantity = quantity - bid_quantity;
-            this.removeBidOrder(bid_price, bid_quantity);
-          } else {
-            this.removeBidOrder(bid_price, quantity);
-            quantity = 0;
-          }
-          if (quantity == 0) {
-            break;
-          }
-        }
+    if (TransactionType.BUY.name().equalsIgnoreCase(side)) {
+      matchOrder(price, quantity, true);
 
-      }
-      if (quantity > 0) {
-        this.addAskRestingOffer(price, quantity);
-      }
+    } else if (TransactionType.SELL.name().equalsIgnoreCase(side)) {
+      matchOrder(price, quantity, false);
     }
   }
 
+  private void matchOrder(double price, int quantity, boolean isBidAction) {
+    Map<Double, Integer> makerOffers = isBidAction ? askOffers : bidOffers;
+    Map<Double, Integer> takerOffers = isBidAction ? bidOffers : askOffers;
+
+    makerOffers.put(price, quantity);
+    Set<Double> makerPrices = makerOffers.keySet();
+    List<Double> makerPricesList = new ArrayList<>(makerPrices);
+
+    for (double makerPrice : makerPricesList) {
+      if (quantity > 0 && isBidAction ? price >= makerPrice
+          : price <= makerPrice) {
+        int makerQuantity = makerOffers.get(makerPrice);
+
+        if (quantity >= makerQuantity) {
+          quantity = quantity - makerQuantity;
+          removeOrder(makerPrice, makerQuantity, isBidAction);
+        } else {
+          removeOrder(makerPrice, quantity, isBidAction);
+          quantity = 0;
+        }
+
+        if (quantity == 0) {
+          break;
+        }
+      }
+    }
+
+    if (quantity > 0) {
+      addBidRestingOrder(price, quantity);
+    } else {
+      addAskRestingOffer(price, quantity);
+    }
+  }
+
+  // public void onOrder(double price, int quantity, boolean isBidAction) {
+  // if (TransactionType.BUY.name().toLowerCase().equals(side)) {
+  // this.bidOffers.put(price, quantity);
+  // Set<Double> ask_prices = this.askOffers.keySet();
+  // List<Double> ask_prices_list = new ArrayList<>(ask_prices);
+  // for (double ask_price : ask_prices_list) {
+  // if (quantity > 0 && price >= ask_price) {
+  // int ask_quantity = this.askOffers.get(ask_price);
+  // if (quantity >= ask_quantity) {
+  // quantity = quantity - ask_quantity;
+  // removeAskOrder(ask_price, ask_quantity);
+  // } else {
+  // removeAskOrder(ask_price, quantity);
+  // quantity = 0;
+  // }
+  // if (quantity == 0) {
+  // break;
+  // }
+  // }
+  // }
+  // if (quantity > 0) {
+  // addBidRestingOrder(price, quantity);
+  // }
+  // } else if (TransactionType.SELL.name().toLowerCase().equals(side)) {
+  // this.askOffers.put(price, quantity);
+  // Set<Double> bid_prices = this.bidOffers.keySet();
+  // List<Double> bid_prices_list = new ArrayList<>(bid_prices);
+  // for (double bid_price : bid_prices_list) {
+  // if (quantity > 0 && price <= bid_price) {
+  // int bid_quantity = this.bidOffers.get(bid_price);
+  // if (quantity >= bid_quantity) {
+  // quantity = quantity - bid_quantity;
+  // this.removeBidOrder(bid_price, bid_quantity);
+  // } else {
+  // this.removeBidOrder(bid_price, quantity);
+  // quantity = 0;
+  // }
+  // if (quantity == 0) {
+  // break;
+  // }
+  // }
+
+  // }
+  // if (quantity > 0) {
+  // this.addAskRestingOffer(price, quantity);
+  // }
+  // }
+  // }
+  synchronized private void removeOrder(double price, int quantity,
+      boolean isBidAction) {
+    if (isBidAction) {
+      // Remove the ask order
+      askOffers.remove(price);
+      // Implement the necessary logic for your order removal
+    } else {
+      // Remove the bid order
+      bidOffers.remove(price);
+      // Implement the necessary logic for your order removal
+    }
+  }
 
   synchronized void addBidRestingOrder(double price, int quantity) {
     this.bidOffers.put(price, quantity);
