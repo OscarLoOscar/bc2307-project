@@ -60,6 +60,7 @@ public class OrderBookServiceImpl implements OrderBookService {
   @Override
   public List<OrderResp> getBidQueue(String stockId) {
     List<Transaction> data = this.getOrderBook();
+    //fixed null pointer
     Map<Double, Integer> priceToQuantityMap = new TreeMap<>(Comparator.reverseOrder());
 
     for (Transaction order : data) {
