@@ -205,7 +205,7 @@ const symbol = stockSymbol.value;
     // Fetch data periodically every 10 seconds
     setInterval(() => {
       retrieveQueue();
-    }, 100000);
+    }, 2000);
 
     // Update buyOrders and sellOrders when buys and asks data change
     const updateOrders = () => {
@@ -258,13 +258,21 @@ body::before {
 }
 
 .flex-container {
-  display: flex;
+  display: grid;
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: left;
   list-style: none;
   padding: 0;
   margin-left: -50px;
+  /* grid-template-columns: repeat(3,1fr);
+  grid-template-rows: 1fr 2fr 2fr 1fr;
+  grid-template-areas: 
+  "action-header"
+  "price-header"
+  "order-header"
+  "quantity-header"
+  ; */
 }
 
 .caption {
@@ -339,27 +347,27 @@ body::before {
     .action-header{
   margin-left: 7px;
   margin-right: 0px; /* Adjust this value to control the left margin */
-  /* display: flex; */
+  display: grid;
  align-items: center;
 }
 .price-header{
   margin-left: 0px; /* Adjust this value to control the left margin */
   margin-top: 0px;
-  /* display: flex; */
+  display: grid;
   align-items: center;
 }
 
 .quantity-header {
   margin-left: 0px; /* Adjust this value to control the left margin */
   margin-top: 0px;
-  /* display: flex; */
+  display: grid;
   align-items: center;
 }
 
 .order-header {
   margin-left: 5px;
   margin-right: 0px; /* Adjust this value to control the left margin */
-  /* display: flex; */
+  display: grid;
  align-items: center;
 }
 
@@ -400,22 +408,23 @@ body::before {
   justify-content: space-between;
   align-items: top;
    margin-top: -1px; 
-   padding-left: -10px;
+   /* padding-left: -10px;
    padding-bottom: 5px;
    padding-right: 10px;
-   padding-bottom: 5px;
+   padding-bottom: 5px; */
 }
 .button-header-action {
+  width: 130px;
   color: white;
   font-size: 15px;
   display: flex;
   justify-content: space-between;
   align-items: top;
-   margin-top: -1px; 
-   padding-left: 10px;
-   padding-bottom: 5px;
+   margin-top: 1px; 
+    padding-left: 5px;
+  /* padding-bottom: 5px;
    padding-right: 10px;
-   padding-bottom: 5px;
+   padding-bottom: 5px; */
 }
 .button-header-price {
   color: white;
@@ -423,22 +432,23 @@ body::before {
   display: flex;
   justify-content: space-between;
   align-items: top;
-   margin-top: -1px; 
+   margin-top: 1px; 
    padding-left: 0px;
    padding-bottom: 5px;
    padding-bottom: 5px;
 }
 .button-header-type {
+  width: 130px;
   color: white;
   font-size: 15px;
   display: flex;
   justify-content: space-between;
   align-items: top;
-   margin-top: -1px; 
-   padding-left: 5px;
+   margin-top: 1px; 
+   /* padding-left: 5px;
    padding-bottom: 5px;
    padding-right: 10px;
-   padding-bottom: 5px;
+   padding-bottom: 5px; */
 }
 .button-header-qty {
   color: white;
@@ -446,7 +456,7 @@ body::before {
   display: flex;
   justify-content: space-between;
   align-items: top;
-   margin-top: -1px; 
+   margin-top: 1px; 
    padding-left: 5px;
    padding-bottom: 5px;
    padding-right: 10px;

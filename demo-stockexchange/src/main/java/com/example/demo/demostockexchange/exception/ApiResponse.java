@@ -64,7 +64,7 @@ public class ApiResponse<T> {
       return this;
     }
 
- public ApiResponseBuilder<T> message(String message) {
+    public ApiResponseBuilder<T> message(String message) {
       this.message = message;
       return this;
     }

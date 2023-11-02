@@ -2,15 +2,15 @@ package com.example.demo.demostockexchange.infra;
 
 public class BusinessException extends Exception {
 
-  private int code;
+  private Code code;
 
   public int getCode() {
-    return this.code;
+    return this.code.getCode();
   }
   
   public BusinessException(Code code) {
     super(code.getDesc());
-    this.code = code.getCode();
+    this.code = code;
   }
 
 }

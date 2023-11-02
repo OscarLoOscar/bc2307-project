@@ -2,6 +2,7 @@ package com.example.demo.demostockexchange.model;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -15,13 +16,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
+// @NoArgsConstructor
 @Getter
 @ToString
 @Setter
+@Slf4j
 public class OrderRequest {
   TransactionType action; // 'Buy','Sell'
 
@@ -39,50 +42,81 @@ public class OrderRequest {
 
   // private long totalOrderValue ;
 
+  @Builder.Default
   private Map<Double, Integer> bidOffers =
       new TreeMap<>(Comparator.reverseOrder());
+  @Builder.Default
   private Map<Double, Integer> askOffers = new TreeMap<>();
 
   public void onOrder(double price, int quantity, String side) {
     if (TransactionType.BUY.name().equalsIgnoreCase(side)) {
       matchOrder(price, quantity, true);
-
     } else if (TransactionType.SELL.name().equalsIgnoreCase(side)) {
       matchOrder(price, quantity, false);
     }
   }
 
   private void matchOrder(double price, int quantity, boolean isBidAction) {
-    Map<Double, Integer> makerOffers = isBidAction ? askOffers : bidOffers;
-    Map<Double, Integer> takerOffers = isBidAction ? bidOffers : askOffers;
+    if (isBidAction) {
+      log.info("start run matchOrder : isBidAction");
+      this.bidOffers.put(price, quantity);
+      log.info("After put" + this.bidOffers.keySet().toString());
 
-    makerOffers.put(price, quantity);
-    Set<Double> makerPrices = makerOffers.keySet();
-    List<Double> makerPricesList = new ArrayList<>(makerPrices);
+      Set<Double> offerPrices = this.bidOffers.keySet();
+      List<Double> offerPricesList = new ArrayList<>(offerPrices);
 
-    for (double makerPrice : makerPricesList) {
-      if (quantity > 0 && isBidAction ? price >= makerPrice
-          : price <= makerPrice) {
-        int makerQuantity = makerOffers.get(makerPrice);
+      for (double offerPrice : offerPricesList) {
+        if (quantity > 0 && ((isBidAction && price >= offerPrice)
+            || (!isBidAction && price <= offerPrice))) {
+          int offerQuantity = this.bidOffers.get(offerPrice);
 
-        if (quantity >= makerQuantity) {
-          quantity = quantity - makerQuantity;
-          removeOrder(makerPrice, makerQuantity, isBidAction);
-        } else {
-          removeOrder(makerPrice, quantity, isBidAction);
-          quantity = 0;
-        }
+          if (quantity >= offerQuantity) {
+            quantity = quantity - offerQuantity;
+            removeOrder(offerPrice, offerQuantity, isBidAction);
+          } else {
+            removeOrder(offerPrice, quantity, isBidAction);
+            quantity = 0;
+          }
 
-        if (quantity == 0) {
-          break;
+          if (quantity == 0) {
+            break;
+          }
         }
       }
-    }
-
-    if (quantity > 0) {
-      addBidRestingOrder(price, quantity);
     } else {
-      addAskRestingOffer(price, quantity);
+      log.info("start run matchOrder : askOffers");
+      this.askOffers.put(price, quantity);
+      log.info("After put" + this.askOffers.keySet().toString());
+
+      Set<Double> offerPrices = this.askOffers.keySet();
+      List<Double> offerPricesList = new ArrayList<>(offerPrices);
+
+      for (double offerPrice : offerPricesList) {
+        if (quantity > 0 && ((isBidAction && price >= offerPrice)
+            || (!isBidAction && price <= offerPrice))) {
+          int offerQuantity = this.askOffers.get(offerPrice);
+
+          if (quantity >= offerQuantity) {
+            quantity = quantity - offerQuantity;
+            removeOrder(offerPrice, offerQuantity, isBidAction);
+          } else {
+            removeOrder(offerPrice, quantity, isBidAction);
+            quantity = 0;
+          }
+
+          if (quantity == 0) {
+            break;
+          }
+        }
+      }
+
+    }
+    if (quantity > 0) {
+      if (isBidAction) {
+        addBidRestingOrder(price, quantity);
+      } else {
+        addAskRestingOffer(price, quantity);
+      }
     }
   }
 
