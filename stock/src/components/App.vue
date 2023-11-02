@@ -43,7 +43,7 @@
            <li>
           <!-- Order Type Dropdown -->
           <span class="button-header-type order-header">
-            Type&nbsp;&nbsp;&nbsp;&nbsp;
+            Type&nbsp;&nbsp;
             <el-select v-model="orderTypeSelectedOption" class="custom-dropdown order-header">
               <el-option
                 v-for="(option, index) in orderTypeOptions"
@@ -351,6 +351,7 @@ body::before {
  align-items: center;
 }
 .price-header{
+  margin-right: -9px;
   margin-left: 0px; /* Adjust this value to control the left margin */
   margin-top: 0px;
   display: grid;
@@ -358,8 +359,9 @@ body::before {
 }
 
 .quantity-header {
+  margin-right: -8px;
   margin-left: 0px; /* Adjust this value to control the left margin */
-  margin-top: 0px;
+  margin-top: -5px;
   display: grid;
   align-items: center;
 }
@@ -438,7 +440,7 @@ body::before {
    padding-bottom: 5px;
 }
 .button-header-type {
-  width: 130px;
+  width: 150px;
   color: white;
   font-size: 15px;
   display: flex;
@@ -459,7 +461,7 @@ body::before {
    margin-top: 1px; 
    padding-left: 5px;
    padding-bottom: 5px;
-   padding-right: 10px;
+   padding-right: -20px;
    padding-bottom: 5px;
 }
 
