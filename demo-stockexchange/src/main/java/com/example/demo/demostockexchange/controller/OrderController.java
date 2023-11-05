@@ -15,6 +15,7 @@ import com.example.demo.demostockexchange.model.OrderRequest;
 import com.example.demo.demostockexchange.model.mapper.FinnhubMapper;
 // import com.example.demo.demostockexchange.repository.StockRepository;
 import com.example.demo.demostockexchange.repository.TransactionRepository;
+import com.example.demo.demostockexchange.services.TransactionService;
 
 @RestController
 @RequestMapping("/sumit")
@@ -26,7 +27,10 @@ public class OrderController implements OrderControllerOperation {
   private FinnhubMapper finnhubMapper;
 
   @Autowired
-  TransactionRepository transactionRepository;
+  private TransactionService transactionService;
+
+  @Autowired
+  private TransactionRepository transactionRepository;
 
   @Override
   public ApiResponse<Transaction> placeOrder(@PathVariable String symbol,
@@ -45,10 +49,11 @@ public class OrderController implements OrderControllerOperation {
         .quantity(quantity)//
         // .totalOrderValue((long) orderForm.getPrice() * orderForm.getQuantity())//
         .build();
-        
+
     request.onOrder(request.getPrice(), //
         request.getQuantity(), //
         request.getAction().toString());
+        
     transactionRepository
         .save(finnhubMapper.requestToOrdersEntity(symbol, request));
     return ApiResponse.<Transaction>builder()//

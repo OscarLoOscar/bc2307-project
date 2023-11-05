@@ -9,14 +9,12 @@ import java.util.TreeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-// import com.example.demo.demostockexchange.entity.Orders;
 import com.example.demo.demostockexchange.entity.Transaction;
 import com.example.demo.demostockexchange.infra.TransactionType;
 import com.example.demo.demostockexchange.model.BuyerSellerData;
 import com.example.demo.demostockexchange.model.OrderRequest;
 import com.example.demo.demostockexchange.model.OrderResp;
 import com.example.demo.demostockexchange.model.mapper.FinnhubMapper;
-// import com.example.demo.demostockexchange.repository.StockRepository;
 import com.example.demo.demostockexchange.repository.TransactionRepository;
 import com.example.demo.demostockexchange.services.OrderBookService;
 
@@ -57,35 +55,58 @@ public class OrderBookServiceImpl implements OrderBookService {
 
   // }
 
-  @Override
-  public List<OrderResp> getBidQueue(String stockId) {
-    List<Transaction> data = this.getOrderBook();
-    //fixed null pointer
-    Map<Double, Integer> priceToQuantityMap = new TreeMap<>(Comparator.reverseOrder());
+//   @Override
+//   public List<OrderResp> getBidQueue(String stockId) {
+//     List<Transaction> data = this.getOrderBook();
+//     //fixed null pointer
+//     Map<Double, Integer> priceToQuantityMap = new TreeMap<>(Comparator.reverseOrder());
 
-    for (Transaction order : data) {
-        if (TransactionType.BUY.name().toLowerCase().equalsIgnoreCase(order.getTransactionType().toString()) && order.getStockSymbol().equals(stockId)) {
-            double price = order.getPrice();
-            int quantity = order.getQuantity();
+//     for (Transaction order : data) {
+//         if (TransactionType.BUY.name().toLowerCase().equalsIgnoreCase(order.getTransactionType().toString()) && order.getStockSymbol().equals(stockId)) {
+//             double price = order.getPrice();
+//             int quantity = order.getQuantity();
             
-            // Check if the price already exists in the map
-            if (priceToQuantityMap.containsKey(price)) {
-                // If the price exists, add the quantity to the existing value
-                int existingQuantity = priceToQuantityMap.get(price);
-                priceToQuantityMap.put(price, existingQuantity + quantity);
-            } else {
-                // If the price is new, simply put it in the map
-                priceToQuantityMap.put(price, quantity);
-            }
-        }
-    }
+//             // Check if the price already exists in the map
+//             if (priceToQuantityMap.containsKey(price)) {
+//                 // If the price exists, add the quantity to the existing value
+//                 int existingQuantity = priceToQuantityMap.get(price);
+//                 priceToQuantityMap.put(price, existingQuantity + quantity);
+//             } else {
+//                 // If the price is new, simply put it in the map
+//                 priceToQuantityMap.put(price, quantity);
+//             }
+//         }
+//     }
+
+//     List<OrderResp> response = new ArrayList<>();
+//     for (Map.Entry<Double, Integer> entry : priceToQuantityMap.entrySet()) {
+//         double price = entry.getKey();
+//         int quantity = entry.getValue();
+
+//         // Create an OrderResp object with the price and summed quantity
+//         OrderResp orderResp = OrderResp.builder()
+//                 .type(TransactionType.BUY.name())
+//                 .localTime(LocalTime.now().toString())
+//                 .price(price)
+//                 .quantity(quantity)
+//                 .build();
+
+//         response.add(orderResp);
+//     }
+
+//     return response;
+// }
+@Override
+public List<OrderResp> getBidQueue(String stockId) {
+    // Get the bidOffers from the static field
+    Map<Double, Integer> bidOffers = OrderRequest.bidOffers;
 
     List<OrderResp> response = new ArrayList<>();
-    for (Map.Entry<Double, Integer> entry : priceToQuantityMap.entrySet()) {
+    for (Map.Entry<Double, Integer> entry : bidOffers.entrySet()) {
         double price = entry.getKey();
         int quantity = entry.getValue();
 
-        // Create an OrderResp object with the price and summed quantity
+        // Create an OrderResp object with the price and quantity
         OrderResp orderResp = OrderResp.builder()
                 .type(TransactionType.BUY.name())
                 .localTime(LocalTime.now().toString())
@@ -98,35 +119,17 @@ public class OrderBookServiceImpl implements OrderBookService {
 
     return response;
 }
-
-  @Override
-  public List<OrderResp> getAskQueue(String stockId) {
-    List<Transaction> data = this.getOrderBook();
-    Map<Double, Integer> priceToQuantityMap = new TreeMap<>();
-
-    for (Transaction order : data) {
-        if (TransactionType.SELL.name().toLowerCase().equalsIgnoreCase(order.getTransactionType().toString()) && order.getStockSymbol().equals(stockId)) {
-            double price = order.getPrice();
-            int quantity = order.getQuantity();
-            
-            // Check if the price already exists in the map
-            if (priceToQuantityMap.containsKey(price)) {
-                // If the price exists, add the quantity to the existing value
-                int existingQuantity = priceToQuantityMap.get(price);
-                priceToQuantityMap.put(price, existingQuantity + quantity);
-            } else {
-                // If the price is new, simply put it in the map
-                priceToQuantityMap.put(price, quantity);
-            }
-        }
-    }
+@Override
+public List<OrderResp> getAskQueue(String stockId) {
+    // Get the askOffers from the static field
+    Map<Double, Integer> askOffers = OrderRequest.askOffers;
 
     List<OrderResp> response = new ArrayList<>();
-    for (Map.Entry<Double, Integer> entry : priceToQuantityMap.entrySet()) {
+    for (Map.Entry<Double, Integer> entry : askOffers.entrySet()) {
         double price = entry.getKey();
         int quantity = entry.getValue();
 
-        // Create an OrderResp object with the price and summed quantity
+        // Create an OrderResp object with the price and quantity
         OrderResp orderResp = OrderResp.builder()
                 .type(TransactionType.SELL.name())
                 .localTime(LocalTime.now().toString())
@@ -139,6 +142,47 @@ public class OrderBookServiceImpl implements OrderBookService {
 
     return response;
 }
+
+//   @Override
+//   public List<OrderResp> getAskQueue(String stockId) {
+//     List<Transaction> data = this.getOrderBook();
+//     Map<Double, Integer> priceToQuantityMap = new TreeMap<>();
+
+//     for (Transaction order : data) {
+//         if (TransactionType.SELL.name().toLowerCase().equalsIgnoreCase(order.getTransactionType().toString()) && order.getStockSymbol().equals(stockId)) {
+//             double price = order.getPrice();
+//             int quantity = order.getQuantity();
+            
+//             // Check if the price already exists in the map
+//             if (priceToQuantityMap.containsKey(price)) {
+//                 // If the price exists, add the quantity to the existing value
+//                 int existingQuantity = priceToQuantityMap.get(price);
+//                 priceToQuantityMap.put(price, existingQuantity + quantity);
+//             } else {
+//                 // If the price is new, simply put it in the map
+//                 priceToQuantityMap.put(price, quantity);
+//             }
+//         }
+//     }
+
+//     List<OrderResp> response = new ArrayList<>();
+//     for (Map.Entry<Double, Integer> entry : priceToQuantityMap.entrySet()) {
+//         double price = entry.getKey();
+//         int quantity = entry.getValue();
+
+//         // Create an OrderResp object with the price and summed quantity
+//         OrderResp orderResp = OrderResp.builder()
+//                 .type(TransactionType.SELL.name())
+//                 .localTime(LocalTime.now().toString())
+//                 .price(price)
+//                 .quantity(quantity)
+//                 .build();
+
+//         response.add(orderResp);
+//     }
+
+//     return response;
+// }
 
   // @Override
   // public List<OrderResp> getAskQueue(String stockId) {

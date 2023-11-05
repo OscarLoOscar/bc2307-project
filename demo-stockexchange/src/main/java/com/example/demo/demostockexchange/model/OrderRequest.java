@@ -1,19 +1,17 @@
 package com.example.demo.demostockexchange.model;
 
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.demostockexchange.infra.TransactionType;
-import com.example.demo.demostockexchange.entity.Transaction;
-import com.example.demo.demostockexchange.infra.OrderType;
+import com.example.demo.demostockexchange.repository.TransactionRepository;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +24,10 @@ import lombok.extern.slf4j.Slf4j;
 @Setter
 @Slf4j
 public class OrderRequest {
+
+  @Autowired
+  TransactionRepository transactionRepository;
+
   TransactionType action; // 'Buy','Sell'
 
   String orderType;
@@ -43,82 +45,96 @@ public class OrderRequest {
   // private long totalOrderValue ;
 
   @Builder.Default
-  private Map<Double, Integer> bidOffers =
+  public static Map<Double, Integer> bidOffers =
       new TreeMap<>(Comparator.reverseOrder());
   @Builder.Default
-  private Map<Double, Integer> askOffers = new TreeMap<>();
+  public static Map<Double, Integer> askOffers = new TreeMap<>();
 
-  public void onOrder(double price, int quantity, String side) {
-    if (TransactionType.BUY.name().equalsIgnoreCase(side)) {
-      matchOrder(price, quantity, true);
-    } else if (TransactionType.SELL.name().equalsIgnoreCase(side)) {
-      matchOrder(price, quantity, false);
+  synchronized public void onOrder(double price, int quantity, String action) {
+    boolean isBidAction = true;
+    if (action.equals(TransactionType.BUY.name())) {
+      isBidAction = true;
+      matchOrder(price, quantity, isBidAction);
+      log.info("BUY bidOffers : " + bidOffers.get(price));
+      log.info("BUY askOffers : " + askOffers.get(price));
+
+    } else if (action.equals(TransactionType.SELL.name())) {
+      isBidAction = false;
+      matchOrder(price, quantity, isBidAction);
+      log.info("SELL bidOffers : " + bidOffers.get(price));
+      log.info("SELL askOffers : " + askOffers.get(price));
+
     }
   }
 
-  private void matchOrder(double price, int quantity, boolean isBidAction) {
+
+  @Transactional
+  synchronized private void matchOrder(double price, int quantity,
+      boolean isBidAction) {
+    Set<Double> bidPrices = new HashSet<>(bidOffers.keySet());
+    Set<Double> askPrices = new HashSet<>(askOffers.keySet());
+
+    for (double bidPrice : bidPrices) {
+      for (double askPrice : askPrices) {
+        if (bidPrice == price && askPrice == price) {
+          int askQuantity = askOffers.get(askPrice);
+          int bidQuantity = bidOffers.get(bidPrice);
+
+          if (askQuantity >= quantity) {
+            // Match the entire offer
+            askOffers.put(askPrice, askQuantity - quantity);
+            bidOffers.put(bidPrice, bidQuantity + quantity);
+            return;
+          } else {
+            // Match part of the offer
+            askOffers.remove(askPrice);
+            bidOffers.put(bidPrice, bidQuantity + askQuantity);
+            quantity -= askQuantity;
+          }
+        }
+      }
+    }
+
+    // If there's remaining quantity, add a resting order
     if (isBidAction) {
-      log.info("start run matchOrder : isBidAction");
-      this.bidOffers.put(price, quantity);
-      log.info("After put" + this.bidOffers.keySet().toString());
-
-      Set<Double> offerPrices = this.bidOffers.keySet();
-      List<Double> offerPricesList = new ArrayList<>(offerPrices);
-
-      for (double offerPrice : offerPricesList) {
-        if (quantity > 0 && ((isBidAction && price >= offerPrice)
-            || (!isBidAction && price <= offerPrice))) {
-          int offerQuantity = this.bidOffers.get(offerPrice);
-
-          if (quantity >= offerQuantity) {
-            quantity = quantity - offerQuantity;
-            removeOrder(offerPrice, offerQuantity, isBidAction);
-          } else {
-            removeOrder(offerPrice, quantity, isBidAction);
-            quantity = 0;
-          }
-
-          if (quantity == 0) {
-            break;
-          }
-        }
-      }
+      addBidRestingOrder(price, quantity);
     } else {
-      log.info("start run matchOrder : askOffers");
-      this.askOffers.put(price, quantity);
-      log.info("After put" + this.askOffers.keySet().toString());
-
-      Set<Double> offerPrices = this.askOffers.keySet();
-      List<Double> offerPricesList = new ArrayList<>(offerPrices);
-
-      for (double offerPrice : offerPricesList) {
-        if (quantity > 0 && ((isBidAction && price >= offerPrice)
-            || (!isBidAction && price <= offerPrice))) {
-          int offerQuantity = this.askOffers.get(offerPrice);
-
-          if (quantity >= offerQuantity) {
-            quantity = quantity - offerQuantity;
-            removeOrder(offerPrice, offerQuantity, isBidAction);
-          } else {
-            removeOrder(offerPrice, quantity, isBidAction);
-            quantity = 0;
-          }
-
-          if (quantity == 0) {
-            break;
-          }
-        }
-      }
-
-    }
-    if (quantity > 0) {
-      if (isBidAction) {
-        addBidRestingOrder(price, quantity);
-      } else {
-        addAskRestingOffer(price, quantity);
-      }
+      addAskRestingOffer(price, quantity);
     }
   }
+  // @Transactional
+  // synchronized private void matchOrder(double price, int quantity, boolean isBidAction) {
+  // Set<Double> bidPrices = new HashSet<>(bidOffers.keySet());
+  // Set<Double> askPrices = new HashSet<>(askOffers.keySet());
+
+  // for (double bidPrice : bidPrices) {
+  // for (double askPrice : askPrices) {
+  // if (bidPrice == price && askPrice == price) {
+  // int askQuantity = askOffers.get(askPrice);
+  // int bidQuantity = bidOffers.get(bidPrice);
+
+  // if (askQuantity >= quantity) {
+  // // Match the entire offer
+  // askOffers.put(askPrice, askQuantity - quantity);
+  // bidOffers.put(bidPrice, bidQuantity + quantity);
+  // return;
+  // } else {
+  // // Match part of the offer
+  // askOffers.remove(askPrice);
+  // bidOffers.put(bidPrice, bidQuantity + askQuantity);
+  // quantity -= askQuantity;
+  // }
+  // }
+  // }
+  // }
+
+  // // If there's remaining quantity, add a resting order
+  // if (isBidAction) {
+  // addBidRestingOrder(price, quantity);
+  // } else {
+  // addAskRestingOffer(price, quantity);
+  // }
+  // }
 
   // public void onOrder(double price, int quantity, boolean isBidAction) {
   // if (TransactionType.BUY.name().toLowerCase().equals(side)) {
