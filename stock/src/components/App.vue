@@ -136,7 +136,7 @@ export default {
 
     // Order Type Option
     const orderTypeSelectedOption = ref(0);
-    const orderTypeOptions = ['Market', 'Limit'];
+    const orderTypeOptions = ['MARKET', 'LIMIT'];
     const orderTypeSelectOption = (orderTypeIndex) => {
       orderTypeSelectedOption.value = orderTypeIndex;
     };

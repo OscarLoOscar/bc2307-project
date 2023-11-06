@@ -30,10 +30,15 @@ public class Transaction {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long transactionId;
+
   private Long userId;
+
   private String stockSymbol;
+
   private int quantity;
+
   private double price;
+  
   private TransactionType transactionType;
 
   @JsonFormat(locale = "zh", timezone = "GMT+8",

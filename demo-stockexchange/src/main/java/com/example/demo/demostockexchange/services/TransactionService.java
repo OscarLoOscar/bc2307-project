@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.example.demo.demostockexchange.entity.Customer;
+import com.example.demo.demostockexchange.entity.User;
 import com.example.demo.demostockexchange.entity.Transaction;
 import com.example.demo.demostockexchange.infra.TransactionType;
 import com.example.demo.demostockexchange.repository.TransactionRepository;
@@ -17,7 +17,7 @@ public class TransactionService {
     @Autowired
     private TransactionRepository transactionRepository;
 
-    public List<Transaction> combineTransactions(Customer user) {
+    public List<Transaction> combineTransactions(User user) {
         List<Transaction> transactions = transactionRepository.findByUserId(user.getId());
 
         // Create a map to combine transactions by stock symbol and quantity
@@ -45,7 +45,6 @@ public class TransactionService {
                     Transaction combinedTransaction = new Transaction();
                     combinedTransaction.setStockSymbol(stockSymbol);
                     combinedTransaction.setQuantity(quantity);
-                    combinedTransaction.setTransactionType(TransactionType.COMBINED);
                     combinedTransactions.add(combinedTransaction);
                 } else {
                     // Handle partial sells, or you can record the remaining quantity

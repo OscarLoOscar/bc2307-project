@@ -1,14 +1,18 @@
 package com.example.demo.demostockexchange.model;
 
+import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.List;
 import java.util.TreeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import com.example.demo.demostockexchange.infra.OrderType;
 import com.example.demo.demostockexchange.infra.TransactionType;
 import com.example.demo.demostockexchange.repository.TransactionRepository;
+import com.example.demo.demostockexchange.trade.BuyAndLimited;
+import com.example.demo.demostockexchange.trade.BuyAndMarket;
+import com.example.demo.demostockexchange.trade.SellAndLimited;
+import com.example.demo.demostockexchange.trade.SellAndMarket;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,7 +34,7 @@ public class OrderRequest {
 
   TransactionType action; // 'Buy','Sell'
 
-  String orderType;
+  OrderType orderType;
   // @JsonFormat(locale = "zh", timezone = "GMT+8",
   // pattern = "yyyy-MM-dd HH:mm:ss")
   // @DateTimeFormat
@@ -45,40 +49,35 @@ public class OrderRequest {
   // private long totalOrderValue ;
 
   @Builder.Default
-  public static Map<Double, Integer> bidOffers =
+  public static TreeMap<Double, Integer> bidOffers =
       new TreeMap<>(Comparator.reverseOrder());
   @Builder.Default
-  public static Map<Double, Integer> askOffers = new TreeMap<>();
+  public static TreeMap<Double, Integer> askOffers = new TreeMap<>();
 
-  synchronized public void onOrder(double price, int quantity, String action) {
-    boolean isBidAction = true;
-    if (action.equals(TransactionType.BUY.name())) {
-      isBidAction = true;
-      matchOrder(price, quantity, isBidAction);
-      log.info("BUY bidOffers : " + bidOffers.get(price));
-      log.info("BUY askOffers : " + askOffers.get(price));
-
-    } else if (action.equals(TransactionType.SELL.name())) {
-      isBidAction = false;
-      matchOrder(price, quantity, isBidAction);
-      log.info("SELL bidOffers : " + bidOffers.get(price));
-      log.info("SELL askOffers : " + askOffers.get(price));
-
-    }
+  synchronized public void onOrder(Order entry, TransactionType action,
+      OrderType orderType) {
+    if (action == TransactionType.BUY && orderType == OrderType.LIMIT)
+      new BuyAndLimited(entry).trade(entry);
+    if (action == TransactionType.BUY && orderType == OrderType.MARKET)
+      new BuyAndMarket(entry).trade(entry);
+    if (action == TransactionType.SELL && orderType == OrderType.LIMIT)
+      new SellAndLimited(entry).trade(entry);
+    if (action == TransactionType.SELL && orderType == OrderType.MARKET)
+      new SellAndMarket(entry).trade(entry);
   }
 
 
   @Transactional
   synchronized private void matchOrder(double price, int quantity,
       boolean isBidAction) {
-    Set<Double> bidPrices = new HashSet<>(bidOffers.keySet());
-    Set<Double> askPrices = new HashSet<>(askOffers.keySet());
+    List<Double> bidPrices = new ArrayList<>(bidOffers.keySet());
+    List<Double> askPrices = new ArrayList<>(askOffers.keySet());
 
     for (double bidPrice : bidPrices) {
       for (double askPrice : askPrices) {
         if (bidPrice == price && askPrice == price) {
-          int askQuantity = askOffers.get(askPrice);
-          int bidQuantity = bidOffers.get(bidPrice);
+          int askQuantity = askOffers.get(price);
+          int bidQuantity = bidOffers.get(price);
 
           if (askQuantity >= quantity) {
             // Match the entire offer
@@ -198,37 +197,37 @@ public class OrderRequest {
   }
 
   synchronized void addBidRestingOrder(double price, int quantity) {
-    this.bidOffers.put(price, quantity);
+    bidOffers.put(price, quantity);
   }
 
   synchronized void removeBidOrder(double price, int quantity) {
-    int lastQuantity = this.bidOffers.get(price);
+    int lastQuantity = bidOffers.get(price);
     if (lastQuantity == quantity) {
-      this.bidOffers.remove(price);
+      bidOffers.remove(price);
     } else {
-      this.bidOffers.put(price, lastQuantity - quantity);
+      bidOffers.put(price, lastQuantity - quantity);
     }
   }
 
   synchronized void addAskRestingOffer(double price, int quantity) {
-    this.askOffers.put(price, quantity);
+    askOffers.put(price, quantity);
   }
 
   synchronized void removeAskOrder(double price, int quantity) {
-    int lastQuantity = this.askOffers.get(price);
+    int lastQuantity = askOffers.get(price);
     if (lastQuantity == quantity) {
-      this.askOffers.remove(price);
+      askOffers.remove(price);
     } else {
-      this.askOffers.put(price, lastQuantity - quantity);
+      askOffers.put(price, lastQuantity - quantity);
     }
   }
 
   public int getAskLevel() {
-    return this.askOffers.size();
+    return askOffers.size();
   }
 
   public int getBidLevel() {
-    return this.bidOffers.size();
+    return bidOffers.size();
   }
 
 }

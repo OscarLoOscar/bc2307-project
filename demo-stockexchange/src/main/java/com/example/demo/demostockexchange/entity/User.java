@@ -22,7 +22,7 @@ import lombok.ToString;
 @Setter
 @Builder
 @ToString
-public class Customer implements Serializable {
+public class User implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

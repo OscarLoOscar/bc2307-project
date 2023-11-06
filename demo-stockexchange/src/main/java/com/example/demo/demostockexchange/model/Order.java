@@ -11,14 +11,14 @@ import lombok.ToString;
 @Setter
 @ToString
 @EqualsAndHashCode
-public class Entry {
+public class Order {
 
 
-    private double price;
+    private Double price;
 
-    private int share;
+    private Integer share;
 
-    public Entry(double price, int share) {
+    public Order(double price, int share) {
         if (price < 0.0d || share <= 0) {
             throw new IllegalArgumentException("Invalid price or share value");
         }
@@ -31,8 +31,9 @@ public class Entry {
     }
 
     public void deductShare(int share) {
-        if( share > this.share)
-        throw new IllegalArgumentException("Cannot deduct more shares than available");
+        if (share > this.share)
+            throw new IllegalArgumentException(
+                    "Cannot deduct more shares than available");
         this.share -= share;
     }
 

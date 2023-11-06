@@ -6,7 +6,6 @@ import lombok.Getter;
 public enum TransactionType {
   BUY(0), //
   SELL(1),//
-  COMBINED(2),//
   ;
 
   int transactionType;

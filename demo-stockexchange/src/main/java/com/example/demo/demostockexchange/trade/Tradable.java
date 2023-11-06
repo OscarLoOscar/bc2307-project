@@ -1,14 +1,15 @@
 package com.example.demo.demostockexchange.trade;
 
 import java.util.Deque;
-import com.example.demo.demostockexchange.model.Entry;
+import java.util.Map;
+import com.example.demo.demostockexchange.model.Order;
 
 //step 1 
 @FunctionalInterface
 public interface Tradable {
-  void trade(Double orderPrice, Integer orderShare);
+  void trade(Order entry);
 
-  default void placeBook(Deque<Entry> entries , Double orderPrice,Integer orderShare){
-    TradeFactory.placeBook(entries , orderPrice ,orderShare);
+  default void placeBook(Map<Double, Integer> offers , Double orderPrice,Integer orderShare){
+    TradeFactory.placeBook(offers , orderPrice ,orderShare);
   }
 }

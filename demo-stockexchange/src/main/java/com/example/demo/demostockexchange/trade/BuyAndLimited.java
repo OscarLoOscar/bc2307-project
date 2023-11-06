@@ -1,108 +1,110 @@
 package com.example.demo.demostockexchange.trade;
 
-import java.util.Deque;
-import com.example.demo.demostockexchange.model.Entry;
+import java.util.Map;
+import java.util.Map.Entry;
+import com.example.demo.demostockexchange.model.Order;
+import java.util.Comparator;
+import com.example.demo.demostockexchange.model.OrderRequest;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class BuyAndLimited implements Tradable {
 
-  private Deque<Entry> buybook; // descending 51.5 ,51.25 ,51.0
-
-  private Deque<Entry> sellbook; // ascending 51.75 , 52.0 , 52.25
+  private Order entry;
 
   @Override
-  public void trade(Double orderPrice, Integer orderShare) {
-    if (orderPrice == null || orderShare == null )
+  public void trade(Order entry) {
+    if (entry.getPrice().doubleValue() == 0
+        || entry.getShare().intValue() == 0) {
       throw new IllegalArgumentException();
-    if (orderPrice.doubleValue() < 0.0d || orderShare.intValue() <= 0)
+    }
+    if (entry.getPrice().doubleValue() < 0.0d
+        || entry.getShare().intValue() <= 0) {
       return;
+    }
 
-    // Order Price not matching existing sell book.
-    // Place it to Buy Book and return
-    if (this.sellbook.isEmpty()
-        || orderPrice.compareTo(this.sellbook.peek().getPrice()) >= 0) {
-      placeBook(this.buybook, orderPrice, orderShare);
+    if (OrderRequest.askOffers.isEmpty()
+        || entry.getPrice().compareTo(OrderRequest.askOffers.keySet().stream()
+            .min(Comparator.naturalOrder()).orElse(0.0)) >= 0) {
+      placeBook(OrderRequest.bidOffers, entry.getPrice(), entry.getShare());
       cleanup();
       return;
     }
     System.out.println("BuyandLimit Sell Book");
-    // loop to check sellbook and add back to buyBook
-    Entry head = this.sellbook.peek();// peek head
-    int restToBuy = orderShare;
-    while (orderPrice.compareTo(head.getPrice()) >= 0) {
-      if (restToBuy >= head.getShare()) {
-        head = this.sellbook.poll(); // update head
-        restToBuy -= head.getShare();
-        if (orderPrice.compareTo(head.getPrice()) == 0) {
-          head.setShare(restToBuy);
+
+    Entry<Double, Integer> head =
+        OrderRequest.askOffers.entrySet().iterator().next();
+    int restToBuy = entry.getShare();
+
+    while (entry.getPrice().compareTo(head.getKey()) >= 0) {
+      if (restToBuy >= head.getValue()) {
+        OrderRequest.askOffers.remove(head.getKey());
+        restToBuy -= head.getValue();
+        if (entry.getPrice().compareTo(head.getKey()) == 0) {
+          head.setValue(restToBuy);
         } else {
-          head.clearShare();
+          head.setValue(0);
         }
-        this.buybook.addFirst(head);
-        System.out.println("sellbook size : " + this.sellbook.size());
-        System.out.println("buybook size : " + this.buybook.size());
+        OrderRequest.bidOffers.put(head.getKey(), head.getValue());
+        System.out.println("askOffers size: " + OrderRequest.askOffers.size());
+        System.out.println("bidOffers size: " + OrderRequest.bidOffers.size());
       } else {
         System.out.println("last ");
-        head.deductShare(restToBuy);
+        head.setValue(head.getValue() - restToBuy);
         restToBuy = 0;
       }
       if (restToBuy <= 0)
         break;
-      head = this.sellbook.peek();
+      head = OrderRequest.askOffers.entrySet().iterator().next();
     }
-    System.out.println("end sellbook size : " + this.sellbook);
-    System.out.println("end buybook size : " + this.buybook);
+    System.out.println("end askOffers size: " + OrderRequest.askOffers.size());
+    System.out.println("end bidOffers size: " + OrderRequest.bidOffers.size());
     cleanup();
   }
 
-  
+  // Rest of the BuyAndLimited class remains the same
+  // ...
+
   private void cleanup() {
-    int sellBookSize = this.sellbook.size();
-    int buyBookSize = this.buybook.size();
+    int sellBookSize = OrderRequest.askOffers.size();
+    int buyBookSize = OrderRequest.bidOffers.size();
     if (sellBookSize >= 6 && buyBookSize >= 6)
       // Both sellbook and buybook have sufficient entries, no need to clean up.
       return;
     // Check if sellBook is under the required size
     if (sellBookSize < 6) {
       // get the last price from the sellbook
-      Entry sellLast = this.sellbook.peekLast();
+      Double sellLast = OrderRequest.askOffers.lastKey();
       // if sellLast is null , it means the sellBook is empty
       if (sellLast == null) {
         // start with a default price
-        sellLast = new Entry(50.0, 0);
+        sellLast = 50.0;
       }
       // fill the sellbook with entries it has at least 6 entries
-      fillTheQueue(this.sellbook, 6 - sellBookSize, sellLast.getPrice() + 0.01);
+      fillTheQueue(OrderRequest.askOffers, 6 - sellBookSize, sellLast + 0.01);
     }
 
     // check if buybook is under the required size
     if (buyBookSize < 6) {
       // get the last price from the buybook
-      Entry buyLast = this.buybook.peekLast();
+      Double buyLast = OrderRequest.bidOffers.lastKey();
 
       // if buyLast is null , it means the buybook is empty
       if (buyLast == null) {
         // start with a default price
-        buyLast = new Entry(50.0, 0);
+        buyLast = 50.0;
       }
       // fill the buybook with entries until it has at least 6 entries
-      fillTheQueue(this.buybook, 6 - buyBookSize, buyLast.getPrice() - 0.01);
+      fillTheQueue(OrderRequest.bidOffers, 6 - buyBookSize, buyLast - 0.01);
     }
   }
 
-  private void fillTheQueue(Deque<Entry> book, int size, Double lastPrice) {
-    // while (size < 6) {
-    // lastPrice += 0.01;
-    // this.sellbook.add(new Entry(lastPrice, 0));
-    // size++;
-    // }
+  private void fillTheQueue(Map<Double, Integer> book, int size,
+      Double lastPrice) {
     while (size > 0) {
-      lastPrice += (book.equals(this.sellbook) ? 0.01 : -0.01);
-      book.add(new Entry(lastPrice, 0));
+      lastPrice += (book == OrderRequest.askOffers ? 0.01 : -0.01);
+      book.put(lastPrice, 0);
       size--;
-
     }
   }
-
 }
