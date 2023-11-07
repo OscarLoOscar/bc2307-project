@@ -8,7 +8,7 @@ public class SymbolValidator
 
   @Override
   public boolean isValid(String symbol, ConstraintValidatorContext context) {
-    // Check if the symbol is either "BID" or "ASK"
+    // Check if the symbol is either "BUY" or "SELL" or "MARKET" or "LIMIT"
     return "BUY".equals(symbol) || "SELL".equals(symbol)
         || "MARKET".equals(symbol) || "LIMIT".equals(symbol);
   }

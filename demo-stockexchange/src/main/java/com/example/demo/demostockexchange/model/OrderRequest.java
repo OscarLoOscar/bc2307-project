@@ -54,6 +54,10 @@ public class OrderRequest {
   @Builder.Default
   public static TreeMap<Double, Integer> askOffers = new TreeMap<>();
 
+  static {
+    askOffers.put(1000.00, 50000);
+  }
+
   synchronized public void onOrder(Order entry, TransactionType action,
       OrderType orderType) {
     if (action == TransactionType.BUY && orderType == OrderType.LIMIT)

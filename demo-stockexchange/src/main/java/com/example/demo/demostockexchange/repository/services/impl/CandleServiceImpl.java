@@ -1,4 +1,4 @@
-package com.example.demo.demostockexchange.services.impl;
+package com.example.demo.demostockexchange.repository.services.impl;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +9,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import com.example.demo.demostockexchange.infra.Protocol;
 import com.example.demo.demostockexchange.model.Candle;
-import com.example.demo.demostockexchange.services.CandleService;
+import com.example.demo.demostockexchange.repository.services.CandleService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

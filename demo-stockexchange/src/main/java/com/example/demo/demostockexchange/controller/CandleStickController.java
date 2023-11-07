@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.demostockexchange.controller.impl.CandleStickOperation;
 import com.example.demo.demostockexchange.model.Candle;
-import com.example.demo.demostockexchange.services.CandleService;
+import com.example.demo.demostockexchange.repository.services.CandleService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

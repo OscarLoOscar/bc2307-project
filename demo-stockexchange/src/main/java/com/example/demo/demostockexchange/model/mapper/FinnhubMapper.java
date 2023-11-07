@@ -12,7 +12,6 @@ import com.example.demo.demostockexchange.entity.Transaction;
 import com.example.demo.demostockexchange.infra.TransactionType;
 import com.example.demo.demostockexchange.model.OrderRequest;
 import com.example.demo.demostockexchange.model.OrderResp;
-import com.example.demo.demostockexchange.model.StockExchange;
 
 @Component
 public class FinnhubMapper {
@@ -77,12 +76,4 @@ public class FinnhubMapper {
         .build();
   }
 
-  // --------
-  public StockExchange installBidQueueAndAskQueue(List<OrderResp> Bid,
-      List<OrderResp> Ask) {
-    return StockExchange.builder()//
-        .BidOrders(Bid)//
-        .AskOrders(Ask)//
-        .build();
-  }
 }

@@ -14,7 +14,7 @@ import com.example.demo.demostockexchange.model.OrderResp;
 import com.example.demo.demostockexchange.model.BuyerSellerData;
 import com.example.demo.demostockexchange.model.mapper.FinnhubMapper;
 import com.example.demo.demostockexchange.repository.TransactionRepository;
-import com.example.demo.demostockexchange.services.OrderBookService;
+import com.example.demo.demostockexchange.repository.services.OrderBookService;
 
 @RestController
 @RequestMapping("/transactions")

@@ -18,7 +18,7 @@ import com.example.demo.demostockexchange.model.OrderRequest;
 import com.example.demo.demostockexchange.model.mapper.FinnhubMapper;
 // import com.example.demo.demostockexchange.repository.StockRepository;
 import com.example.demo.demostockexchange.repository.TransactionRepository;
-import com.example.demo.demostockexchange.services.TransactionService;
+import com.example.demo.demostockexchange.repository.services.TransactionService;
 
 @RestController
 @RequestMapping("/sumit")
