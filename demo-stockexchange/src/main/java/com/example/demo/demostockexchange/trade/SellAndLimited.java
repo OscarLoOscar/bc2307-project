@@ -3,7 +3,6 @@ package com.example.demo.demostockexchange.trade;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 import com.example.demo.demostockexchange.model.Order;
 import com.example.demo.demostockexchange.model.OrderRequest;
 import lombok.AllArgsConstructor;
@@ -17,11 +16,12 @@ public class SellAndLimited implements Tradable {
 
   @Override
   public void trade(Order entry) {
-    if (entry.getPrice() == null || entry.getShare() == null)
-      throw new IllegalArgumentException();
-    if (entry.getPrice().doubleValue() < 0.0d
-        || entry.getShare().intValue() <= 0)
-      return;
+    if (entry.getPrice() == null || entry.getShare() == null) {
+      throw new IllegalArgumentException("Price and share must not be null.");
+    }
+    if (entry.getPrice().doubleValue() < 0.0d || entry.getShare().intValue() <= 0) {
+      return; // Skip if price is negative or share is zero or negative.
+    }
 
     if (OrderRequest.bidOffers.isEmpty()
         || entry.getPrice().compareTo(OrderRequest.askOffers.keySet().stream()
@@ -75,41 +75,39 @@ public class SellAndLimited implements Tradable {
   private void cleanup() {
     int sellBookSize = OrderRequest.askOffers.size();
     int buyBookSize = OrderRequest.bidOffers.size();
-    if (sellBookSize >= 6 && buyBookSize >= 6)
-      // Both sellbook and buybook have sufficient entries, no need to clean up.
-      return;
-    // Check if sellBook is under the required size
+    if (sellBookSize >= 6 && buyBookSize >= 6) {
+      return; // Both sell book and buy book have sufficient entries, no need to clean up.
+    }
+    // Check if sell book is under the required size
     if (sellBookSize < 6) {
-      // get the last price from the sellbook
+      // Get the last price from the sell book
       Double sellLast = OrderRequest.askOffers.lastKey();
-      // if sellLast is null , it means the sellBook is empty
       if (sellLast == null) {
-        // start with a default price
+        // Start with a default price
         sellLast = 50.0;
       }
-      // fill the sellbook with entries it has at least 6 entries
+      // Fill the sell book with entries until it has at least 6 entries
       fillTheQueue(OrderRequest.askOffers, 6 - sellBookSize, sellLast + 0.01);
     }
 
-    // check if buybook is under the required size
+    // Check if buy book is under the required size
     if (buyBookSize < 6) {
-      // get the last price from the buybook
+      // Get the last price from the buy book
       Double buyLast = OrderRequest.bidOffers.lastKey();
-
-      // if buyLast is null , it means the buybook is empty
       if (buyLast == null) {
-        // start with a default price
+        // Start with a default price
         buyLast = 50.0;
       }
-      // fill the buybook with entries until it has at least 6 entries
+      // Fill the buy book with entries until it has at least 6 entries
       fillTheQueue(OrderRequest.bidOffers, 6 - buyBookSize, buyLast - 0.01);
     }
   }
 
   private void fillTheQueue(Map<Double, Integer> book, int size,
       Double lastPrice) {
+    double step = book.equals(OrderRequest.askOffers) ? 0.01 : -0.01;
     while (size > 0) {
-      lastPrice += (book.equals(OrderRequest.askOffers) ? 0.01 : -0.01);
+      lastPrice += step;
       book.put(lastPrice, 0);
       size--;
     }

@@ -19,59 +19,65 @@ import com.example.demo.demostockexchange.model.mapper.FinnhubMapper;
 // import com.example.demo.demostockexchange.repository.StockRepository;
 import com.example.demo.demostockexchange.repository.TransactionRepository;
 import com.example.demo.demostockexchange.repository.services.TransactionService;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequestMapping("/sumit")
 public class OrderController implements OrderControllerOperation {
 
-    public static List<String> tradeStock = List.of("AAPL", "TSLA", "MSFT");
+        public static List<String> tradeStock = List.of("AAPL", "TSLA", "MSFT");
 
-    @Autowired
-    private FinnhubMapper finnhubMapper;
+        @Autowired
+        private FinnhubMapper finnhubMapper;
 
-    @Autowired
-    private TransactionService transactionService;
+        @Autowired
+        private TransactionService transactionService;
 
-    @Autowired
-    private TransactionRepository transactionRepository;
+        @Autowired
+        private TransactionRepository transactionRepository;
 
-    @Override
-    public ApiResponse<Transaction> placeOrder(@PathVariable String symbol,
-            @RequestParam @SymbolCheck String action, //
-            @RequestParam @SymbolCheck String orderType, //
-            @RequestParam double price, //
-            @RequestParam int quantity//
-    ) throws FinnhubException {
-        if (!tradeStock.contains(symbol)) {
-            return null;
+        @Override
+        public ApiResponse<Transaction> placeOrder(@PathVariable String symbol,
+                        @RequestParam @SymbolCheck String action, //
+                        @RequestParam @SymbolCheck String orderType, //
+                        @RequestParam double price, //
+                        @RequestParam int quantity//
+        ) throws FinnhubException {
+                if (!tradeStock.contains(symbol)) {
+                        return null;
+                }
+
+                OrderRequest request = OrderRequest.builder()//
+                                .action(TransactionType.valueOf(action))//
+                                .orderType(OrderType.valueOf(orderType))//
+                                .price(price)//
+                                .quantity(quantity)//
+                                // .totalOrderValue((long) orderForm.getPrice() * orderForm.getQuantity())//
+                                .build();
+
+                Order order = Order.builder()//
+                                .price(price)//
+                                .share(quantity)//
+                                .build();
+
+
+                request.onOrder(order, //
+                                TransactionType.valueOf(action), //
+                                OrderType.valueOf(orderType));
+
+                log.info("1 : " + OrderRequest.askOffers.keySet().toString());
+                log.info("2 : " + OrderRequest.bidOffers.keySet().toString());
+
+                transactionRepository.save(finnhubMapper
+                                .requestToOrdersEntity(symbol, request));
+
+                return ApiResponse.<Transaction>builder()//
+                                .ok()//
+                                .data(finnhubMapper.requestToOrdersEntity(
+                                                symbol, request))//
+                                .build();
+
         }
-
-        OrderRequest request = OrderRequest.builder()//
-                .action(TransactionType.valueOf(action))//
-                .orderType(OrderType.valueOf(orderType))//
-                .price(price)//
-                .quantity(quantity)//
-                // .totalOrderValue((long) orderForm.getPrice() * orderForm.getQuantity())//
-                .build();
-
-        Order order = Order.builder()//
-                .price(price)//
-                .share(quantity)//
-                .build();
-
-
-        request.onOrder(order, //
-                TransactionType.valueOf(action), //
-                OrderType.valueOf(orderType));
-
-        transactionRepository
-                .save(finnhubMapper.requestToOrdersEntity(symbol, request));
-
-        return ApiResponse.<Transaction>builder()//
-                .ok()//
-                .data(finnhubMapper.requestToOrdersEntity(symbol, request))//
-                .build();
-
-    }
 
 }

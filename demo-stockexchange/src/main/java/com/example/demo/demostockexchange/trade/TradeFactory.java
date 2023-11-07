@@ -6,7 +6,9 @@ import java.util.Map;
 import com.example.demo.demostockexchange.infra.OrderType;
 import com.example.demo.demostockexchange.infra.TransactionType;
 import com.example.demo.demostockexchange.model.Order;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class TradeFactory {
 
   public static Tradable produce(double price, int quantity,

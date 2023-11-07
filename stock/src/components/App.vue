@@ -168,37 +168,39 @@ const symbol = stockSymbol.value;
         console.error('Invalid price or quantity');
         return;
       }
-      const  symbol= stockSymbol.value;
-      const  action= buySellOptions[buySellSelectedOption.value]; // Use the selected option index to get the value
-      const  orderType= orderTypeOptions[orderTypeSelectedOption.value]; // Use the selected option index to get the value
-      const  price= price_input.value;
-      const  quantity= quantity_input.value;
+      const symbol= stockSymbol.value;
+      const action= buySellOptions[buySellSelectedOption.value]; // Use the selected option index to get the value
+      const orderType= orderTypeOptions[orderTypeSelectedOption.value]; // Use the selected option index to get the value
+      const price= price_input.value;
+      const quantity= quantity_input.value;
     // Include other request data here
 
   // Construct the URL with the selected parameters
-  const url = `http://localhost:8085/sumit/trade/symbol/${symbol}?action=${action}&orderType=${orderType}&price=${price}&quantity=${quantity}`;
+  const url = `http://localhost:8085/sumit/trade/symbol/${symbol}`;
 
   // Create an Axios configuration object
-  const config = {
-    method: 'POST',
-    data: url,
-    headers: {
-      'Content-Type': 'application/json'
-    },
-  };
+ // Create the data object
+ const data = new URLSearchParams();
+  data.append('action', action);
+  data.append('orderType', orderType);
+  data.append('price', price);
+  data.append('quantity', quantity);
 
   // Send the POST request using Axios
-  axios(url, config)
+ // Make the POST request with the URL and data
+  axios.post(url, data, {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+  })
     .then(() => {
-      // Handle the response if needed
       console.log('Order placed successfully');
     })
+    
     .catch(error => {
-      // Handle any errors
       console.error('Error placing order:', error);
     });
-};
-    // Fetch data initially
+};    // Fetch data initially
     onMounted(() => {
       retrieveQueue();
     });

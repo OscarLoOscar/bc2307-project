@@ -91,6 +91,7 @@ public class OrderRequest {
           } else {
             // Match part of the offer
             askOffers.remove(askPrice);
+            // askOffers.put(askPrice, 0);
             bidOffers.put(bidPrice, bidQuantity + askQuantity);
             quantity -= askQuantity;
           }
@@ -105,88 +106,7 @@ public class OrderRequest {
       addAskRestingOffer(price, quantity);
     }
   }
-  // @Transactional
-  // synchronized private void matchOrder(double price, int quantity, boolean isBidAction) {
-  // Set<Double> bidPrices = new HashSet<>(bidOffers.keySet());
-  // Set<Double> askPrices = new HashSet<>(askOffers.keySet());
 
-  // for (double bidPrice : bidPrices) {
-  // for (double askPrice : askPrices) {
-  // if (bidPrice == price && askPrice == price) {
-  // int askQuantity = askOffers.get(askPrice);
-  // int bidQuantity = bidOffers.get(bidPrice);
-
-  // if (askQuantity >= quantity) {
-  // // Match the entire offer
-  // askOffers.put(askPrice, askQuantity - quantity);
-  // bidOffers.put(bidPrice, bidQuantity + quantity);
-  // return;
-  // } else {
-  // // Match part of the offer
-  // askOffers.remove(askPrice);
-  // bidOffers.put(bidPrice, bidQuantity + askQuantity);
-  // quantity -= askQuantity;
-  // }
-  // }
-  // }
-  // }
-
-  // // If there's remaining quantity, add a resting order
-  // if (isBidAction) {
-  // addBidRestingOrder(price, quantity);
-  // } else {
-  // addAskRestingOffer(price, quantity);
-  // }
-  // }
-
-  // public void onOrder(double price, int quantity, boolean isBidAction) {
-  // if (TransactionType.BUY.name().toLowerCase().equals(side)) {
-  // this.bidOffers.put(price, quantity);
-  // Set<Double> ask_prices = this.askOffers.keySet();
-  // List<Double> ask_prices_list = new ArrayList<>(ask_prices);
-  // for (double ask_price : ask_prices_list) {
-  // if (quantity > 0 && price >= ask_price) {
-  // int ask_quantity = this.askOffers.get(ask_price);
-  // if (quantity >= ask_quantity) {
-  // quantity = quantity - ask_quantity;
-  // removeAskOrder(ask_price, ask_quantity);
-  // } else {
-  // removeAskOrder(ask_price, quantity);
-  // quantity = 0;
-  // }
-  // if (quantity == 0) {
-  // break;
-  // }
-  // }
-  // }
-  // if (quantity > 0) {
-  // addBidRestingOrder(price, quantity);
-  // }
-  // } else if (TransactionType.SELL.name().toLowerCase().equals(side)) {
-  // this.askOffers.put(price, quantity);
-  // Set<Double> bid_prices = this.bidOffers.keySet();
-  // List<Double> bid_prices_list = new ArrayList<>(bid_prices);
-  // for (double bid_price : bid_prices_list) {
-  // if (quantity > 0 && price <= bid_price) {
-  // int bid_quantity = this.bidOffers.get(bid_price);
-  // if (quantity >= bid_quantity) {
-  // quantity = quantity - bid_quantity;
-  // this.removeBidOrder(bid_price, bid_quantity);
-  // } else {
-  // this.removeBidOrder(bid_price, quantity);
-  // quantity = 0;
-  // }
-  // if (quantity == 0) {
-  // break;
-  // }
-  // }
-
-  // }
-  // if (quantity > 0) {
-  // this.addAskRestingOffer(price, quantity);
-  // }
-  // }
-  // }
   synchronized private void removeOrder(double price, int quantity,
       boolean isBidAction) {
     if (isBidAction) {
