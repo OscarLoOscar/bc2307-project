@@ -1,12 +1,15 @@
 package com.example.demo.demostockexchange.trade;
 
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import com.example.demo.demostockexchange.model.Order;
 import com.example.demo.demostockexchange.model.OrderRequest;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @AllArgsConstructor
 public class SellAndLimited implements Tradable {
 
@@ -23,35 +26,50 @@ public class SellAndLimited implements Tradable {
     if (OrderRequest.bidOffers.isEmpty()
         || entry.getPrice().compareTo(OrderRequest.askOffers.keySet().stream()
             .min(Comparator.naturalOrder()).orElse(0.0)) < 0) {
-      placeBook(OrderRequest.askOffers, entry.getPrice(), entry.getShare());
+      placeBook(entry.getPrice(), entry.getShare());
       cleanup();
       return;
     }
 
-    // Sell with limited price logic: Place your sell order in the buybook if there are matching buy orders
-    Entry<Double, Integer> head =
-        OrderRequest.bidOffers.entrySet().iterator().next();
-    int restToSell = entry.getShare();
-
-    while (entry.getPrice().compareTo(head.getKey()) <= 0) {
-      if (restToSell >= head.getValue()) {
-        OrderRequest.bidOffers.remove(head.getKey());
-        restToSell -= head.getValue();
-        head.setValue(0);
-        OrderRequest.askOffers.put(head.getKey(), head.getValue());
-        System.out.println("askOffers size: " + OrderRequest.askOffers.size());
-        System.out.println("bidOffers size: " + OrderRequest.bidOffers.size());
-      } else {
-        System.out.println("last ");
-        head.setValue(head.getValue() - restToSell);
-        restToSell = 0;
-      }
-      if (restToSell <= 0)
-        break;
-      head = OrderRequest.bidOffers.entrySet().iterator().next();
-    }
+    handleMatchingOrders(entry);
 
     cleanup();
+  }
+
+  private void placeBook(Double price, Integer share) {
+    OrderRequest.askOffers.put(price, share);
+  }
+
+  private void handleMatchingOrders(Order entry) {
+    Iterator<Map.Entry<Double, Integer>> bidIterator = OrderRequest.bidOffers.entrySet().iterator();
+
+    while (bidIterator.hasNext()) {
+        Map.Entry<Double, Integer> bidEntry = bidIterator.next();
+        Double bidPrice = bidEntry.getKey();
+        Integer bidShare = bidEntry.getValue();
+
+        if (entry.getPrice() <= bidPrice) {
+            if (entry.getShare() >= bidShare) {
+                entry.setShare(entry.getShare() - bidShare);
+                bidIterator.remove(); // Remove the matched bid entry
+
+                // Update askOffers
+                OrderRequest.askOffers.put(bidPrice, bidShare);
+
+                log.info("Matched order - Price: " + bidPrice + ", Share: " + bidShare);
+            } else {
+                // Update bidOffers with the remaining shares
+                bidEntry.setValue(bidShare - entry.getShare());
+
+                // Update askOffers
+                OrderRequest.askOffers.put(bidPrice, entry.getShare());
+
+                log.info("Partial Match - Price: " + bidPrice + ", Share: " + entry.getShare());
+                entry.setShare(0); // No more shares to sell
+                break; // No need to continue checking for more matches
+            }
+        }
+    }
   }
 
   private void cleanup() {

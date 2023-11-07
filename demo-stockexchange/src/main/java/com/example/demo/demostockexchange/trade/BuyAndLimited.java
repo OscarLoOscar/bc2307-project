@@ -6,7 +6,9 @@ import com.example.demo.demostockexchange.model.Order;
 import java.util.Comparator;
 import com.example.demo.demostockexchange.model.OrderRequest;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @AllArgsConstructor
 public class BuyAndLimited implements Tradable {
 
@@ -30,7 +32,7 @@ public class BuyAndLimited implements Tradable {
       cleanup();
       return;
     }
-    System.out.println("BuyandLimit Sell Book");
+    log.info("BuyandLimit Sell Book");
 
     Entry<Double, Integer> head =
         OrderRequest.askOffers.entrySet().iterator().next();
@@ -46,10 +48,10 @@ public class BuyAndLimited implements Tradable {
           head.setValue(0);
         }
         OrderRequest.bidOffers.put(head.getKey(), head.getValue());
-        System.out.println("askOffers size: " + OrderRequest.askOffers.size());
-        System.out.println("bidOffers size: " + OrderRequest.bidOffers.size());
+        log.info("askOffers size: " + OrderRequest.askOffers.size());
+        log.info("bidOffers size: " + OrderRequest.bidOffers.size());
       } else {
-        System.out.println("last ");
+        log.info("last ");
         head.setValue(head.getValue() - restToBuy);
         restToBuy = 0;
       }
@@ -57,8 +59,8 @@ public class BuyAndLimited implements Tradable {
         break;
       head = OrderRequest.askOffers.entrySet().iterator().next();
     }
-    System.out.println("end askOffers size: " + OrderRequest.askOffers.size());
-    System.out.println("end bidOffers size: " + OrderRequest.bidOffers.size());
+    log.info("end askOffers size: " + OrderRequest.askOffers.size());
+    log.info("end bidOffers size: " + OrderRequest.bidOffers.size());
     cleanup();
   }
 

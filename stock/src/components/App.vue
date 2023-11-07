@@ -180,7 +180,8 @@ const symbol = stockSymbol.value;
 
   // Create an Axios configuration object
   const config = {
-    method: 'post',
+    method: 'POST',
+    data: url,
     headers: {
       'Content-Type': 'application/json'
     },

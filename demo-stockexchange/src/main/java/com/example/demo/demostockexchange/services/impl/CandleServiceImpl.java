@@ -10,7 +10,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.example.demo.demostockexchange.infra.Protocol;
 import com.example.demo.demostockexchange.model.Candle;
 import com.example.demo.demostockexchange.services.CandleService;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 public class CandleServiceImpl implements CandleService {
 
@@ -45,7 +47,7 @@ public class CandleServiceImpl implements CandleService {
         .queryParam("token", token)//
         .build()//
         .toUriString();
-    System.out.println("url : " + url);
+    log.info("url : " + url);
 
     return restTemplate.getForObject(url, Candle.class);
   }

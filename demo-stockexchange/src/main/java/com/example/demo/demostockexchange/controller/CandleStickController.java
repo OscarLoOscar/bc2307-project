@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.demostockexchange.controller.impl.CandleStickOperation;
 import com.example.demo.demostockexchange.model.Candle;
 import com.example.demo.demostockexchange.services.CandleService;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1")
 public class CandleStickController implements CandleStickOperation {
@@ -26,9 +28,9 @@ public class CandleStickController implements CandleStickOperation {
 
       // Parse the 'fromDate' and 'toDate' strings to Date objects
       Date fromDateObj = dateFormat.parse(fromDate);
-      System.out.println("fromDateObj : " + fromDateObj);
+      log.info("fromDateObj : " + fromDateObj);
       Date toDateObj = dateFormat.parse(toDate);
-      System.out.println("toDateObj : " + toDateObj);
+      log.info("toDateObj : " + toDateObj);
 
       // Convert Date objects to Unix timestamps
       long fromTimestamp = fromDateObj.getTime() / 1000; // Divide by 1000 to convert to seconds

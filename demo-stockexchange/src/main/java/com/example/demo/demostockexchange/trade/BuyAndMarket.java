@@ -6,7 +6,9 @@ import java.util.Map.Entry;
 import com.example.demo.demostockexchange.model.Order;
 import com.example.demo.demostockexchange.model.OrderRequest;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @AllArgsConstructor
 public class BuyAndMarket implements Tradable {
 
@@ -37,10 +39,10 @@ public class BuyAndMarket implements Tradable {
         restToBuy -= head.getValue();
         head.setValue(0);
         OrderRequest.bidOffers.put(head.getKey(), head.getValue());
-        System.out.println("askOffers size: " + OrderRequest.askOffers.size());
-        System.out.println("bidOffers size: " + OrderRequest.bidOffers.size());
+        log.info("askOffers size: " + OrderRequest.askOffers.size());
+        log.info("bidOffers size: " + OrderRequest.bidOffers.size());
       } else {
-        System.out.println("last ");
+        log.info("last ");
         head.setValue(head.getValue() - restToBuy);
         restToBuy = 0;
       }
