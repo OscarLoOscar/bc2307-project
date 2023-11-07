@@ -56,7 +56,7 @@ public class SellAndLimited implements Tradable {
                 // Update askOffers
                 OrderRequest.askOffers.put(bidPrice, bidShare);
 
-                log.info("Matched order - Price: " + bidPrice + ", Share: " + bidShare);
+                log.info("Sell And Limit Matched order - Price: " + bidPrice + ", Share: " + bidShare);
             } else {
                 // Update bidOffers with the remaining shares
                 bidEntry.setValue(bidShare - entry.getShare());
@@ -64,7 +64,7 @@ public class SellAndLimited implements Tradable {
                 // Update askOffers
                 OrderRequest.askOffers.put(bidPrice, entry.getShare());
 
-                log.info("Partial Match - Price: " + bidPrice + ", Share: " + entry.getShare());
+                log.info("Sell And Limit Partial Match - Price: " + bidPrice + ", Share: " + entry.getShare());
                 entry.setShare(0); // No more shares to sell
                 break; // No need to continue checking for more matches
             }

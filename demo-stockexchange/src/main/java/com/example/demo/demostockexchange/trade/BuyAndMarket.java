@@ -39,10 +39,10 @@ public class BuyAndMarket implements Tradable {
         restToBuy -= head.getValue();
         head.setValue(0);
         OrderRequest.bidOffers.put(head.getKey(), head.getValue());
-        log.info("askOffers size: " + OrderRequest.askOffers.size());
-        log.info("bidOffers size: " + OrderRequest.bidOffers.size());
+        log.info("Buy and market askOffers size: " + OrderRequest.askOffers.size());
+        log.info("Buy and market bidOffers size: " + OrderRequest.bidOffers.size());
       } else {
-        log.info("last ");
+        log.info("Buy and market last ");
         head.setValue(head.getValue() - restToBuy);
         restToBuy = 0;
       }
