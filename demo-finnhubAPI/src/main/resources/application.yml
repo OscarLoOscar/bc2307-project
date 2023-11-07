@@ -2,7 +2,7 @@ server.port: 8085
 
 api:
   finnhub:
-    token: "cju3it9r01qr958213c0cju3it9r01qr958213cg"
+    token: ""
     domain: "finnhub.io"
     base-url: "api/v1"
     endpoints:
